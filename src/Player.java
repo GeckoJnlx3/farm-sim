@@ -1,0 +1,103 @@
+package MyFarm;
+import java.util.Scanner;
+
+class Player {
+	
+	
+	private int XP = 0;
+	private int level = 0;
+	private Title title = Title.FARMER;
+	private int objectCoins = 100;
+	
+	private void levelUp() {
+		this.level++;
+		System.out.println("Congratulations! you have reached level" + level + "!");
+	}
+	
+	public void buyTitle(Title choice) {
+		switch (choice) {
+		case REGISTERED_FARMER:
+			if (this.level >= 5 && this.objectCoins >= 200 &&
+				this.title != Title.REGISTERED_FARMER) {
+				System.out.println("You are now a Registered Farmer!");
+				this.title = Title.REGISTERED_FARMER;
+				this.objectCoins -= 200;
+			}
+		case DISTINGUISHED_FARMER:
+			if (this.level >= 10 && this.objectCoins >= 300 &&
+				this.title != Title.DISTINGUISHED_FARMER) {
+				System.out.println("You are now a Distinguished Farmer!");
+				title = Title.DISTINGUISHED_FARMER;
+				this.objectCoins -= 300;
+			}
+		case LEGENDARY_FARMER:
+			if (this.level >= 15 && this.objectCoins >= 400 &&
+				this.title != Title.LEGENDARY_FARMER) {
+				System.out.println("You are now a Legendary Farmer!");
+				title = Title.LEGENDARY_FARMER;
+				this.objectCoins -= 400;
+			}
+		default:
+			while (choice == title) {
+				System.out.println("You already have this title.");
+				int input = sc.nextInt();
+				choice = choice.setTitle(input);
+			}
+		}
+	}
+	
+	public void plowLand (int row, int col) {
+		if (land[row][col].landState == UNPLOWED) {
+			land[row][col].landState == PLOWED;
+			this.XP += 0.5;
+		}
+		else
+			System.out.println("You cannot plow the land!");
+	}
+	
+	public void fertilizeCrop (int row, int col) {
+		if (land[row][col].landState == PLANTED) {
+			land[row][col].crop.fertilizerAmt++;
+			this.objectCoins -= 4;
+			this.XP +=4;
+		}
+		else
+			System.out.println("You cannot fertilize the land!");
+	}
+	
+	public void waterPlant(int row, int col) {
+		if (land[row][col].landState == PLANTED) {
+			land[row][col].crop.waterAmt++;
+			this.XP +=0.5;
+		}
+		else
+			System.out.println("You cannot water the land!");
+	}
+	
+	public void removePlant(int row, int col) {
+		if (land[row][col].landState == UNPLOWED) 
+			this.objectCoins -= 7;
+		else if (land[row][col].landState == BLOCKED) 
+			this.objectCoins -= 7;
+		else if (land[row][col].landState == PLANTED) {
+			land[row][col].landState = UNPLOWED;
+			this.objectCoins -= 7;
+		}
+		else if (land[row][col].landState == WITHERED) {
+			land[row][col].landState = UNPLOWED;
+			this.objectCoins -= 7;
+			this.XP += 2;
+		}
+	}
+	
+	public void removeRock(int row, int col) {
+		if (land[row][col].landState == BLOCKED) {
+			land[row][col].landState = UNPLOWED;
+			this.objectCoins -= 50;
+			this.XP += 15;
+		}
+			
+	}
+	
+	
+}
