@@ -8,7 +8,7 @@ public class Crop
     private int fertilizerAmt;
     private int cropCost;
 
-    private void updatePlantStage(int age)
+    private void updatePlantStage()
     {
 
     }
