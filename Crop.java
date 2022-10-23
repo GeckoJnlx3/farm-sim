@@ -13,21 +13,21 @@ public class Crop
 
     }
 
-    private int computeWaterBonus(String cropName, int waterAmt)
+    private int computeWaterBonus()
     {
         int n = 0;
 
         return n;
     }
 
-    private int computerFertilizerBonus(String cropName, int fertilizerAmt)
+    private int computeFertilizerBonus()
     {
         int n = 0;
 
         return n;
     }
 
-    private int computeHarvestEarnings(String cropName, int waterBonus, int fertilizerBonus)
+    private int computeHarvestEarnings()
     {
         int n = 0;
 
