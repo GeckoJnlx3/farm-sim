@@ -47,8 +47,8 @@ class Player {
 	}
 	
 	public void plowLand (int row, int col) {
-		if (land[row][col].landState == UNPLOWED) {
-			land[row][col].landState == PLOWED;
+		if (land[row][col].landState == LandState.UNPLOWED) {
+			land[row][col].landState = LandState.PLOWED;
 			this.XP += 0.5;
 		}
 		else
@@ -56,7 +56,7 @@ class Player {
 	}
 	
 	public void fertilizeCrop (int row, int col) {
-		if (land[row][col].landState == PLANTED) {
+		if (land[row][col].landState == LandState.PLANTED) {
 			land[row][col].crop.fertilizerAmt++;
 			this.objectCoins -= 4;
 			this.XP +=4;
@@ -66,7 +66,7 @@ class Player {
 	}
 	
 	public void waterPlant(int row, int col) {
-		if (land[row][col].landState == PLANTED) {
+		if (land[row][col].landState == LandState.PLANTED) {
 			land[row][col].crop.waterAmt++;
 			this.XP +=0.5;
 		}
@@ -75,24 +75,24 @@ class Player {
 	}
 	
 	public void removePlant(int row, int col) {
-		if (land[row][col].landState == UNPLOWED) 
+		if (land[row][col].landState == LandState.UNPLOWED) 
 			this.objectCoins -= 7;
-		else if (land[row][col].landState == BLOCKED) 
+		else if (land[row][col].landState == LandState.BLOCKED) 
 			this.objectCoins -= 7;
-		else if (land[row][col].landState == PLANTED) {
-			land[row][col].landState = UNPLOWED;
+		else if (land[row][col].landState == LandState.PLANTED) {
+			land[row][col].landState = LandState.UNPLOWED;
 			this.objectCoins -= 7;
 		}
-		else if (land[row][col].landState == WITHERED) {
-			land[row][col].landState = UNPLOWED;
+		else if (land[row][col].landState == LandState.WITHERED) {
+			land[row][col].landState = LandState.UNPLOWED;
 			this.objectCoins -= 7;
 			this.XP += 2;
 		}
 	}
 	
 	public void removeRock(int row, int col) {
-		if (land[row][col].landState == BLOCKED) {
-			land[row][col].landState = UNPLOWED;
+		if (land[row][col].landState == LandState.BLOCKED) {
+			land[row][col].landState = LandState.UNPLOWED;
 			this.objectCoins -= 50;
 			this.XP += 15;
 		}
