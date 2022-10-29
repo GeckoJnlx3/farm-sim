@@ -2,8 +2,8 @@ public class Time
 {
     int time = 0;
 
-    public int advanceDay()
+    public void advanceDay()
     {
-
+        this.time += 1;
     }
 }
