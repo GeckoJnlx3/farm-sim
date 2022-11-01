@@ -1,33 +1,40 @@
-package myFarm;
+package MyFarm;
 
 public class Crop
 {
+    // 1 (Root) - Turnip, Carrot, Potato
+    // 2 (Flower) - Rose, Turnips, Sunflower
+    // 3 (Fruit Tree) - Mango, Apple
+
+    // These are variables inherent to each crop category
     private String cropName;
-    private int cropType; // 1 for Root, 2 for Flower, 3 for Fruit Tree
-    private int age = 0;
-    private int maxAge ; // AKA Harvest Time
+    private int cropCategory;
+    private int maxAge; // AKA Harvest Time
     private int waterMin;
     private int fertilizerMin;
     private int waterBonus;
     private int fertilizerBonus;
-    private int waterAmt;
-    private int fertilizerAmt;
     private int cropCost;
     private int produceMin;
     private int produceMax;
     private int sellPrice;
     private double expYield;
-    private int totalYield; // Actual number of crop products harvested (randomized)
-    private int farmerEarningTypeBonus; // This is from Farmer class though, hmm how to get it
+
+    // Variables that are set to the same default value for all crops
+    private int age = 0;
+    private int waterAmt = 0;
+    private int fertilizerAmt = 0;
+    private int totalYield = generateYield(produceMin, produceMax);
+    private boolean isWithered = false;
+    private int farmerEarningTypeBonus; // Create getter class for Farmer title?
 
     Crop(String cropName)
     {
-        // 1 (Root) - Turnip, Carrot, Potato
-        // 2 (Flower) - Rose, Turnips, Sunflower
-        // 3 (Fruit Tree) - Mango, Apple
         switch(cropName)
         {
             case "Turnip":
+                this.cropName = cropName;
+                this.cropCategory = 1;
                 this.maxAge = 2;
                 this.waterMin = 1;
                 this.fertilizerMin = 0;
@@ -39,6 +46,8 @@ public class Crop
                 this.sellPrice = 6;
                 this.expYield = 5;
             case "Carrot":
+                this.cropName = cropName;
+                this.cropCategory = 1;
                 this.maxAge = 3;
                 this.waterMin = 1;
                 this.fertilizerMin = 0;
@@ -50,6 +59,8 @@ public class Crop
                 this.sellPrice = 9;
                 this.expYield = 7.5;
             case "Potato":
+                this.cropName = cropName;
+                this.cropCategory = 1;
                 this.maxAge = 5;
                 this.waterMin = 3;
                 this.fertilizerMin = 1;
@@ -61,6 +72,8 @@ public class Crop
                 this.sellPrice = 3;
                 this.expYield = 12.5;
             case "Rose":
+                this.cropName = cropName;
+                this.cropCategory = 2;
                 this.maxAge = 1;
                 this.waterMin = 1;
                 this.fertilizerMin = 0;
@@ -72,6 +85,8 @@ public class Crop
                 this.sellPrice = 5;
                 this.expYield = 2.5;
             case "Turnips":
+                this.cropName = cropName;
+                this.cropCategory = 2;
                 this.maxAge = 2;
                 this.waterMin = 2;
                 this.fertilizerMin = 0;
@@ -83,6 +98,8 @@ public class Crop
                 this.sellPrice = 9;
                 this.expYield = 5;
             case "Sunflower":
+                this.cropName = cropName;
+                this.cropCategory = 2;
                 this.maxAge = 3;
                 this.waterMin = 2;
                 this.fertilizerMin = 1;
@@ -94,6 +111,8 @@ public class Crop
                 this.sellPrice = 19;
                 this.expYield = 7.5;
             case "Mango":
+                this.cropName = cropName;
+                this.cropCategory = 3;
                 this.maxAge = 10;
                 this.waterMin = 7;
                 this.fertilizerMin = 4;
@@ -105,6 +124,8 @@ public class Crop
                 this.sellPrice = 8;
                 this.expYield = 25;
             case "Apple":
+                this.cropName = cropName;
+                this.cropCategory = 3;
                 this.maxAge = 10;
                 this.waterMin = 7;
                 this.fertilizerMin = 5;
@@ -121,6 +142,18 @@ public class Crop
     private void updatePlantStage(int age)
     {
         this.age = age + 1;
+    }
+
+    private void checkForWither(int age, int maxAge)
+    {
+        if (age > maxAge)
+            this.isWithered = true;
+    }
+
+    // Generate amt. of crop items obtained from harvesting a single crop
+    private int generateYield(int produceMin, int produceMax)
+    {
+        return (int)((Math.random() * (produceMax - produceMin)) + produceMin);
     }
 
     private double computerHarvestTotal()
@@ -148,7 +181,7 @@ public class Crop
         double b = computeWaterBonus();
         double c = computeFertilizerBonus();
 
-        if (this.cropType == 2)
+        if (this.cropCategory == 2)
             return (a + b + c) * 1.1;
 
         return a + b + c;
