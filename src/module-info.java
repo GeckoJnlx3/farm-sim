@@ -6,4 +6,5 @@
  *
  */
 module MyFarm {
+    requires java.desktop;
 }

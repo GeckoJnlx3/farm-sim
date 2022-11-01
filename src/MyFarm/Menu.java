@@ -1,4 +1,4 @@
-package myFarm;
+package MyFarm;
 
 public class Menu
 {

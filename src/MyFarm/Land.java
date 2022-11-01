@@ -11,7 +11,7 @@ import java.util.Random;
 
 class Land {
 	LandState [][] landState = new LandState[5][10];
-	Crop crop [][]; 	
+	//Crop crop [][]; 	
 	String [] rockCSVData = new String [30];
 	public Land () {
 		for (int i = 0; i < 5; i ++) {
@@ -21,17 +21,17 @@ class Land {
 		}
 	}
 	
-	void setRocks(String path) {
+	void setRocks() {
 		try {
-			BufferedReader br = new BufferedReader (new FileReader(path));
+			BufferedReader br = new BufferedReader (new FileReader("src/MyFarm/rock/scatter.csv"));
 			String line = "";
 			int i = 0;
 			while ((line = br.readLine()) != null){
-				rockCSVData [i] = line;
+				rockCSVData[i] = line;
 				i++;
 			}
-			String [][] rockList = new String [30][];
-			for (i = 0; i < rockCSVData.length; i++) {
+			String [][] rockList = new String [30][2];
+			for (i = 0; rockCSVData[i] != null; i++) {
 				rockList[i] = rockCSVData[i].split(",");
 				landState[Integer.parseInt(rockList[i][0])][Integer.parseInt(rockList[i][1])] = LandState.BLOCKED;
 			}
@@ -66,9 +66,7 @@ class Land {
 				}
 				
 				if (found == false){
-					System.out.println(i + ": "+ rockGen.toString());
 					rockGen.add(temp);
-					System.out.println(i + ": "+ rockGen.toString());
 					sb.append(rockGen.get(i).x + "," + rockGen.get(i).y);
 					if (i != rockAmt-1) 
 						sb.append("\n");
