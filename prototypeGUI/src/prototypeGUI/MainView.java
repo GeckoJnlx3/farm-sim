@@ -1,4 +1,4 @@
-package prototypeGUI;
+package MyFarm;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -17,6 +17,17 @@ public class MainView {
 	JFrame mainFrame;
 	ImageIcon seedling = new ImageIcon("seedling.png");
 	
+	JLabel playerAction = new JLabel("");
+	JPanel bottomPanel = new JPanel();
+	JPanel leftPanel = new JPanel();
+	JPanel rightPanel = new JPanel();
+	
+	JButton wateringCan = new JButton("watering can");
+	JButton pickaxe = new JButton("pickaxe");
+	JButton shovel = new JButton ("shovel");
+	JButton hoe = new JButton ("hoe");
+	
+	
 	public MainView () {
 		this.mainFrame = new JFrame();
 		this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,10 +44,9 @@ public class MainView {
 	} 
 	
 	void initializePanels(){
-		JPanel bottomPanel = new JPanel();
+		
 		bottomPanel.setBackground(new Color (0x5D5D5D)); //gray
 		
-		JLabel playerAction = new JLabel("");
 		playerAction.setForeground(new Color (0xFFFFFF)); //white
 		
 		bottomPanel.add(playerAction);
@@ -48,6 +58,7 @@ public class MainView {
 		centerPanel.setBackground(new Color (0xC0E5C8)); //green
 		
 		initializeSidePanels();
+		initializeTools();
 		
 		ImageIcon seedling = new ImageIcon("seedling.png");
 		
@@ -66,6 +77,12 @@ public class MainView {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						playerAction.setText("Land selected");
+						if (wateringCan.getText().equals("selected")) {
+							landArray[0][0].setBackground(new Color(0x605651));
+							playerAction.setText("Plant watered succesfully");
+							wateringCan.setText("watering can");
+						}
+						
 					}
 				});
 			}
@@ -75,9 +92,6 @@ public class MainView {
 	}
 	
 	void initializeSidePanels() {
-		JPanel leftPanel = new JPanel();
-		JPanel rightPanel = new JPanel();
-		
 		leftPanel.setBackground(new Color(0xC0E5C8));
 		leftPanel.setPreferredSize(new Dimension(100,100));
 		rightPanel.setBackground(new Color(0xC0E5C8));
@@ -86,4 +100,65 @@ public class MainView {
 		this.mainFrame.add(leftPanel, BorderLayout.WEST);
 		this.mainFrame.add(rightPanel, BorderLayout.EAST);
 	}
+	
+	void initializeTools() {
+		wateringCan.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    	playerAction.setText("Select on a land to water");
+		    	selectTool(wateringCan, pickaxe, shovel, hoe, "watering can", "pickaxe", "shovel", "hoe");
+		    }
+		});
+		
+		pickaxe.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    	playerAction.setText("Select on a land to remove a rock");
+		    	selectTool(pickaxe, wateringCan, shovel, hoe, "pickaxe", "watering can", "shovel", "hoe");
+		    }
+		});
+		
+		shovel.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    	playerAction.setText("Select on a plant to remove");
+		    	selectTool(shovel, wateringCan, pickaxe, hoe, "shovel", "watering can", "pickaxe", "hoe");
+		    }
+		});
+		
+		hoe.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    	playerAction.setText("Select on a land to plow");
+		    	selectTool(hoe, wateringCan, shovel, pickaxe, "hoe", "watering can", "shovel", "pickaxe");
+		    }
+		});
+		
+		rightPanel.add(wateringCan);
+		rightPanel.add(pickaxe);
+		rightPanel.add(shovel);
+		rightPanel.add(hoe);
+	}
+	
+	
+	//assume btn1 is the button, the rest are other btns
+	void selectTool(JButton btn1, JButton btn2, JButton btn3, JButton btn4, 
+			String toolName1, String toolName2, String toolName3, 
+			String toolName4) {
+		if (btn2.getText().equals("selected") || //if theres already a selected tool, replace it with the tool being selected
+			btn3.getText().equals("selected") ||
+			btn4.getText().equals("selected")) {
+			btn1.setText("selected");
+			btn2.setText(toolName2);
+			btn3.setText(toolName3);
+			btn4.setText(toolName4);
+		}
+		else if (btn1.getText().equals("selected")) {
+			btn1.setText(toolName1);
+			playerAction.setText("");
+		}
+		else
+			btn1.setText("selected");
+	}
+	
 }
