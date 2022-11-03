@@ -11,7 +11,7 @@ import java.util.Random;
 
 class Land {
     LandState [][] landState = new LandState[5][10];
-    Crop crops [][];
+    Crop crops [][] = new Crop[5][10];
     String [] rockCSVData = new String [30];
     public Land () {
         for (int i = 0; i < 5; i ++) {
@@ -23,7 +23,7 @@ class Land {
 
     void setRocks() {
         try {
-            BufferedReader br = new BufferedReader (new FileReader("src/MyFarm/rock/scatter.csv"));
+            BufferedReader br = new BufferedReader (new FileReader("rock/scatter.csv"));
             String line = "";
             int i = 0;
             while ((line = br.readLine()) != null){
@@ -50,7 +50,7 @@ class Land {
         int i = 0;
 
         try {
-            PrintWriter pw = new PrintWriter(new File("src/MyFarm/rock/scatter.csv"));
+            PrintWriter pw = new PrintWriter(new File("rock/scatter.csv"));
             StringBuilder sb = new StringBuilder();
             ArrayList <Rock>rockGen = new ArrayList<Rock>();
 

@@ -12,13 +12,16 @@ import javax.swing.JPanel;
 public class MainView {
     JFrame mainFrame;
 
+    JButton [][] landArray = new JButton [5][10];
+
     LeftPanel leftPanel;
     RightPanel rightPanel;
-    
-    ImageIcon seedling = new ImageIcon("src/MyFarm/icons/seedling.png");
-    ImageIcon unplowed = new ImageIcon("src/MyFarm/icons/unplowed.png");
-    ImageIcon withered = new ImageIcon("src/MyFarm/icons/withered.png");
-    
+
+    ImageIcon seedling = new ImageIcon("icons/seedling.png");
+    ImageIcon unplowed = new ImageIcon("icons/unplowed.png");
+    ImageIcon plowed = new ImageIcon("icons/plowed.png");
+    ImageIcon withered = new ImageIcon("icons/withered.png");
+
     JLabel playerAction = new JLabel("");
     JPanel bottomPanel = new JPanel();
 
@@ -28,18 +31,18 @@ public class MainView {
         this.mainFrame.setSize(700,420);
         this.mainFrame.setResizable(false);
         this.mainFrame.setTitle("Farming Simulator");
-        this.mainFrame.setIconImage(new ImageIcon("src/MyFarm/icons/seedling.png").getImage());
+        this.mainFrame.setIconImage(new ImageIcon("icons/seedling.png").getImage());
         this.mainFrame.setLayout(new BorderLayout(8,2));
-        
-        leftPanel = new LeftPanel(P1); 
-        rightPanel = new RightPanel(playerAction);
-        
+
+        leftPanel = new LeftPanel(P1);
+        rightPanel = new RightPanel(playerAction, land, landArray, P1, leftPanel);
+
         initializePanels(land.landState, P1);
 
         this.mainFrame.setVisible(true);
     }
 
-    void initializePanels(LandState[][] landState, Player P1){
+    public void initializePanels(LandState[][] landState, Player P1){
 
         bottomPanel.setBackground(new Color (0x5D5D5D)); //gray
 
@@ -54,9 +57,6 @@ public class MainView {
         centerPanel.setBackground(new Color (0xC0E5C8)); //green
 
         initializeSidePanels();
-        rightPanel.initializeTools(playerAction);
-
-        JButton [][] landArray = new JButton [5][10];
 
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 10; j++) {
@@ -75,6 +75,7 @@ public class MainView {
         }
 
         landState[0][0] = LandState.PLOWED;
+        landArray[0][0].setIcon(plowed);
         landArray[0][0].addActionListener(new ActionListener()
         {
             @Override
@@ -88,9 +89,8 @@ public class MainView {
         this.mainFrame.add(centerPanel, BorderLayout.CENTER);
     }
 
-    void initializeSidePanels() {
+    public void initializeSidePanels() {
         this.mainFrame.add(leftPanel.panel, BorderLayout.WEST);
         this.mainFrame.add(rightPanel.rightCardPanel, BorderLayout.EAST);
     }
-
 }

@@ -1,111 +1,93 @@
 package MyFarm;
 
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
-
-public class RightPanel {
-	JPanel toolPanel = new JPanel();
-	JPanel seedPanel = new JPanel();
-	
-    ImageIcon forward = new ImageIcon("src/MyFarm/icons/forward.png");
-    ImageIcon turnip = new ImageIcon("src/MyFarm/icons/turnip.png");
-    ImageIcon plowed = new ImageIcon("src/MyFarm/icons/plowed.png");
+public class RightPanel
+{
+    ImageIcon turnip = new ImageIcon("icons/turnip.png");
+    ImageIcon seedling = new ImageIcon("icons/seedling.png");
+    ImageIcon withered = new ImageIcon("icons/withered.png");
 
     CardLayout cardLayout = new CardLayout();
     JPanel rightCardPanel = new JPanel(cardLayout);
-    
-    JButton seedTurnip = new JButton();
-    
-    JButton forwardButton = new JButton("forward");
+    JPanel toolPanel = new JPanel();
+    JPanel seedPanel = new JPanel();
+
+    JButton forwardButton = new JButton("advance day");
     JButton wateringCan = new JButton("watering can");
     JButton pickaxe = new JButton("pickaxe");
     JButton shovel = new JButton ("shovel");
     JButton hoe = new JButton ("hoe");
-    
-    RightPanel(JLabel playerAction){
+
+    JButton seedTurnip = new JButton();
+
+    public RightPanel(JLabel playerAction, Land land, JButton[][] landArray, Player P1, LeftPanel leftPanel)
+    {
         rightCardPanel.setBackground(new Color(0xC0E5C8));
         rightCardPanel.setPreferredSize(new Dimension(125,100));
-        
+
         toolPanel.setBackground(new Color(0xC0E5C8));
         toolPanel.setPreferredSize(new Dimension(125,100));
-        
         seedPanel.setBackground(new Color(0xC0E5C8));
         seedPanel.setPreferredSize(new Dimension(125,100));
-        
-        initializeTools(playerAction);
-        initializeSeeds(playerAction);
-        
+
+        initializeTools(playerAction, P1, leftPanel);
+        initializeSeeds(playerAction, land, landArray, P1, leftPanel);
+
         rightCardPanel.add(toolPanel, "tool");
         rightCardPanel.add(seedPanel, "seed");
     }
-    
-    void initializeSeeds(JLabel playerAction)
-    {
-    	this.seedTurnip.setIcon(turnip);
-    	this.seedTurnip.setBackground(new Color(0xAAE29F));
-    	this.seedTurnip.setFocusable(false);
 
-        seedTurnip.addActionListener(new ActionListener()
+    public void initializeTools(JLabel playerAction, Player P1, LeftPanel leftPanel) {
+        forwardButton.setFocusable(false);
+        forwardButton.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                playerAction.setText("You planted a turnip.");
-                cardLayout.next(rightCardPanel); // only next if planting is valid
+                P1.setDay(P1.getDay() + 1);
+                System.out.println(P1.getDay());
+                leftPanel.initializeGameInfo(P1);
+                playerAction.setText("Advanced to the next day!");
             }
         });
 
-        this.seedPanel.add(seedTurnip);
-    }
-    
-    void initializeTools(JLabel playerAction) {
-
-        
-    	forwardButton.setFocusable(false);
-    	forwardButton.setIcon(forward);
-
-    	wateringCan.setFocusable(false);
-    	wateringCan.addActionListener(new ActionListener() {
+        wateringCan.setFocusable(false);
+        wateringCan.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 playerAction.setText("Select on a land to water");
-                selectTool(wateringCan, pickaxe, shovel, hoe, 
-                		"watering can", "pickaxe", "shovel", "hoe", playerAction);
+                selectTool(playerAction, wateringCan, pickaxe, shovel, hoe, "watering can", "pickaxe", "shovel", "hoe");
             }
         });
 
-    	pickaxe.setFocusable(false);
-    	pickaxe.addActionListener(new ActionListener() {
+        pickaxe.setFocusable(false);
+        pickaxe.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 playerAction.setText("Select on a land to remove a rock");
-                selectTool(pickaxe, wateringCan, shovel, hoe, 
-                		"pickaxe", "watering can", "shovel", "hoe", playerAction);
+                selectTool(playerAction, pickaxe, wateringCan, shovel, hoe, "pickaxe", "watering can", "shovel", "hoe");
             }
         });
 
-    	shovel.setFocusable(false);
-    	shovel.addActionListener(new ActionListener() {
+        shovel.setFocusable(false);
+        shovel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 playerAction.setText("Select on a plant to remove");
-                selectTool(shovel, wateringCan, pickaxe, hoe, 
-                		"shovel", "watering can", "pickaxe", "hoe", playerAction);
+                selectTool(playerAction, shovel, wateringCan, pickaxe, hoe, "shovel", "watering can", "pickaxe", "hoe");
             }
         });
 
-    	hoe.setFocusable(false);
-    	hoe.addActionListener(new ActionListener() {
+        hoe.setFocusable(false);
+        hoe.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 playerAction.setText("Select on a land to plow");
-                selectTool(hoe, wateringCan, shovel, pickaxe, 
-                		"hoe", "watering can", "shovel", "pickaxe", playerAction);
+                selectTool(playerAction, hoe, wateringCan, shovel, pickaxe, "hoe", "watering can", "shovel", "pickaxe");
             }
         });
 
@@ -118,10 +100,10 @@ public class RightPanel {
 
     // assume btn1 is the button, the rest are other btns
 
-    void selectTool(JButton btn1, JButton btn2, JButton btn3, JButton btn4,
+    public void selectTool(JLabel playerAction, JButton btn1, JButton btn2, JButton btn3, JButton btn4,
                     String toolName1, String toolName2, String toolName3,
-                    String toolName4, JLabel playerAction) {
-        if (btn2.getText().equals("selected") || //if theres already a selected tool, replace it with the tool being selected
+                    String toolName4) {
+        if (btn2.getText().equals("selected") || //if there's already a selected tool, replace it with the tool being selected
                 btn3.getText().equals("selected") ||
                 btn4.getText().equals("selected")) {
             btn1.setText("selected");
@@ -137,4 +119,32 @@ public class RightPanel {
             btn1.setText("selected");
     }
 
+    public void initializeSeeds(JLabel playerAction, Land land, JButton[][] landArray, Player P1, LeftPanel leftPanel)
+    {
+        seedTurnip.setIcon(turnip);
+        seedTurnip.setBackground(new Color(0xAAE29F));
+        seedTurnip.setFocusable(false);
+
+        seedTurnip.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                land.crops[0][0] = new Crop("Turnip");
+                land.landState[0][0] = LandState.PLANTED;
+                landArray[0][0].setIcon(seedling);
+
+                P1.setCoins(P1.getCoins() - 5);
+
+                // update the left panel info?
+                leftPanel.initializeGameInfo(P1);
+
+                playerAction.setText("You planted a turnip.");
+
+                cardLayout.next(rightCardPanel);
+            }
+        });
+
+        seedPanel.add(seedTurnip);
+    }
 }
