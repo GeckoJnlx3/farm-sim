@@ -13,19 +13,19 @@ import javax.swing.JPanel;
 public class MainView {
     JFrame mainFrame;
 
-    ImageIcon seedling = new ImageIcon("seedling.png");
-    ImageIcon objectcoins = new ImageIcon("objectcoins.png");
-    ImageIcon xp = new ImageIcon("xp.png");
-    ImageIcon lvl = new ImageIcon("lvl.png");
-    ImageIcon title = new ImageIcon("title.png");
-    ImageIcon shop = new ImageIcon("shop.png");
-    ImageIcon player = new ImageIcon("player.png");
-    ImageIcon day = new ImageIcon("day.png");
-    ImageIcon forward = new ImageIcon("forward.png");
-    ImageIcon turnip = new ImageIcon("turnip.png");
-    ImageIcon plowed = new ImageIcon("plowed.png");
-    ImageIcon unplowed = new ImageIcon("unplowed.png");
-    ImageIcon withered = new ImageIcon("withered.png");
+    ImageIcon seedling = new ImageIcon("icons/seedling.png");
+    ImageIcon objectcoins = new ImageIcon("icons/objectcoins.png");
+    ImageIcon xp = new ImageIcon("icons/xp.png");
+    ImageIcon lvl = new ImageIcon("icons/lvl.png");
+    ImageIcon title = new ImageIcon("icons/title.png");
+    ImageIcon shop = new ImageIcon("icons/shop.png");
+    ImageIcon player = new ImageIcon("icons/player.png");
+    ImageIcon day = new ImageIcon("icons/day.png");
+    ImageIcon forward = new ImageIcon("icons/forward.png");
+    ImageIcon turnip = new ImageIcon("icons/turnip.png");
+    ImageIcon plowed = new ImageIcon("icons/plowed.png");
+    ImageIcon unplowed = new ImageIcon("icons/unplowed.png");
+    ImageIcon withered = new ImageIcon("icons/withered.png");
 
     CardLayout cardLayout = new CardLayout();
     JLabel playerAction = new JLabel("");
@@ -57,7 +57,7 @@ public class MainView {
         this.mainFrame.setSize(700,420);
         this.mainFrame.setResizable(false);
         this.mainFrame.setTitle("Farming Simulator");
-        this.mainFrame.setIconImage(new ImageIcon("seedling.png").getImage());
+        this.mainFrame.setIconImage(new ImageIcon("icons/seedling.png").getImage());
         this.mainFrame.setLayout(new BorderLayout(10,2));
 
         initializePanels(land.landState, P1);
@@ -80,7 +80,6 @@ public class MainView {
         centerPanel.setBackground(new Color (0xC0E5C8)); //green
 
         initializeSidePanels();
-        initializeTools();
         initializeGameInfo(P1);
 
         JButton [][] landArray = new JButton [5][10];
@@ -118,105 +117,12 @@ public class MainView {
     void initializeSidePanels() {
         leftPanel.setBackground(new Color(0xC0E5C8));
         leftPanel.setPreferredSize(new Dimension(125,100));
-        rightPanel.setBackground(new Color(0xC0E5C8));
-        rightPanel.setPreferredSize(new Dimension(125,100));
-        seedPanel.setBackground(new Color(0xC0E5C8));
-        seedPanel.setPreferredSize(new Dimension(125,100));
-        initializeSeeds();
 
-        rightCardPanel.add(rightPanel, "right");
-        rightCardPanel.add(seedPanel, "seed");
+        RightPanel panel2 = new RightPanel(playerAction);
+
 
         this.mainFrame.add(leftPanel, BorderLayout.WEST);
-        this.mainFrame.add(rightCardPanel, BorderLayout.EAST);
-    }
-
-    void initializeTools() {
-        forwardButton.setFocusable(false);
-        forwardButton.setIcon(forward);
-
-        wateringCan.setFocusable(false);
-        wateringCan.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                playerAction.setText("Select on a land to water");
-                selectTool(wateringCan, pickaxe, shovel, hoe, "watering can", "pickaxe", "shovel", "hoe");
-            }
-        });
-
-        pickaxe.setFocusable(false);
-        pickaxe.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                playerAction.setText("Select on a land to remove a rock");
-                selectTool(pickaxe, wateringCan, shovel, hoe, "pickaxe", "watering can", "shovel", "hoe");
-            }
-        });
-
-        shovel.setFocusable(false);
-        shovel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                playerAction.setText("Select on a plant to remove");
-                selectTool(shovel, wateringCan, pickaxe, hoe, "shovel", "watering can", "pickaxe", "hoe");
-            }
-        });
-
-        hoe.setFocusable(false);
-        hoe.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                playerAction.setText("Select on a land to plow");
-                selectTool(hoe, wateringCan, shovel, pickaxe, "hoe", "watering can", "shovel", "pickaxe");
-            }
-        });
-
-        rightPanel.add(forwardButton);
-        rightPanel.add(wateringCan);
-        rightPanel.add(pickaxe);
-        rightPanel.add(shovel);
-        rightPanel.add(hoe);
-    }
-
-    // assume btn1 is the button, the rest are other btns
-
-    void selectTool(JButton btn1, JButton btn2, JButton btn3, JButton btn4,
-                    String toolName1, String toolName2, String toolName3,
-                    String toolName4) {
-        if (btn2.getText().equals("selected") || //if theres already a selected tool, replace it with the tool being selected
-                btn3.getText().equals("selected") ||
-                btn4.getText().equals("selected")) {
-            btn1.setText("selected");
-            btn2.setText(toolName2);
-            btn3.setText(toolName3);
-            btn4.setText(toolName4);
-        }
-        else if (btn1.getText().equals("selected")) {
-            btn1.setText(toolName1);
-            playerAction.setText("");
-        }
-        else
-            btn1.setText("selected");
-    }
-
-
-    void initializeSeeds()
-    {
-        seedTurnip.setIcon(turnip);
-        seedTurnip.setBackground(new Color(0xAAE29F));
-        seedTurnip.setFocusable(false);
-
-        seedTurnip.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                playerAction.setText("You planted a turnip.");
-                cardLayout.next(rightCardPanel); // only next if planting is valid
-            }
-        });
-
-        seedPanel.add(seedTurnip);
+        this.mainFrame.add(panel2.rightCardPanel, BorderLayout.EAST);
     }
 
     void initializeGameInfo(Player P1)
