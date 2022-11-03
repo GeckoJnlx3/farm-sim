@@ -8,13 +8,13 @@ import javax.swing.*;
 public class LeftPanel {
     JPanel panel;
 
-    ImageIcon objectcoins = new ImageIcon("icons/objectcoins.png");
-    ImageIcon xp = new ImageIcon("icons/xp.png");
-    ImageIcon lvl = new ImageIcon("icons/lvl.png");
-    ImageIcon title = new ImageIcon("icons/title.png");
-    ImageIcon shop = new ImageIcon("icons/shop.png");
-    ImageIcon player = new ImageIcon("icons/player.png");
-    ImageIcon day = new ImageIcon("icons/day.png");
+    ImageIcon objectcoins = new ImageIcon("src/MyFarm/icons/objectcoins.png");
+    ImageIcon xp = new ImageIcon("src/MyFarm/icons/xp.png");
+    ImageIcon lvl = new ImageIcon("src/MyFarm/icons/lvl.png");
+    ImageIcon title = new ImageIcon("src/MyFarm/icons/title.png");
+    ImageIcon shop = new ImageIcon("src/MyFarm/icons/shop.png");
+    ImageIcon player = new ImageIcon("src/MyFarm/icons/player.png");
+    ImageIcon day = new ImageIcon("src/MyFarm/icons/day.png");
 
     JLabel objectCoins = new JLabel();
     JLabel currExp = new JLabel();
@@ -38,7 +38,7 @@ public class LeftPanel {
         currDay.setIcon(day);
         objectCoins.setText(Double.toString(p1.getCoins()));
         objectCoins.setIcon(objectcoins);
-        currExp.setText(Integer.toString(p1.getXP()));
+        currExp.setText(Double.toString(p1.getXP()));
         currExp.setIcon(xp);
         currLvl.setText(Integer.toString(p1.getLevel()));
         currLvl.setIcon(lvl);

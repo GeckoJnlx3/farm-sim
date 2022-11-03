@@ -22,7 +22,7 @@ public class Crop
 
     // Variables that are set to the same default value for all crops
     private int age = 0;
-    private int waterAmt = 1;
+    private int waterAmt = 0;
     private int fertilizerAmt = 0;
     private boolean isWithered = false;
     private boolean isHarvestable = false;
@@ -184,18 +184,36 @@ public class Crop
     {
         return this.isHarvestable;
     }
+    
+	public int getWaterAmt() {
+		return this.waterAmt;
+	}
+	
+	public int getCropCost() {
+		return this.cropCost;
+	}
+    
+    public boolean increaseWaterAmt() {
+    	if (this.waterAmt < this.waterBonus) {
+    		this.waterAmt++;
+    		return true;
+    	} else return false;
+    }
 
-    public void updatePlantStage(int age)
+    public void updatePlantStage()
     {
         this.age = age + 1;
     }
 
-    public void checkCropStatus(int age, int maxAge)
+    public void checkCropStatus()
     {
-        if (age > maxAge)
-            this.isWithered = true;
-        else if (age == maxAge)
-            this.isHarvestable = true;
+        if (!this.cropName.equals("empty")){
+        	if (age > maxAge || 
+        			(age == maxAge && waterAmt < waterMin))
+                this.isWithered = true;
+            else if (age == maxAge)
+                this.isHarvestable = true;
+        }
     }
 
     // Generate amt. of crop items obtained from harvesting a single crop
@@ -234,5 +252,7 @@ public class Crop
 
         return a + b + c;
     }
+
+
 }
 

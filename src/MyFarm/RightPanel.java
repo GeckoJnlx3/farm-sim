@@ -7,9 +7,9 @@ import java.awt.event.ActionListener;
 
 public class RightPanel
 {
-    ImageIcon turnip = new ImageIcon("icons/turnip.png");
-    ImageIcon seedling = new ImageIcon("icons/seedling.png");
-    ImageIcon withered = new ImageIcon("icons/withered.png");
+    ImageIcon turnip = new ImageIcon("src/MyFarm/icons/turnip.png");
+    ImageIcon seedling = new ImageIcon("src/MyFarm/icons/seedling.png");
+    ImageIcon withered = new ImageIcon("src/MyFarm/icons/withered.png");
 
     CardLayout cardLayout = new CardLayout();
     JPanel rightCardPanel = new JPanel(cardLayout);
@@ -48,7 +48,7 @@ public class RightPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                P1.setDay(P1.getDay() + 1);
+                P1.advanceTime();
 
                 updateCrops(land, landArray);
 
@@ -153,9 +153,9 @@ public class RightPanel
     public void updateCrops(Land land, JButton[][] landArray)
     {
         if (!(land.crops[0][0].getCropName().equals("")))
-            land.crops[0][0].updatePlantStage(land.crops[0][0].getAge());
+            land.crops[0][0].updatePlantStage();
 
-        land.crops[0][0].checkCropStatus(land.crops[0][0].getAge(), land.crops[0][0].getMaxAge());
+        land.crops[0][0].checkCropStatus();
 
         if (land.crops[0][0].getWitherStatus() == true)
         {

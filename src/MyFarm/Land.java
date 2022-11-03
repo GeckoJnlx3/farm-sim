@@ -23,7 +23,7 @@ class Land {
 
     void setRocks() {
         try {
-            BufferedReader br = new BufferedReader (new FileReader("rock/scatter.csv"));
+            BufferedReader br = new BufferedReader (new FileReader("src/MyFarm/rock/scatter.csv"));
             String line = "";
             int i = 0;
             while ((line = br.readLine()) != null){
@@ -50,7 +50,7 @@ class Land {
         int i = 0;
 
         try {
-            PrintWriter pw = new PrintWriter(new File("rock/scatter.csv"));
+            PrintWriter pw = new PrintWriter(new File("src/MyFarm/rock/scatter.csv"));
             StringBuilder sb = new StringBuilder();
             ArrayList <Rock>rockGen = new ArrayList<Rock>();
 

@@ -4,12 +4,13 @@ import javax.swing.*;
 
 class Player {
 
-    private int xp = 0;
+    private double xp = 0;
     private int level = 0;
     private Title title = Title.FARMER;
     private double objectCoins = 100;
     private int time = 1;
-    ImageIcon unplowed = new ImageIcon("icons/unplowed.png");
+    ImageIcon unplowed = new ImageIcon("src/MyFarm/icons/unplowed.png");
+    ImageIcon plowed = new ImageIcon("src/MyFarm/icons/plowed.png");
 
     void levelUp() {
         this.level++;
@@ -36,7 +37,7 @@ class Player {
         this.objectCoins = coins;
     }
 
-    int getXP()
+    double getXP()
     {
         return this.xp;
     }
@@ -96,23 +97,24 @@ class Player {
 
         playerAction.setText("You harvested a turnip and earned " + earned + " coins and 5 XP!");
 
-        land.landState[0][0] = LandState.PLOWED; // revert to unplowed land
+        land.landState[0][0] = LandState.UNPLOWED; // revert to unplowed land
         landArray[0][0].setIcon(unplowed); // icon unplowed
         land.crops[0][0] = new Crop(""); // remove crop
 
         leftPanel.initializeGameInfo(this);
     }
 
-//    public void plowLand (int row, int col) {
-//
-//
-//        if (land[row][col].landState == LandState.UNPLOWED) {
-//            land[row][col].landState = LandState.PLOWED;
-//            this.XP += 0.5;
-//        }
-//        else
-//            System.out.println("You cannot plow the land!");
-//    }
+    public void plowLand (Land land, JButton[][] landArray, JLabel playerAction, LeftPanel leftPanel) {
+        if (land.landState[0][0] == LandState.UNPLOWED) {
+        	land.landState[0][0] = LandState.PLOWED;
+        	playerAction.setText("The land is plowed.");
+        	landArray[0][0].setIcon(plowed);
+        	this.xp += 0.5;
+        }
+        else
+            playerAction.setText("You cannot plow the land!");
+        leftPanel.initializeGameInfo(this);
+    }
 //
 //    public void fertilizeCrop (int row, int col) {
 //        if (land[row][col].landState == LandState.PLANTED) {
@@ -124,30 +126,45 @@ class Player {
 //            System.out.println("You cannot fertilize the land!");
 //    }
 //
-//    public void waterPlant(int row, int col) {
-//        if (land[row][col].landState == LandState.PLANTED) {
-//            land[row][col].crop.waterAmt++;
-//            this.XP +=0.5;
-//        }
-//        else
-//            System.out.println("You cannot water the land!");
-//    }
-//
-//    public void removePlant(int row, int col) {
-//        if (land[row][col].landState == LandState.UNPLOWED)
-//            this.objectCoins -= 7;
-//        else if (land[row][col].landState == LandState.BLOCKED)
-//            this.objectCoins -= 7;
-//        else if (land[row][col].landState == LandState.PLANTED) {
-//            land[row][col].landState = LandState.UNPLOWED;
-//            this.objectCoins -= 7;
-//        }
-//        else if (land[row][col].landState == LandState.WITHERED) {
-//            land[row][col].landState = LandState.UNPLOWED;
-//            this.objectCoins -= 7;
-//            this.xp += 2;
-//        }
-//    }
+    public void waterPlant(Land land, JButton[][] landArray, JLabel playerAction, LeftPanel leftPanel) {
+        if (land.landState[0][0] == LandState.PLANTED) {
+        	boolean isWatered = land.crops[0][0].increaseWaterAmt();
+            this.xp += 0.5;
+            if (isWatered)
+            	playerAction.setText("The plant has been watered " + land.crops[0][0].getWaterAmt() + " times.");
+            else 
+            	playerAction.setText("The plant has reached it's max water amount!");
+        }
+        else
+            playerAction.setText("You cannot water the land!");
+        leftPanel.initializeGameInfo(this);
+    }
+
+    public void removePlant(Land land, JButton[][] landArray, JLabel playerAction, LeftPanel leftPanel) {
+        if (land.landState[0][0] == LandState.UNPLOWED || 
+        		land.landState[0][0] == LandState.PLOWED) {
+        	land.landState[0][0] = LandState.UNPLOWED;
+        	this.objectCoins -= 7;
+        	playerAction.setText("You shoveled nothing... you lost 7 coins.");
+        } else if (land.landState[0][0] == LandState.BLOCKED) {
+        	this.objectCoins -= 7;
+        	playerAction.setText("You tried to shovel the rock... you lost 7 coins.");
+        } else if (land.landState[0][0] == LandState.PLANTED) {
+            land.landState[0][0] = LandState.UNPLOWED;
+            landArray[0][0].setIcon(unplowed);
+            land.crops[0][0] = new Crop("");
+            this.objectCoins -= 7;
+            playerAction.setText("You shoveled your growing plant out... you lost 7 coins.");
+        } else if (land.landState[0][0] == LandState.WITHERED) {
+            land.landState[0][0] = LandState.UNPLOWED;
+            landArray[0][0].setIcon(unplowed);
+            land.crops[0][0] = new Crop("");
+            this.objectCoins -= 7;
+            this.xp += 2;
+            playerAction.setText("The withered plant was removed.");
+        } 
+        leftPanel.initializeGameInfo(this);
+    }
 
 //    public void removeRock(int row, int col) {
 //        if (land[row][col].landState == LandState.BLOCKED) {
