@@ -18,9 +18,19 @@ class Player {
         return this.time;
     }
 
+    void setDay(int day)
+    {
+        this.time = day;
+    }
+
     int getCoins()
     {
         return this.objectCoins;
+    }
+
+    void setCoins(int coins)
+    {
+        this.objectCoins = coins;
     }
 
     int getXP()
