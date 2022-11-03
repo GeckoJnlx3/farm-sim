@@ -36,7 +36,7 @@ public class LeftPanel {
     {
         currDay.setText("Day " + p1.getDay());
         currDay.setIcon(day);
-        objectCoins.setText(Integer.toString(p1.getCoins()));
+        objectCoins.setText(Double.toString(p1.getCoins()));
         objectCoins.setIcon(objectcoins);
         currExp.setText(Integer.toString(p1.getXP()));
         currExp.setIcon(xp);

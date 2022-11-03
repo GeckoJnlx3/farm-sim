@@ -22,11 +22,11 @@ public class Crop
 
     // Variables that are set to the same default value for all crops
     private int age = 0;
-    private int waterAmt = 0;
+    private int waterAmt = 1;
     private int fertilizerAmt = 0;
-    private int totalYield = generateYield(produceMin, produceMax);
     private boolean isWithered = false;
-    private int farmerEarningTypeBonus; // Create getter class for Farmer title?
+    private boolean isHarvestable = false;
+    private int farmerEarningTypeBonus = 0; // Create getter class for Farmer title?
 
     Crop(String cropName)
     {
@@ -45,6 +45,7 @@ public class Crop
                 this.produceMax = 2;
                 this.sellPrice = 6;
                 this.expYield = 5;
+                break;
             case "Carrot":
                 this.cropName = cropName;
                 this.cropCategory = 1;
@@ -58,6 +59,7 @@ public class Crop
                 this.produceMax = 2;
                 this.sellPrice = 9;
                 this.expYield = 7.5;
+                break;
             case "Potato":
                 this.cropName = cropName;
                 this.cropCategory = 1;
@@ -71,6 +73,7 @@ public class Crop
                 this.produceMax = 10;
                 this.sellPrice = 3;
                 this.expYield = 12.5;
+                break;
             case "Rose":
                 this.cropName = cropName;
                 this.cropCategory = 2;
@@ -84,6 +87,7 @@ public class Crop
                 this.produceMax = 1;
                 this.sellPrice = 5;
                 this.expYield = 2.5;
+                break;
             case "Turnips":
                 this.cropName = cropName;
                 this.cropCategory = 2;
@@ -97,6 +101,7 @@ public class Crop
                 this.produceMax = 1;
                 this.sellPrice = 9;
                 this.expYield = 5;
+                break;
             case "Sunflower":
                 this.cropName = cropName;
                 this.cropCategory = 2;
@@ -110,6 +115,7 @@ public class Crop
                 this.produceMax = 1;
                 this.sellPrice = 19;
                 this.expYield = 7.5;
+                break;
             case "Mango":
                 this.cropName = cropName;
                 this.cropCategory = 3;
@@ -123,6 +129,7 @@ public class Crop
                 this.produceMax = 15;
                 this.sellPrice = 8;
                 this.expYield = 25;
+                break;
             case "Apple":
                 this.cropName = cropName;
                 this.cropCategory = 3;
@@ -136,48 +143,89 @@ public class Crop
                 this.produceMax = 15;
                 this.sellPrice = 5;
                 this.expYield = 25;
+                break;
+            default:
+                this.cropName = "empty";
+                this.cropCategory = 0;
+                this.maxAge = 0;
+                this.waterMin = 0;
+                this.fertilizerMin = 0;
+                this.waterBonus = 0;
+                this.fertilizerBonus = 0;
+                this.cropCost = 0;
+                this.produceMin = 0;
+                this.produceMax = 0;
+                this.sellPrice = 0;
+                this.expYield = 0;
         }
     }
 
-    private void updatePlantStage(int age)
+    public String getCropName()
+    {
+        return this.cropName;
+    }
+
+    public int getAge()
+    {
+        return this.age;
+    }
+
+    public int getMaxAge()
+    {
+        return this.maxAge;
+    }
+
+    public boolean getWitherStatus()
+    {
+        return this.isWithered;
+    }
+
+    public boolean getHarvestStatus()
+    {
+        return this.isHarvestable;
+    }
+
+    public void updatePlantStage(int age)
     {
         this.age = age + 1;
     }
 
-    private void checkForWither(int age, int maxAge)
+    public void checkCropStatus(int age, int maxAge)
     {
         if (age > maxAge)
             this.isWithered = true;
+        else if (age == maxAge)
+            this.isHarvestable = true;
     }
 
     // Generate amt. of crop items obtained from harvesting a single crop
-    private int generateYield(int produceMin, int produceMax)
+    public int generateYield(int produceMin, int produceMax)
     {
-        return (int)((Math.random() * (produceMax - produceMin)) + produceMin);
+        return produceMin + (int)(Math.random() * ((produceMax - produceMin) + 1));
     }
 
-    private double computerHarvestTotal()
+    public double computeHarvestTotal()
     {
-        return totalYield * (sellPrice + farmerEarningTypeBonus);
+        return generateYield(produceMin, produceMax) * (sellPrice + farmerEarningTypeBonus);
     }
 
-    private double computeWaterBonus()
+    public double computeWaterBonus()
     {
-        double i = computerHarvestTotal();
+        double i = computeHarvestTotal();
 
         return i * 0.2 * (waterAmt - 1);
     }
 
-    private double computeFertilizerBonus()
+    public double computeFertilizerBonus()
     {
-        double i = computerHarvestTotal();
+        double i = computeHarvestTotal();
 
         return i * 0.5 * fertilizerAmt;
     }
 
-    private double computeHarvestEarnings()
+    public double computeHarvestEarnings()
     {
-        double a = computerHarvestTotal();
+        double a = computeHarvestTotal();
         double b = computeWaterBonus();
         double c = computeFertilizerBonus();
 

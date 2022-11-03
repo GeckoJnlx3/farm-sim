@@ -1,12 +1,15 @@
 package MyFarm;
 
+import javax.swing.*;
+
 class Player {
 
     private int xp = 0;
     private int level = 0;
     private Title title = Title.FARMER;
-    private int objectCoins = 100;
+    private double objectCoins = 100;
     private int time = 1;
+    ImageIcon unplowed = new ImageIcon("icons/unplowed.png");
 
     void levelUp() {
         this.level++;
@@ -23,12 +26,12 @@ class Player {
         this.time = day;
     }
 
-    int getCoins()
+    double getCoins()
     {
         return this.objectCoins;
     }
 
-    void setCoins(int coins)
+    void setCoins(double coins)
     {
         this.objectCoins = coins;
     }
@@ -84,6 +87,21 @@ class Player {
 //                }
 //        }
 //    }
+
+    public void harvestCrop(Land land, JButton[][] landArray, JLabel playerAction, LeftPanel leftPanel) // only for turnip rn
+    {
+        double earned = land.crops[0][0].computeHarvestEarnings();
+        this.objectCoins += earned;
+        this.xp += 5;
+
+        playerAction.setText("You harvested a turnip and earned " + earned + " coins and 5 XP!");
+
+        land.landState[0][0] = LandState.PLOWED; // revert to unplowed land
+        landArray[0][0].setIcon(unplowed); // icon unplowed
+        land.crops[0][0] = new Crop(""); // remove crop
+
+        leftPanel.initializeGameInfo(this);
+    }
 
 //    public void plowLand (int row, int col) {
 //

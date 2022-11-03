@@ -34,14 +34,14 @@ public class RightPanel
         seedPanel.setBackground(new Color(0xC0E5C8));
         seedPanel.setPreferredSize(new Dimension(125,100));
 
-        initializeTools(playerAction, P1, leftPanel);
+        initializeTools(playerAction, P1, leftPanel, land, landArray);
         initializeSeeds(playerAction, land, landArray, P1, leftPanel);
 
         rightCardPanel.add(toolPanel, "tool");
         rightCardPanel.add(seedPanel, "seed");
     }
 
-    public void initializeTools(JLabel playerAction, Player P1, LeftPanel leftPanel) {
+    public void initializeTools(JLabel playerAction, Player P1, LeftPanel leftPanel, Land land, JButton[][] landArray) {
         forwardButton.setFocusable(false);
         forwardButton.addActionListener(new ActionListener()
         {
@@ -49,7 +49,9 @@ public class RightPanel
             public void actionPerformed(ActionEvent e)
             {
                 P1.setDay(P1.getDay() + 1);
-                System.out.println(P1.getDay());
+
+                updateCrops(land, landArray);
+
                 leftPanel.initializeGameInfo(P1);
                 playerAction.setText("Advanced to the next day!");
             }
@@ -146,5 +148,25 @@ public class RightPanel
         });
 
         seedPanel.add(seedTurnip);
+    }
+
+    public void updateCrops(Land land, JButton[][] landArray)
+    {
+        if (!(land.crops[0][0].getCropName().equals("")))
+            land.crops[0][0].updatePlantStage(land.crops[0][0].getAge());
+
+        land.crops[0][0].checkCropStatus(land.crops[0][0].getAge(), land.crops[0][0].getMaxAge());
+
+        if (land.crops[0][0].getWitherStatus() == true)
+        {
+            land.landState[0][0] = LandState.WITHERED;
+            landArray[0][0].setIcon(withered);
+        }
+
+        else if (land.crops[0][0].getHarvestStatus() == true)
+        {
+            land.landState[0][0] = LandState.HARVESTABLE;
+            landArray[0][0].setIcon(turnip);
+        }
     }
 }

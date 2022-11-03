@@ -37,12 +37,12 @@ public class MainView {
         leftPanel = new LeftPanel(P1);
         rightPanel = new RightPanel(playerAction, land, landArray, P1, leftPanel);
 
-        initializePanels(land.landState, P1);
+        initializePanels(land.landState, P1, land);
 
         this.mainFrame.setVisible(true);
     }
 
-    public void initializePanels(LandState[][] landState, Player P1){
+    public void initializePanels(LandState[][] landState, Player P1, Land land){
 
         bottomPanel.setBackground(new Color (0x5D5D5D)); //gray
 
@@ -83,6 +83,9 @@ public class MainView {
             {
                 if(landState[0][0] == LandState.PLOWED)
                     rightPanel.cardLayout.next(rightPanel.rightCardPanel);
+
+                if(landState[0][0] == LandState.HARVESTABLE)
+                    P1.harvestCrop(land, landArray, playerAction, leftPanel);
             }
         });
 
