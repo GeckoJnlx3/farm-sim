@@ -74,8 +74,8 @@ public class TextBasedDriver {
 
     /**
      * Displays the land information to the console.
-     * @param land TextLand instance where crop is planted
-     * @param p1 TextPlayer instance that interacts with land
+     * @param land 	TextLand instance where crop is planted
+     * @param p1 	TextPlayer instance that interacts with land
      */
     private static void displayLandInfo(TextLand land, TextPlayer p1) {
         System.out.println("Day: " + p1.getDay() + "\t\t\tObjectCoins:" + p1.getCoins());
@@ -84,24 +84,28 @@ public class TextBasedDriver {
     }
 
     /**
-     * Collects player input for game actions.
-     * @param sc Scanner object for intake of
+     * Collects player input and validates it
+     * for game actions.
+     * @param 	sc Scanner object for intake of
      *           player choice.
-     * @return integer that corresponds with
+     * @return 	integer that corresponds with
      *          player choice.
      */
     private static int collectChoice(Scanner sc) {
         int temp = -1;
         do {
             try {
-                System.out.println("1-plant turnip\n2-water\n3-shovel\n4-hoe\n5-harvest crop"
+                System.out.println("1-plant turnip\n2-water"
+                		+ "\n3-shovel\n4-hoe\n5-harvest crop"
                         + "\n6-advance day\n0-close game");
                 temp = sc.nextInt();
                 if (temp <= 0 && temp >= 6)
-                    System.out.println("Invalid input.Please enter only the following choices.");
+                    System.out.println("Invalid input.Please "
+                    		+ "enter only the following choices.");
                 return temp;
             } catch (InputMismatchException e) {
-                System.out.println("Invalid input.Please enter only the following choices.");
+                System.out.println("Invalid input.Please "
+                		+ "enter only the following choices.");
             } sc.nextLine();
         } while (temp <= 0 && temp >= 6);
 
@@ -111,8 +115,8 @@ public class TextBasedDriver {
 
     /**
      * Checks if player has selected to close game.
-     * @param choice Inputted player choice.
-     * @return int that determines whether to
+     * @param choice Inputed player choice.
+     * @return int 	that determines whether to
      *          terminate the program or not.
      */
     private static int updateIsRunning(int choice) {

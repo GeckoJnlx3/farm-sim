@@ -28,7 +28,7 @@ public class Crop
     private int waterAmt = 0;
     private boolean isWithered = false;
     private boolean isHarvestable = false;
-    private int farmerEarningTypeBonus = 0; // Create getter class for Farmer title?
+    private int farmerEarningTypeBonus = 0; 
     private int producedAmt = 0;
 
     /**
@@ -114,9 +114,8 @@ public class Crop
     }
 
     /**
-     * Returns the crop's water amount as long
-     * as it is less than the crop's maximum
-     * water amount.
+     * Increases the water amount as long as
+     * it has not exceeded its maximum value.
      * @return boolean which determines if the
      *         crop was successfully watered.
      */
@@ -128,7 +127,7 @@ public class Crop
     }
 
     /**
-     * ages the crop by one.
+     * Ages the crop by one day.
      */
     void updatePlantStage(){
         this.age = age + 1;
@@ -170,7 +169,7 @@ public class Crop
     }
 
     /**
-     * Computes the water bonus of the crop
+     * Computes the water bonus of the crop.
      * @return crop's water bonus.
      */
     private double computeWaterBonus()

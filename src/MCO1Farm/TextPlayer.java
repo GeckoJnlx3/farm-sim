@@ -68,9 +68,12 @@ class TextPlayer {
             land.landState = LandState.PLANTED;
             land.crop = new Crop("Turnip");
             this.objectCoins -= land.crop.getCropCost();
-            System.out.println("You have sucessfully printed a turnip.");
+            System.out.println("You have sucessfully "
+            		+ "printed a turnip.");
         } else {
-            System.out.println("You cannot plant a turnip. Make it plantable (remove the plant then plow it)");
+            System.out.println("You cannot plant a turnip."
+            		+ " Make it plantable (remove the plant "
+            		+ "then plow it)");
         }
     }
 
@@ -79,7 +82,7 @@ class TextPlayer {
      * @param land land's state to be changed if
      *             a crop is harvested.
      */
-    public void harvestCrop(TextLand land) // only for turnip rn
+    public void harvestCrop(TextLand land) 
     {
         if (land.crop.getHarvestStatus() == true) {
             double earned = land.crop.computeHarvestEarnings();
@@ -118,7 +121,8 @@ class TextPlayer {
         if (land.landState == LandState.PLANTED) {
             boolean isWatered = land.crop.increaseWaterAmt();
             if (isWatered)
-                System.out.println("The plant has been watered " + land.crop.getWaterAmt() + " times.");
+                System.out.println("The plant has been watered " + 
+                		land.crop.getWaterAmt() + " times.");
             else
                 System.out.println("The plant has reached it's max water amount!");
         }
@@ -128,7 +132,7 @@ class TextPlayer {
 
     /**
      * Uses the shovel on a tile.
-     * Removes all plants if there is one.
+     * Removes any type of plants if there is one.
      * @param land land's state to be updated if
      *             anything is removed from the tile.
      */
