@@ -86,14 +86,14 @@ public class Crop
 		return this.producedAmt;
 	}
     
-    public boolean increaseWaterAmt() {
+    boolean increaseWaterAmt() {
     	if (this.waterAmt < this.waterBonus) {
     		this.waterAmt++;
     		return true;
     	} else return false;
     }
 
-    public void updatePlantStage(){
+    void updatePlantStage(){
         this.age = age + 1;
     }
 
@@ -109,27 +109,26 @@ public class Crop
     }
 
     // Generate amt. of crop items obtained from harvesting a single crop
-    public void generateYield(){
+    private void generateYield(){
     	this.producedAmt =  produceMin + (int)(Math.random() * ((produceMax - produceMin) + 1));
     }
 
-    public double computeHarvestTotal()
+    private double computeHarvestTotal()
     {
     	generateYield();
     	return this.producedAmt* (sellPrice + farmerEarningTypeBonus);
     }
 
-    public double computeWaterBonus()
+    private double computeWaterBonus()
     {
         double i = computeHarvestTotal();
 
         return i * 0.2 * (waterAmt - 1);
     }
 
-    public double computeHarvestEarnings() {
+    double computeHarvestEarnings() {
         return computeHarvestTotal() + computeWaterBonus();
     }
-
 
 }
 

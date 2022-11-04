@@ -54,13 +54,13 @@ public class TextBasedDriver {
 		sc.close();
 	}
 	
-	static void displayLandInfo(TextLand land, TextPlayer p1) {
+	private static void displayLandInfo(TextLand land, TextPlayer p1) {
 		System.out.println("Day: " + p1.getDay() + "\t\t\tObjectCoins:" + p1.getCoins());
 		System.out.println("Land state: " + land.landState.toString() + "\tCrop: " + land.crop.getCropName().toString());
 		System.out.println();
 	}
 	
-	static int collectChoice(Scanner sc) {
+	private static int collectChoice(Scanner sc) {
 		int temp = -1;
 		do {
 			try {
@@ -79,7 +79,7 @@ public class TextBasedDriver {
 
 	}
 	
-	static int updateIsRunning(int choice) {
+	private static int updateIsRunning(int choice) {
 		if (choice == 0)
 			return 0; 
 		else return 1;
