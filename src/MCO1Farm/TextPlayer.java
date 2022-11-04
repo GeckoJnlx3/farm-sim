@@ -1,5 +1,7 @@
 package MCO1Farm;
 
+import java.text.DecimalFormat;
+
 /**
  * Player class interacts with land to plant,
  * water and harvest crops.
@@ -8,7 +10,9 @@ package MCO1Farm;
 class TextPlayer {
 
     private double objectCoins = 100;
+
     private int time = 1;
+    
 
     /**
      * getter method which returns the current day.
@@ -94,7 +98,7 @@ class TextPlayer {
             land.landState = LandState.UNPLOWED; // revert to unplowed land
             land.crop = new Crop(""); // remove crop
         } else {
-            System.out.println("The plant is not harvestable yet!");
+            System.out.println("The plant is not harvestable.");
         }
     }
 

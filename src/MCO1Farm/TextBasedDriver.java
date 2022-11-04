@@ -6,6 +6,7 @@
 
 package MCO1Farm;
 
+import java.text.DecimalFormat;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -27,18 +28,32 @@ public class TextBasedDriver {
         TextPlayer p1 = new TextPlayer();
         TextLand land = new TextLand();
 
-        int isRunning = 1;
+        int isRunning = -1;
         Scanner sc = new Scanner(System.in);
         int choice;
+        
 
-        System.out.println("Farm sim.\n1-start game\n0-close program");
-        isRunning = sc.nextInt();
-        while (isRunning != 0 &&
-                isRunning != 1) {
-            System.out.println("Invalid input.");
-            System.out.println("Farm sim.\n1-start game\n0-close program");
-            isRunning = sc.nextInt();
-        }
+//        System.out.println("Farm sim.\n1-start game\n0-close program");
+//        isRunning = sc.nextInt();
+        do {
+            try {
+            	System.out.println("Farm sim.\n1-start game\n0-close program");
+            	isRunning = sc.nextInt();
+                if (isRunning != 0 && isRunning != 1)
+                    System.out.println("Invalid input.Please "
+                    		+ "enter only the following choices.");
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input.Please "
+                		+ "enter only the following choices.");
+            } sc.nextLine();
+        } while (isRunning != 0 && isRunning != 1);
+        
+//        while (isRunning != 0 &&
+//                isRunning != 1) {
+//            System.out.println("Invalid input.");
+//            System.out.println("Farm sim.\n1-start game\n0-close program");
+//            isRunning = sc.nextInt();
+//        }
         while (isRunning == 1) {
             displayLandInfo(land, p1);
             choice = collectChoice(sc);
@@ -78,7 +93,8 @@ public class TextBasedDriver {
      * @param p1 	TextPlayer instance that interacts with land
      */
     private static void displayLandInfo(TextLand land, TextPlayer p1) {
-        System.out.println("Day: " + p1.getDay() + "\t\t\tObjectCoins:" + p1.getCoins());
+    	DecimalFormat nf = new DecimalFormat("#.00");
+        System.out.println("Day: " + p1.getDay() + "\t\t\tObjectCoins:" + nf.format(p1.getCoins()));
         System.out.println("Land state: " + land.landState.toString() + "\tCrop: " + land.crop.getCropName().toString());
         System.out.println();
     }

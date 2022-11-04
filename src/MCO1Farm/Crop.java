@@ -1,5 +1,7 @@
 package MCO1Farm;
 
+import java.util.Random;
+
 /**
  * Crop class - object that is planted
  * on a plot of land.
@@ -30,7 +32,9 @@ public class Crop
     private boolean isHarvestable = false;
     private int farmerEarningTypeBonus = 0; 
     private int producedAmt = 0;
-
+    
+    //Variables responsible for randomizing the amount of crop yield
+    Random random = new Random();
     /**
      * Constructor for Crop class.
      * @param cropName crop name that determines
@@ -50,6 +54,7 @@ public class Crop
                 this.produceMin = 1;
                 this.produceMax = 2;
                 this.sellPrice = 6;
+                this.producedAmt = produceMin + random.nextInt(this.produceMax);
                 break;
             default:
                 this.cropName = "empty";
@@ -60,6 +65,10 @@ public class Crop
                 this.produceMin = 0;
                 this.produceMax = 0;
                 this.sellPrice = 0;
+                this.producedAmt = 0;
+                this.waterAmt = 0;
+                this.isWithered = false;
+                this.isHarvestable = false;
         }
     }
 
@@ -141,20 +150,12 @@ public class Crop
     {
         if (!this.cropName.equals("empty")){
             if (age > maxAge ||
-                    (age == maxAge && waterAmt < waterMin))
-                this.isWithered = true;
-            else if (age == maxAge)
+                    (age == maxAge && waterAmt < waterMin)) {
+            	this.isWithered = true;
+            	this.isHarvestable = false;
+            } else if (age == maxAge)
                 this.isHarvestable = true;
         }
-    }
-
-    /**
-     * Generates a random value between the crop's
-     * minimum and maximum produce values.
-     */
-    // Generate amt. of crop items obtained from harvesting a single crop
-    private void generateYield(){
-        this.producedAmt =  produceMin + (int)(Math.random() * ((produceMax - produceMin) + 1));
     }
 
     /**
@@ -162,9 +163,7 @@ public class Crop
      * of objectcoins), exclusive of title bonus.
      * @return the crop's price yield.
      */
-    private double computeHarvestTotal()
-    {
-        generateYield();
+    private double computeHarvestTotal() {
         return this.producedAmt* (sellPrice + farmerEarningTypeBonus);
     }
 
