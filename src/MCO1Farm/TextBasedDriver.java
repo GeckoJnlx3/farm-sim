@@ -1,4 +1,4 @@
-package MyFarm;
+package MCO1Farm;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;

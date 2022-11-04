@@ -1,4 +1,6 @@
-package MyFarm;
+package MCO1Farm;
+
+import MyFarm.Title;
 
 class TextPlayer {
 
@@ -85,7 +87,8 @@ class TextPlayer {
             this.objectCoins += earned;
             this.xp += 5;
 
-            System.out.println("You harvested a turnip and earned " + earned + " coins and 5 XP!");
+            System.out.println("You harvested "+ land.crop.getProducedAmt() + " turnip(s) and earned " + earned 
+            		+ " coins and 5 XP!");
 
             land.landState = LandState.UNPLOWED; // revert to unplowed land
             land.crop = new Crop(""); // remove crop

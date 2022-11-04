@@ -1,4 +1,5 @@
-package MyFarm;
+package MCO1Farm;
+
 
 class TextLand {
     LandState landState;
