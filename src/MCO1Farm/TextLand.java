@@ -4,7 +4,6 @@ package MCO1Farm;
 class TextLand {
     LandState landState;
     Crop crop;
-    String [] rockCSVData = new String [30];
     
     public TextLand () {
         landState = LandState.UNPLOWED;

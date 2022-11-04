@@ -1,6 +1,6 @@
 package MCO1Farm;
 
-public enum LandState {
+enum LandState {
     BLOCKED,
     UNPLOWED,
     PLOWED,

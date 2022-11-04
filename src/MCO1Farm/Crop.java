@@ -97,7 +97,7 @@ public class Crop
         this.age = age + 1;
     }
 
-    public void checkCropStatus()
+    void checkCropStatus()
     {
         if (!this.cropName.equals("empty")){
         	if (age > maxAge || 
