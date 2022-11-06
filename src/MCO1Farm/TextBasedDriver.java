@@ -32,9 +32,6 @@ public class TextBasedDriver {
         Scanner sc = new Scanner(System.in);
         int choice;
         
-
-//        System.out.println("Farm sim.\n1-start game\n0-close program");
-//        isRunning = sc.nextInt();
         do {
             try {
             	System.out.println("Farm sim.\n1-start game\n0-close program");
@@ -47,13 +44,6 @@ public class TextBasedDriver {
                 		+ "enter only the following choices.");
             } sc.nextLine();
         } while (isRunning != 0 && isRunning != 1);
-        
-//        while (isRunning != 0 &&
-//                isRunning != 1) {
-//            System.out.println("Invalid input.");
-//            System.out.println("Farm sim.\n1-start game\n0-close program");
-//            isRunning = sc.nextInt();
-//        }
         while (isRunning == 1) {
             displayLandInfo(land, p1);
             choice = collectChoice(sc);

@@ -1,7 +1,5 @@
 package MCO1Farm;
 
-import java.text.DecimalFormat;
-
 /**
  * Player class interacts with land to plant,
  * water and harvest crops.
