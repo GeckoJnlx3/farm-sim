@@ -2,10 +2,6 @@ package MyFarm;
 
 public class Crop
 {
-    // 1 (Root) - Turnip, Carrot, Potato
-    // 2 (Flower) - Rose, Turnips, Sunflower
-    // 3 (Fruit Tree) - Mango, Apple
-
     // These are variables inherent to each crop category
     CropType cropType;
 
@@ -76,12 +72,12 @@ public class Crop
 		return this.waterAmt;
 	}
 	
-	public int getCropCost() {
+	public double getCropCost() {
 		return this.cropType.cropCost;
 	}
     
     public boolean increaseWaterAmt() {
-    	if (this.waterAmt < this.waterBonus) {
+    	if (this.waterAmt < this.cropType.waterBonus) {
     		this.waterAmt++;
     		return true;
     	} else return false;
@@ -94,11 +90,11 @@ public class Crop
 
     public void checkCropStatus()
     {
-        if (!this.cropName.equals("empty")){
-        	if (age > maxAge || 
-        			(age == maxAge && waterAmt < waterMin))
+        if (!this.cropType.cropName.equals("")){
+        	if (age > cropType.maxAge || 
+        			(age == cropType.maxAge && waterAmt < cropType.waterMin))
                 this.isWithered = true;
-            else if (age == maxAge)
+            else if (age == cropType.maxAge)
                 this.isHarvestable = true;
         }
     }
@@ -111,7 +107,7 @@ public class Crop
 
     public double computeHarvestTotal()
     {
-        return generateYield() * (sellPrice + farmerEarningTypeBonus);
+        return generateYield() * (cropType.sellPrice + farmerEarningTypeBonus);
     }
 
     public double computeWaterBonus()
@@ -139,7 +135,5 @@ public class Crop
 
         return a + b + c;
     }
-
-
 }
 

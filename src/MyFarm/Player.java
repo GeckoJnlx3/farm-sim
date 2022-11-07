@@ -129,10 +129,10 @@ class Player {
     public void waterPlant(Land land, JButton[][] landArray, JLabel playerAction, LeftPanel leftPanel) {
         if (land.landState[0][0] == LandState.PLANTED) {
         	boolean isWatered = land.crops[0][0].increaseWaterAmt();
-            this.xp += 0.5;
-            if (isWatered)
+            if (isWatered) { 
             	playerAction.setText("The plant has been watered " + land.crops[0][0].getWaterAmt() + " times.");
-            else 
+                this.xp += 0.5;            	
+            } else 
             	playerAction.setText("The plant has reached it's max water amount!");
         }
         else
@@ -141,25 +141,22 @@ class Player {
     }
 
     public void removePlant(Land land, JButton[][] landArray, JLabel playerAction, LeftPanel leftPanel) {
-        if (land.landState[0][0] == LandState.UNPLOWED || 
+    	this.objectCoins -= 7;
+    	if (land.landState[0][0] == LandState.UNPLOWED || 
         		land.landState[0][0] == LandState.PLOWED) {
         	land.landState[0][0] = LandState.UNPLOWED;
-        	this.objectCoins -= 7;
         	playerAction.setText("You shoveled nothing... you lost 7 coins.");
         } else if (land.landState[0][0] == LandState.BLOCKED) {
-        	this.objectCoins -= 7;
         	playerAction.setText("You tried to shovel the rock... you lost 7 coins.");
         } else if (land.landState[0][0] == LandState.PLANTED) {
             land.landState[0][0] = LandState.UNPLOWED;
             landArray[0][0].setIcon(unplowed);
             land.crops[0][0] = new Crop("");
-            this.objectCoins -= 7;
             playerAction.setText("You shoveled your growing plant out... you lost 7 coins.");
         } else if (land.landState[0][0] == LandState.WITHERED) {
             land.landState[0][0] = LandState.UNPLOWED;
             landArray[0][0].setIcon(unplowed);
             land.crops[0][0] = new Crop("");
-            this.objectCoins -= 7;
             this.xp += 2;
             playerAction.setText("The withered plant was removed.");
         } 
