@@ -152,7 +152,7 @@ public class RightPanel
 
     public void updateCrops(Land land, JButton[][] landArray)
     {
-        if (!(land.crops[0][0].getCropName().equals("")))
+        if (!(land.crops[0][0].cropType.cropName.equals("")))
             land.crops[0][0].updatePlantStage();
 
         land.crops[0][0].checkCropStatus();
