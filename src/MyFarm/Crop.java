@@ -216,7 +216,7 @@ public class Crop
         }
     }
 
-    // Generate amt. of crop items obtained from harvesting a single crop
+    // Generate amount. of crop items obtained from harvesting a single crop
     public int generateYield(int produceMin, int produceMax)
     {
         return produceMin + (int)(Math.random() * ((produceMax - produceMin) + 1));
