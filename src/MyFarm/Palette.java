@@ -10,7 +10,7 @@ public enum Palette {
     WATERED_PLOT(0x654f2b),
     BOTTOM_PANEL(0x5D5D5D);    
 
-    private Color color;
+    private final Color color;
 
     private Palette(int color){
         this.color = new Color(color);
