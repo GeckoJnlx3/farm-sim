@@ -2,6 +2,10 @@ package MyFarm;
 
 import javax.swing.*;
 
+import MyFarm.crop.Crop;
+import MyFarm.land.Land;
+import MyFarm.land.LandState;
+
 class Player {
 
     private double xp = 0;

@@ -1,6 +1,12 @@
 package MyFarm;
 
 import javax.swing.*;
+
+import MyFarm.crop.Crop;
+import MyFarm.crop.CropType;
+import MyFarm.land.Land;
+import MyFarm.land.LandState;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -152,10 +158,11 @@ public class RightPanel
 
     public void updateCrops(Land land, JButton[][] landArray)
     {
-        if (!(land.crops[0][0].cropType.cropName.equals("")))
+        if (land.crops[0][0].cropType != CropType.EMPTY){
             land.crops[0][0].updatePlantStage();
-
-        land.crops[0][0].checkCropStatus();
+            land.crops[0][0].checkCropStatus();
+        }
+        
 
         if (land.crops[0][0].getWitherStatus() == true)
         {

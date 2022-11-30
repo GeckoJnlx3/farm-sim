@@ -1,4 +1,4 @@
-package MyFarm;
+package MyFarm.land;
 
 import java.util.Random;
 

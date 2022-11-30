@@ -4,15 +4,18 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import MyFarm.land.Land;
+import MyFarm.land.LandState;
+
 public class MainView {
     JFrame mainFrame;
 
-    JButton [][] landArray = new JButton [5][10];
+    // JButton [][] landArray = new JButton [5][10];
+    Plot [][]landArray = new Plot[5][10];
 
     LeftPanel leftPanel;
     RightPanel rightPanel;
@@ -44,9 +47,9 @@ public class MainView {
 
     public void initializePanels(Player P1, Land land){
 
-        bottomPanel.setBackground(new Color (0x5D5D5D)); //gray
+        bottomPanel.setBackground(Palette.BOTTOM_PANEL.getColor()); //gray
 
-        playerAction.setForeground(new Color (0xFFFFFF)); //white
+        playerAction.setForeground(Palette.WHITE.getColor()); //white
 
         bottomPanel.add(playerAction);
         bottomPanel.setPreferredSize(new Dimension(50,100));
@@ -54,29 +57,18 @@ public class MainView {
 
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new GridLayout(5,10,5,5));
-        centerPanel.setBackground(new Color (0xC0E5C8)); //green
+        centerPanel.setBackground(Palette.GRASS.getColor()); //green
 
         initializeSidePanels();
 
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 10; j++) {
-                landArray[i][j] = new JButton();
+                landArray[i][j] = new Plot(land.landState[i][j],i ,j);
 
-                if (land.landState[i][j] == LandState.UNPLOWED) {
-                	landArray[i][j].setBackground(new Color (0x9F8C83)); //brown
-                	landArray[i][j].setIcon(unplowed);
-                }
-                else if (land.landState[i][j] == LandState.BLOCKED)
-                    landArray[i][j].setBackground(Color.lightGray);
-                landArray[i][j].setForeground(new Color(0x8EE779)); //plant color
-                landArray[i][j].setIcon(unplowed);
-                landArray[i][j].setFocusable(false);
                 centerPanel.add(landArray[i][j]);
             }
         }
 
-//        land.landState[0][0] = LandState.PLOWED;
-//        landArray[0][0].setIcon(plowed);
         land.landState[0][0] = LandState.UNPLOWED;
         landArray[0][0].setIcon(unplowed);
         landArray[0][0].addActionListener(new ActionListener()
@@ -99,8 +91,8 @@ public class MainView {
                 	rightPanel.shovel.setText("shovel");
                 }
                 else if(land.landState[0][0] == LandState.PLOWED && 
-                    	!rightPanel.wateringCan.getText().equals("selected"))
-                        rightPanel.cardLayout.next(rightPanel.rightCardPanel);
+                    !rightPanel.wateringCan.getText().equals("selected"))
+                    rightPanel.cardLayout.next(rightPanel.rightCardPanel);
             }
         });
 

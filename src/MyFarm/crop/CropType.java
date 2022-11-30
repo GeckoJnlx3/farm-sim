@@ -1,6 +1,6 @@
-package MyFarm;
+package MyFarm.crop;
 
-enum CropType {
+public enum CropType {
     EMPTY("", "", 0,0,0,0,0,0,0,0,0,0),
 	TURNIP("root", "turnip", 2, 1, 2, 0, 1, 1, 2, 5, 6, 5),
     CARROT("root", "carrot", 3, 1, 2, 0, 1, 1, 2, 10, 9, 7.5),
@@ -16,7 +16,7 @@ enum CropType {
     final String cropName;
     final int maxAge; // AKA Harvest Time
     final int waterMin;
-    final int waterBonus;
+    public final int waterBonus;
     final int fertilizerMin;
     final int fertilizerBonus;
     final int produceMin;
