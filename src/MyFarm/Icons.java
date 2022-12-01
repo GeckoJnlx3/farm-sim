@@ -13,7 +13,8 @@ public enum Icons {
     TITLE("src/MyFarm/icons/title.png"),
     SHOP("src/MyFarm/icons/shop.png"),
     PLAYER("src/MyFarm/icons/player.png"),
-    DAY("src/MyFarm/icons/day.png");
+    DAY("src/MyFarm/icons/day.png"),
+    TURNIP("src/MyFarm/icons/turnip.png");
 
 
     private final ImageIcon btnImage;
