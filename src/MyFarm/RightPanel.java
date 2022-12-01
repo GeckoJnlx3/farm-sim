@@ -19,10 +19,12 @@ public class RightPanel
     JPanel seedPanel = new JPanel();
 
     JButton forwardButton = new JButton("advance day");
-    JButton wateringCan = new JButton("watering can");
-    JButton pickaxe = new JButton("pickaxe");
-    JButton shovel = new JButton ("shovel");
-    JButton hoe = new JButton ("hoe");
+    
+    ToolButton wateringCan = new ToolButton("watering can");
+    ToolButton pickaxe = new ToolButton("pickaxe");
+    ToolButton shovel = new ToolButton ("shovel");
+    ToolButton hoe = new ToolButton ("hoe");
+    ToolButton fertilizer = new ToolButton("fertilizer");
 
     JButton seedTurnip = new JButton();
 
@@ -59,39 +61,43 @@ public class RightPanel
             }
         });
 
-        wateringCan.setFocusable(false);
         wateringCan.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 view.bottomPanel.playerAction.setText("Select on a land to water");
-                selectTool(view.bottomPanel.playerAction, wateringCan, pickaxe, shovel, hoe, "watering can", "pickaxe", "shovel", "hoe");
+                selectTool(view, wateringCan, pickaxe, shovel, hoe, fertilizer);
             }
         });
 
-        pickaxe.setFocusable(false);
         pickaxe.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 view.bottomPanel.playerAction.setText("Select on a land to remove a rock");
-                selectTool(view.bottomPanel.playerAction, pickaxe, wateringCan, shovel, hoe, "pickaxe", "watering can", "shovel", "hoe");
+                selectTool(view, pickaxe, wateringCan, shovel, hoe, fertilizer);
             }
         });
 
-        shovel.setFocusable(false);
         shovel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 view.bottomPanel.playerAction.setText("Select on a plant to remove");
-                selectTool(view.bottomPanel.playerAction, shovel, wateringCan, pickaxe, hoe, "shovel", "watering can", "pickaxe", "hoe");
+                selectTool(view, shovel, wateringCan, pickaxe, hoe, fertilizer);
             }
         });
 
-        hoe.setFocusable(false);
         hoe.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 view.bottomPanel.playerAction.setText("Select on a land to plow");
-                selectTool(view.bottomPanel.playerAction, hoe, wateringCan, shovel, pickaxe, "hoe", "watering can", "shovel", "pickaxe");
+                selectTool(view, hoe, wateringCan, pickaxe, fertilizer, shovel);
+            }
+        });
+
+        fertilizer.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                view.bottomPanel.playerAction.setText("Select on a land to plow");
+                selectTool(view, fertilizer, wateringCan, pickaxe, hoe, shovel);
             }
         });
 
@@ -100,29 +106,7 @@ public class RightPanel
         toolPanel.add(pickaxe);
         toolPanel.add(shovel);
         toolPanel.add(hoe);
-    }
-
-    // assume btn1 is the button, the rest are other btns
-
-    public void selectTool(JLabel playerAction, JButton btn1, JButton btn2, JButton btn3, JButton btn4,
-                    String toolName1, String toolName2, String toolName3,
-                    String toolName4) {
-        //if there's already a selected tool, replace it with the tool being selected
-        boolean isSelectingOther =  btn2.getText().equals("selected") || 
-                                    btn3.getText().equals("selected") ||
-                                    btn4.getText().equals("selected") ? true : false;
-        //if the tool is selected again
-        boolean isAlreadySelected = btn1.getText().equals("selected") ? true:false;
-
-        if (isSelectingOther) {
-            btn1.setText("selected");
-            btn2.setText(toolName2);
-            btn3.setText(toolName3);
-            btn4.setText(toolName4);
-        } else if (isAlreadySelected) {
-            btn1.setText(toolName1);
-            playerAction.setText("");
-        } else btn1.setText("selected");
+        toolPanel.add(fertilizer);
     }
 
     public void initializeSeeds(MyFarmModel model, MyFarmView view)
@@ -176,9 +160,28 @@ public class RightPanel
                 }
             }    
         }
-        
-        
-
-
     }
+
+    public void selectTool(MyFarmView view, ToolButton btn1, ToolButton btn2,ToolButton btn3,ToolButton btn4,ToolButton btn5) {
+        //if there's already a selected tool, replace it with the tool being selected
+            boolean isSelectingOther =  btn2.getText().equals("selected") || 
+                                    btn3.getText().equals("selected") ||
+                                    btn4.getText().equals("selected") ||
+                                    btn5.getText().equals("selected")? true : false;
+            
+            //if the tool is selected again
+            boolean isAlreadySelected = btn1.getText().equals("selected") ? true:false;
+    
+            if (isSelectingOther) {
+                btn1.setText("selected");
+                btn2.setText(btn2.name);
+                btn3.setText(btn3.name);
+                btn4.setText(btn4.name);
+                btn5.setText(btn5.name);
+            } else if (isAlreadySelected) {
+                btn1.setText(btn1.name);
+                view.bottomPanel.playerAction.setText("");
+            } else btn1.setText("selected");
+    
+        }
 }

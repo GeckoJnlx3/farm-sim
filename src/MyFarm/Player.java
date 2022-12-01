@@ -102,7 +102,7 @@ class Player {
 
         model.land.landState[i][j] = LandState.UNPLOWED; // revert to unplowed land
         view.centerPanel.plotBtn[i][j].setIcon(unplowed); // icon unplowed
-        model.land.crops[0][0] = new Crop(""); // remove crop
+        model.land.crops[i][j] = new Crop(""); // remove crop
 
         view.leftPanel.initializeGameInfo(this);
     }
@@ -118,17 +118,25 @@ class Player {
             view.bottomPanel.playerAction.setText("You cannot plow the land!");
         view.leftPanel.initializeGameInfo(this);
     }
-//
-//    public void fertilizeCrop (int row, int col) {
-//        if (land[row][col].landState == LandState.PLANTED) {
-//            land[row][col].crop.fertilizerAmt++;
-//            this.objectCoins -= 4;
-//            this.XP +=4;
-//        }
-//        else
-//            System.out.println("You cannot fertilize the land!");
-//    }
-//
+
+    public void fertilizeCrop (MyFarmModel model, MyFarmView view, int i, int j) {
+        if (model.land.landState[i][j] == LandState.PLANTED) {
+            boolean isFertilized = model.land.crops[i][j].increaseFertAmt(model.player.objectCoins);
+            if (isFertilized && this.objectCoins >= 4){
+                view.bottomPanel.playerAction.setText("The plant has been fertilized " + 
+                model.land.crops[i][j].getFertilizerAmt() + " times");
+                this.objectCoins -= 4;
+                this.xp +=4;
+            } else if (this.objectCoins < 4){
+                view.bottomPanel.playerAction.setText("You don't have enough ObjectCoins");
+            } else if (!isFertilized){
+                view.bottomPanel.playerAction.setText("You have reached the max amount of fertilizer.");
+            }
+        } else
+            System.out.println("You cannot fertilize the land!");
+        view.leftPanel.initializeGameInfo(this);
+    }
+
     public void waterPlant(MyFarmModel model, MyFarmView view, int i, int j) {
         if (model.land.landState[i][j] == LandState.PLANTED) {
         	boolean isWatered = model.land.crops[i][j].increaseWaterAmt();
@@ -169,13 +177,22 @@ class Player {
         view.leftPanel.initializeGameInfo(this);
     }
 
-//    public void removeRock(int row, int col) {
-//        if (land[row][col].landState == LandState.BLOCKED) {
-//            land[row][col].landState = LandState.UNPLOWED;
-//            this.objectCoins -= 50;
-//            this.XP += 15;
-//        }
-//
-//    }
+    public void removeRock(MyFarmModel model, MyFarmView view, int i, int j) {
+        boolean enoughCoins = model.player.getCoins()>50 ? true :false;
+        boolean isRock =   model.land.landState[i][j] == LandState.BLOCKED ? true : false;   
+        
+        if (enoughCoins && isRock) {
+            model.land.landState[i][j] = LandState.UNPLOWED;
+            view.bottomPanel.playerAction.setText("You have successfully removed a rock");
+            this.objectCoins -= 50;
+            this.xp += 15;
+            view.centerPanel.plotBtn[i][j].setPlotView(model.land.landState[i][j], model.land.crops[i][j]);
+        } else if (!isRock){
+            view.bottomPanel.playerAction.setText("There is no rock to remove.");
+        } else if (!enoughCoins){
+            view.bottomPanel.playerAction.setText("You don't have enough coins.");
+        }
+        view.leftPanel.initializeGameInfo(this);
+   }
 
 }

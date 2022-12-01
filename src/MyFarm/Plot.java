@@ -36,6 +36,14 @@ public class Plot extends JButton{
                 else if (view.rightPanel.shovel.getText().equals("selected")) {
                     model.player.removePlant(model, view, nRow, nCol);
                     view.rightPanel.shovel.setText("shovel");
+                } 
+                else if (view.rightPanel.pickaxe.getText().equals("selected")){
+                    model.player.removeRock(model, view, nRow, nCol);
+                    view.rightPanel.pickaxe.setText("pickaxe");
+                }
+                else if (view.rightPanel.fertilizer.getText().equals("selected")){
+                    model.player.fertilizeCrop(model, view, nRow, nCol);
+                    view.rightPanel.fertilizer.setText("fertilizer");
                 }
                 else if(model.land.landState[nRow][nCol] == LandState.PLOWED && 
                     !view.rightPanel.wateringCan.getText().equals("selected"))

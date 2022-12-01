@@ -88,6 +88,15 @@ public class Crop
         return isValidAction;
     }
 
+    public boolean increaseFertAmt(double objectCoins) {
+    	boolean isValidAction = this.fertilizerAmt < this.cropType.fertilizerBonus && objectCoins >= 4 ? true : false;
+        
+        if (isValidAction) 
+    		this.fertilizerAmt++;
+
+        return isValidAction;
+    }
+
     public void updatePlantStage()
     {
         this.age = age + 1;
@@ -135,6 +144,10 @@ public class Crop
             return (a + b + c) * 1.1;
 
         return a + b + c;
+    }
+
+    public String getFertilizerAmt() {
+        return null;
     }
 }
 
