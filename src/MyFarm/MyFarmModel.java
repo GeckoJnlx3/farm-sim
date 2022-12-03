@@ -3,6 +3,11 @@ package MyFarm;
 import MyFarm.land.Land;
 
 public class MyFarmModel {
-    Land land = new Land();
-    Player player = new Player();
+    Land land;
+    Player player;
+
+    public MyFarmModel(){
+        land = new Land();
+        player = new Player();
+    }
 }

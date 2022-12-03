@@ -1,10 +1,15 @@
 package MyFarm;
 
 public class MyFarmController {
-    MyFarmView view = new MyFarmView();
-    MyFarmModel model = new MyFarmModel();
+    MyFarmView view;
+    MyFarmModel model;
 
     public MyFarmController () {
+        view = new MyFarmView();
+        model = new MyFarmModel();
+    }
+
+    public void startView(){
         this.view.setVisible(true);
     }
 
