@@ -41,4 +41,8 @@ public enum CropType {
         this.sellPrice = sellPrice;
         this.expYield = expYield;
     }
+
+    public String getCropName(){
+        return cropName;
+    }
 }

@@ -26,7 +26,7 @@ public class RightPanel
     ToolButton hoe = new ToolButton ("hoe");
     ToolButton fertilizer = new ToolButton("fertilizer");
 
-    JButton seedTurnip = new JButton();
+    JButton seedTurnip = new JButton(); //change this into an array of SeedButton
 
     public RightPanel(MyFarmModel model, MyFarmView view)
     {
@@ -37,6 +37,7 @@ public class RightPanel
         toolPanel.setPreferredSize(new Dimension(125,100));
         seedPanel.setBackground(Palette.GRASS.getColor());
         seedPanel.setPreferredSize(new Dimension(125,100));
+        seedPanel.setLayout(new GridLayout(4,2));
 
         initializeTools(model, view);
         initializeSeeds(model, view);
@@ -109,6 +110,7 @@ public class RightPanel
         toolPanel.add(fertilizer);
     }
 
+    //change this to work with the seeds
     public void initializeSeeds(MyFarmModel model, MyFarmView view)
     {
         seedTurnip.setIcon(Icons.TURNIP.getImageIcon());
@@ -142,7 +144,7 @@ public class RightPanel
     {
         for (int i = 0; i < 5;i++){
             for (int j = 0; j < 10; j++){
-                if (model.land.crops[i][j].cropType != CropType.EMPTY){
+                if (!(model.land.crops[i][j].cropType == CropType.EMPTY)){
                     model.land.crops[i][j].updatePlantStage();
                     model.land.crops[i][j].checkCropStatus();
                 }

@@ -5,6 +5,7 @@ import java.awt.Color;
 public enum Palette {
     WHITE(0xFFFFFF), 
     GRASS(0xC0E5C8),
+    SEED_SLOT(0xAAE29F),
     UNWATERED_PLOT(0x9F8C83),
     ROCK(0xBABABA),
     WATERED_PLOT(0x654f2b),

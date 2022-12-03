@@ -41,7 +41,7 @@ public class Crop
      *                 what type of crop should
      *                 be initialized.
      */
-    Crop(String cropName)
+    public Crop(String cropName)
     {
         switch(cropName)
         {
