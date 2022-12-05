@@ -63,7 +63,7 @@ public class Plot extends JButton{
                 this.setIcon(Icons.PLOWED.getImageIcon());
                 break;
             case PLANTED:
-                if (crop.getWaterAmt() == crop.cropType.waterBonus)
+                if (crop.getWaterAmt() == crop.cropType.getWaterBonus())
                     this.setBackground(Palette.WATERED_PLOT.getColor());
                     
                 setPlantIcon(crop.cropType);
@@ -113,4 +113,7 @@ public class Plot extends JButton{
     public int getnCol(){
         return nCol;
     }
+
 }
+
+
