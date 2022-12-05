@@ -1,9 +1,9 @@
 package MyFarm;
 
-import javax.swing.*;
-
 import MyFarm.crop.Crop;
 import MyFarm.land.LandState;
+
+import javax.swing.*;
 
 class Player {
 
@@ -12,8 +12,6 @@ class Player {
     private Title title = Title.FARMER;
     private double objectCoins = 100;
     private int time = 1;
-    ImageIcon unplowed = new ImageIcon("src/MyFarm/icons/unplowed.png");
-    ImageIcon plowed = new ImageIcon("src/MyFarm/icons/plowed.png");
 
     void levelUp() {
         this.level++;
@@ -101,7 +99,7 @@ class Player {
         view.bottomPanel.playerAction.setText("You harvested a turnip and earned " + earned + " coins and 5 XP!");
 
         model.land.landState[i][j] = LandState.UNPLOWED; // revert to unplowed land
-        view.centerPanel.plotBtn[i][j].setIcon(unplowed); // icon unplowed
+        view.centerPanel.plotBtn[i][j].setIcon(Icons.UNPLOWED.getImageIcon()); // icon unplowed
         model.land.crops[i][j] = new Crop(""); // remove crop
 
         view.leftPanel.initializeGameInfo(this);
@@ -111,7 +109,7 @@ class Player {
         if (model.land.landState[i][j] == LandState.UNPLOWED) {
         	model.land.landState[i][j] = LandState.PLOWED;
         	view.bottomPanel.playerAction.setText("The land is plowed.");
-        	view.centerPanel.plotBtn[i][j].setIcon(plowed);
+        	view.centerPanel.plotBtn[i][j].setIcon(Icons.PLOWED.getImageIcon());
         	this.xp += 0.5;
         }
         else
@@ -164,12 +162,12 @@ class Player {
         	view.bottomPanel.playerAction.setText("You tried to shovel the rock... you lost 7 coins.");
         } else if (model.land.landState[i][j] == LandState.PLANTED) {
             model.land.landState[i][j] = LandState.UNPLOWED;
-            view.centerPanel.plotBtn[i][j].setIcon(unplowed);
+            view.centerPanel.plotBtn[i][j].setIcon(Icons.UNPLOWED.getImageIcon());
             model.land.crops[i][j] = new Crop("");
             view.bottomPanel.playerAction.setText("You shoveled your growing plant out... you lost 7 coins.");
         } else if (model.land.landState[i][j] == LandState.WITHERED) {
             model.land.landState[i][j] = LandState.UNPLOWED;
-            view.centerPanel.plotBtn[i][j].setIcon(unplowed);
+            view.centerPanel.plotBtn[i][j].setIcon(Icons.UNPLOWED.getImageIcon());
             model.land.crops[i][j] = new Crop("");
             this.xp += 2;
             view.bottomPanel.playerAction.setText("The withered plant was removed.");

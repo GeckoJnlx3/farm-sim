@@ -22,7 +22,7 @@ public class MyFarmView extends JFrame{
  
         
         this.add(rightPanel.rightCardPanel, BorderLayout.EAST);
-        this.add(leftPanel, BorderLayout.WEST);
+        this.add(leftPanel.leftCardPanel, BorderLayout.WEST);
         this.add(centerPanel, BorderLayout.CENTER);
         this.add(bottomPanel, BorderLayout.SOUTH);
 

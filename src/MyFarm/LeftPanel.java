@@ -1,24 +1,45 @@
 package MyFarm;
 
-import java.awt.Dimension;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-public class LeftPanel extends JPanel{
+public class LeftPanel{
+
+    CardLayout cardLayout = new CardLayout();
+    JPanel leftCardPanel = new JPanel(cardLayout);
+    JPanel infoPanel = new JPanel();
+    JPanel titlePanel = new JPanel();
+
+    JButton titlePanelSwap = new JButton("Buy a Title");
+
+    JButton infoPanelSwap = new JButton("Back");
+    JButton titleReg = new JButton("Registered Farmer");
+    JButton titleDis = new JButton("Distinguished Farmer");
+    JButton titleLeg = new JButton("Legendary Farmer");
 
     JLabel objectCoins = new JLabel();
     JLabel currExp = new JLabel();
     JLabel currLvl = new JLabel();
     JLabel currTitle = new JLabel();
     JLabel currDay = new JLabel();
-    JButton shopTab = new JButton();
-    JButton playerTab = new JButton();
 
     public LeftPanel(Player p1){
-        this.setBackground(Palette.GRASS.getColor());
-        this.setPreferredSize(new Dimension(125,100));
+        leftCardPanel.setBackground(Palette.GRASS.getColor());
+        leftCardPanel.setPreferredSize(new Dimension(125,100));
+
+        infoPanel.setBackground(Palette.GRASS.getColor());
+        infoPanel.setPreferredSize(new Dimension(125,100));
+        titlePanel.setBackground(Palette.GRASS.getColor());
+        titlePanel.setPreferredSize(new Dimension(125,100));
 
         initializeGameInfo(p1);
+        initializeTitles(p1);
+
+        leftCardPanel.add(infoPanel, "info");
+        leftCardPanel.add(titlePanel, "title");
     }
 
     public void initializeGameInfo(Player p1)
@@ -34,10 +55,39 @@ public class LeftPanel extends JPanel{
         currTitle.setText("Farmer");
         currTitle.setIcon(Icons.PLAYER.getImageIcon());
 
-        this.add(currDay);
-        this.add(objectCoins);
-        this.add(currExp);
-        this.add(currLvl);
-        this.add(currTitle);
+        titlePanelSwap.setFocusable(false);
+        titlePanelSwap.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                cardLayout.next(leftCardPanel);
+            }
+        });
+
+        infoPanel.add(titlePanelSwap);
+        infoPanel.add(currDay);
+        infoPanel.add(objectCoins);
+        infoPanel.add(currExp);
+        infoPanel.add(currLvl);
+        infoPanel.add(currTitle);
+    }
+
+    public void initializeTitles(Player p1)
+    {
+        infoPanelSwap.setFocusable(false);
+        infoPanelSwap.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                cardLayout.next(leftCardPanel);
+            }
+        });
+
+        titlePanel.add(infoPanelSwap);
+        titlePanel.add(titleReg);
+        titlePanel.add(titleDis);
+        titlePanel.add(titleLeg);
     }
 }

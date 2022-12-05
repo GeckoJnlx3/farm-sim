@@ -97,7 +97,7 @@ public class RightPanel
         fertilizer.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.bottomPanel.playerAction.setText("Select on a land to plow");
+                view.bottomPanel.playerAction.setText("Select on a land to fertilize");
                 selectTool(view, fertilizer, wateringCan, pickaxe, hoe, shovel);
             }
         });
