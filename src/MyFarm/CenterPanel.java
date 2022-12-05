@@ -14,7 +14,8 @@ public class CenterPanel extends JPanel{
         //initialize buttons
         for (int i = 0; i < 5; i++){
             for (int j = 0; j < 10; j++){
-                plotBtn[i][j] = new Plot(model.land.landState[i][j], i, j,model, view);
+                plotBtn[i][j] = new Plot(model.land.landState[i][j], i, j,model, 
+                                        view);
                 this.add(plotBtn[i][j]);
             }
         }

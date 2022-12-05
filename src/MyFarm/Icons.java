@@ -2,6 +2,9 @@ package MyFarm;
 
 import javax.swing.ImageIcon;
 
+/**
+ * Icons - contains the image paths for every icon that will be used
+ */
 public enum Icons {
     //land images (needs rock)
     PLOWED("src/MyFarm/icons/plowed.png"),

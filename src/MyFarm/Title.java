@@ -1,5 +1,8 @@
 package MyFarm;
 
+/**
+ * Enum class
+ */
 public enum Title {
     FARMER,
     REGISTERED_FARMER,

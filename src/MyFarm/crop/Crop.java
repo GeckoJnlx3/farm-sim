@@ -1,5 +1,12 @@
 package MyFarm.crop;
 
+/**
+ * Crop class - object that is planted
+ * on a plot of land.
+ * Requires a TextLand tile in the PLOWED
+ * state in order to be utilized.
+ */
+
 public class Crop
 {
     // These are variables inherent to each crop category
@@ -11,8 +18,15 @@ public class Crop
     private int fertilizerAmt;
     private boolean isWithered;
     private boolean isHarvestable;
-    private int farmerEarningTypeBonus = 0; // Create getter class for Farmer title?
+    // TO DO: Create getter class for Farmer title
+    private int farmerEarningTypeBonus = 0; 
 
+    /**
+     * Constructor for Crop class.
+     * @param cropName crop name that determines
+     *                 what type of crop should
+     *                 be initialized.
+     */
     public Crop(String cropName) {
         this.age = 0;
         this.waterAmt = 0;
@@ -50,37 +64,68 @@ public class Crop
                 break;
         }
     }
-
+    
+    /**
+     * getter method for age
+     * @return crop's age
+     */
     public int getAge()
     {
         return this.age;
     }
 
+    /**
+     * getter method for maxAge
+     * @return crop's maxAge
+     */
     public int getMaxAge()
     {
-        return this.cropType.maxAge;
+        return this.cropType.getMaxAge();
     }
 
+    /**
+     * getter method for isWithered
+     * @return crop's isWithered
+     */
     public boolean getWitherStatus()
     {
         return this.isWithered;
     }
 
+    /**
+     * getter method for isHarvestable
+     * @return crop's isHarvestable
+     */
     public boolean getHarvestStatus()
     {
         return this.isHarvestable;
     }
     
+    /**
+     * getter method for waterAmt
+     * @return crop's waterAmt
+     */
 	public int getWaterAmt() {
 		return this.waterAmt;
 	}
 	
+    /**
+     * getter method for waterAmt
+     * @return crop's waterAmt
+     */
 	public double getCropCost() {
-		return this.cropType.cropCost;
+		return this.cropType.getCropCost();
 	}
-    
+
+    /**
+     * Increases the water amount as long as
+     * it has not exceeded its maximum value.
+     * @return boolean which determines if the
+     *         crop was successfully watered.
+     */
     public boolean increaseWaterAmt() {
-    	boolean isValidAction = this.waterAmt < this.cropType.waterBonus ? true : false;
+    	boolean isValidAction = this.waterAmt < this.cropType.getWaterBonus() ? 
+        true : false;
         
         if (isValidAction) 
     		this.waterAmt++;
@@ -88,8 +133,15 @@ public class Crop
         return isValidAction;
     }
 
+    /**
+     * Increases the fertilizer amount as long as
+     * it has not exceeded its maximum value.
+     * @return boolean which determines if the
+     *         crop was successfully watered.
+     */
     public boolean increaseFertAmt(double objectCoins) {
-    	boolean isValidAction = this.fertilizerAmt < this.cropType.fertilizerBonus && objectCoins >= 4 ? true : false;
+    	boolean isValidAction = this.fertilizerAmt < this.cropType.getFertilizerBonus() 
+        && objectCoins >= 4 ? true : false;
         
         if (isValidAction) 
     		this.fertilizerAmt++;
@@ -97,29 +149,53 @@ public class Crop
         return isValidAction;
     }
 
+    /**
+     * Ages the crop by one day.
+     */
     public void updatePlantStage()
     {
         this.age = age + 1;
     }
 
+    /**
+     * Updates the crop's withered and harvestable
+     * status by checking its age.
+     */
     public void checkCropStatus()
     {
-        this.isHarvestable = age == cropType.maxAge ? true : false;
-        this.isWithered = age > cropType.maxAge || 
-        (age == cropType.maxAge && waterAmt < cropType.waterMin) ? true : false;
+        this.isHarvestable = age == cropType.getMaxAge() ? true : false;
+        this.isWithered = age > cropType.getMaxAge() || 
+        (age == cropType.getMaxAge() && waterAmt < cropType.getWaterMin()) ? 
+        true : false;
     }
 
-    // Generate amount. of crop items obtained from harvesting a single crop
+    /**
+     * Generates the amount of crop harvested
+     * @return the amount of crop produced
+     */
     public int generateYield()
     {
-        return cropType.produceMin + (int)(Math.random() * ((cropType.produceMax - cropType.produceMin) + 1));
+        return cropType.getProduceMin() + (int)(Math.random() * 
+        ((cropType.getProduceMax() - cropType.getProduceMin()) + 1));
     }
 
+    /**
+     * Generates the sell price of 
+     * all crops produced
+     * @return the sell price of crop produced
+     */
     public double computeHarvestTotal()
     {
-        return generateYield() * (cropType.sellPrice + farmerEarningTypeBonus);
+        return generateYield() * (cropType.getSellPrice() + 
+        farmerEarningTypeBonus);
     }
 
+    /**
+     * Generates the amount of money
+     * earned from water bonus
+     * @return the bonus earned from water
+     * bonus 
+     */
     public double computeWaterBonus()
     {
         double i = computeHarvestTotal();
@@ -127,6 +203,12 @@ public class Crop
         return i * 0.2 * (waterAmt - 1);
     }
 
+    /**
+     * Generates the amount of money
+     * earned from fertilizer bonus
+     * @return the bonus earned from 
+     * fertilizer bonus 
+     */
     public double computeFertilizerBonus()
     {
         double i = computeHarvestTotal();
@@ -134,20 +216,26 @@ public class Crop
         return i * 0.5 * fertilizerAmt;
     }
 
+    /**
+     * Computes the final yield of the crop
+     * in terms of objectcoins, inclusive of
+     * farmer title bonus.
+     * @return crop's final harvest price.
+     */
     public double computeHarvestEarnings()
     {
         double a = computeHarvestTotal();
         double b = computeWaterBonus();
         double c = computeFertilizerBonus();
 
-        if (this.cropType.cropCategory.equals("flower"))
+        if (this.cropType.getCropCategory().equals("flower"))
             return (a + b + c) * 1.1;
 
         return a + b + c;
     }
 
-    public String getFertilizerAmt() {
-        return null;
+    public int getFertilizerAmt() {
+        return fertilizerAmt;
     }
 }
 

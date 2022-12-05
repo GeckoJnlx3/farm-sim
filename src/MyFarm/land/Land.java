@@ -11,11 +11,20 @@ import java.util.Random;
 
 import MyFarm.crop.Crop;
 
+/**
+ * Land plot that the player can interact with.
+ * Contains an array of landstate and crops 
+ * representing each plot of land. 
+ */
 public class Land {
     public LandState [][] landState = new LandState[5][10];
     public Crop crops [][] = new Crop[5][10];
     String [] rockCSVData = new String [31];
+    String rockPath = "src/MyFarm/rock/scatter.csv";
     
+    /**
+     * Constructor for land. Creates the rocks and sets them.
+     */
     public Land () {
         for (int i = 0; i < 5; i ++) {
             for (int j = 0; j < 10; j++) {
@@ -28,10 +37,14 @@ public class Land {
         setRocks();
     }
 
+    /**
+     * sets the rocks on the landstate from the .csv file generated
+     * by createRocks()
+     */
     private void setRocks() {
     	BufferedReader br;
     	try {
-            br = new BufferedReader (new FileReader("src/MyFarm/rock/scatter.csv"));
+            br = new BufferedReader (new FileReader(rockPath));
             String line = "";
             int i = 0;
             while ((line = br.readLine()) != null){
@@ -41,7 +54,11 @@ public class Land {
             String [][] rockList = new String [31][2];
             for (i = 1; rockCSVData[i] != null; i++) {
                 rockList[i] = rockCSVData[i].split(",");
-                landState[Integer.parseInt(rockList[i][0])][Integer.parseInt(rockList[i][1])] = LandState.BLOCKED;
+
+                int parseRow = Integer.parseInt(rockList[i][0]);
+                int parseCol = Integer.parseInt(rockList[i][1]);
+
+                landState[parseRow][parseCol] = LandState.BLOCKED;
             }
             br.close();
 
@@ -52,12 +69,16 @@ public class Land {
         } 
 
     }
+
+    /**
+     * writes a .csv file with the positions of each rock
+     */
     private void createRock() {
         Random rand = new Random();
         int rockAmt = rand.nextInt(21) + 10;
         int i = 0;
         try {
-        	PrintWriter pw = new PrintWriter(new File("src/MyFarm/rock/scatter.csv"));
+        	PrintWriter pw = new PrintWriter(new File(rockPath));
             StringBuilder sb = new StringBuilder();
             ArrayList <Rock>rockGen = new ArrayList<Rock>();
 
@@ -65,14 +86,12 @@ public class Land {
                 Rock temp = new Rock();
                 boolean found = false;
 
-                for (int j = 0; j < rockGen.size(); j++) {
-                    if (temp.equals(rockGen.get(j))) {
+                for (int j = 0; j < rockGen.size() || !found; j++) {
+                    if (temp.equals(rockGen.get(j)))
                         found = true;
-                        j = rockGen.size();
-                    }
                 }
 
-                if (found == false){
+                if (!found){
                     rockGen.add(temp);
                     sb.append(rockGen.get(i).x + "," + rockGen.get(i).y);
                     if (i != rockAmt-1)

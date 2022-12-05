@@ -97,7 +97,7 @@ public class RightPanel
         fertilizer.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.bottomPanel.playerAction.setText("Select on a land to plow");
+                view.bottomPanel.playerAction.setText("Select on a plant to fertilize");
                 selectTool(view, fertilizer, wateringCan, pickaxe, hoe, shovel);
             }
         });
@@ -122,16 +122,19 @@ public class RightPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                model.land.crops[2][2] = new Crop("Turnip");
-                model.land.landState[2][2] = LandState.PLANTED;
-                view.centerPanel.plotBtn[2][2].setIcon(Icons.SEEDLING.getImageIcon());
+                model.land.crops[0][0] = new Crop("Turnip");
+                model.land.landState[0][0] = LandState.PLANTED;
+                view.centerPanel.plotBtn[0][0].setIcon(Icons.SEEDLING.getImageIcon());
 
-                model.player.setCoins(model.player.getCoins() - 5);
+                //make if condition to stop player from buying when poor
+                if(model.player.getCoins() < CropType.TURNIP.getCropCost()){
+                    view.bottomPanel.playerAction.setText("You planted a turnip.");
+                    model.player.setCoins(model.player.getCoins() - 5);
+                } else
+                    view.bottomPanel.playerAction.setText("You don't have enough money to purchase the seed.");
 
                 // update the left panel info?
                 view.leftPanel.initializeGameInfo(model.player);
-
-                view.bottomPanel.playerAction.setText("You planted a turnip.");
 
                 cardLayout.next(rightCardPanel);
             }
@@ -165,25 +168,23 @@ public class RightPanel
     }
 
     public void selectTool(MyFarmView view, ToolButton btn1, ToolButton btn2,ToolButton btn3,ToolButton btn4,ToolButton btn5) {
-        //if there's already a selected tool, replace it with the tool being selected
-            boolean isSelectingOther =  btn2.getText().equals("selected") || 
-                                    btn3.getText().equals("selected") ||
-                                    btn4.getText().equals("selected") ||
-                                    btn5.getText().equals("selected")? true : false;
-            
-            //if the tool is selected again
-            boolean isAlreadySelected = btn1.getText().equals("selected") ? true:false;
-    
-            if (isSelectingOther) {
-                btn1.setText("selected");
-                btn2.setText(btn2.name);
-                btn3.setText(btn3.name);
-                btn4.setText(btn4.name);
-                btn5.setText(btn5.name);
-            } else if (isAlreadySelected) {
-                btn1.setText(btn1.name);
-                view.bottomPanel.playerAction.setText("");
-            } else btn1.setText("selected");
-    
-        }
+        boolean isSelectingOther =  btn2.getText().equals("selected") || 
+                                btn3.getText().equals("selected") ||
+                                btn4.getText().equals("selected") ||
+                                btn5.getText().equals("selected")? true : false;
+        
+        boolean isAlreadySelected = btn1.getText().equals("selected") ? true:false;
+
+        if (isSelectingOther) {
+            btn1.setText("selected");
+            btn2.setText(btn2.name);
+            btn3.setText(btn3.name);
+            btn4.setText(btn4.name);
+            btn5.setText(btn5.name);
+        } else if (isAlreadySelected) {
+            btn1.setText(btn1.name);
+            view.bottomPanel.playerAction.setText("");
+        } else btn1.setText("selected");
+
+    }
 }
