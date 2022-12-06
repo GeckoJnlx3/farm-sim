@@ -53,7 +53,7 @@ public class RightPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                model.player.advanceTime();
+                model.player.advanceTime(); //controller should change
 
                 updateCrops(model, view);
 
