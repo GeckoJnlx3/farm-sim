@@ -45,10 +45,9 @@ public class Plot extends JButton{
                     model.player.fertilizeCrop(model, view, nRow, nCol);
                     view.rightPanel.fertilizer.setText("fertilizer");
                 }
-                else if(model.land.landState[nRow][nCol] == LandState.PLOWED && 
-                    !view.rightPanel.wateringCan.getText().equals("selected"))
-                    view.rightPanel.cardLayout.next(view.rightPanel.rightCardPanel);
-                }
+
+                // add more else ifs for crops
+            }
         });
 
     }

@@ -18,6 +18,9 @@ public class RightPanel
     JPanel toolPanel = new JPanel();
     JPanel seedPanel = new JPanel();
 
+    JButton seedPanelSwap = new JButton("seed shop");
+    JButton toolPanelSwap = new JButton("    Back    ");
+
     JButton forwardButton = new JButton("advance day");
     
     ToolButton wateringCan = new ToolButton("watering can");
@@ -25,8 +28,6 @@ public class RightPanel
     ToolButton shovel = new ToolButton ("shovel");
     ToolButton hoe = new ToolButton ("hoe");
     ToolButton fertilizer = new ToolButton("fertilizer");
-
-    JButton seedTurnip = new JButton(); //change this into an array of SeedButton
 
     public RightPanel(MyFarmModel model, MyFarmView view)
     {
@@ -37,7 +38,6 @@ public class RightPanel
         toolPanel.setPreferredSize(new Dimension(125,100));
         seedPanel.setBackground(Palette.GRASS.getColor());
         seedPanel.setPreferredSize(new Dimension(125,100));
-        seedPanel.setLayout(new GridLayout(4,2));
 
         initializeTools(model, view);
         initializeSeeds(model, view);
@@ -47,6 +47,16 @@ public class RightPanel
     }
 
     public void initializeTools(MyFarmModel model, MyFarmView view) {
+        seedPanelSwap.setFocusable(false);
+        seedPanelSwap.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                cardLayout.next(rightCardPanel);
+            }
+        });
+
         forwardButton.setFocusable(false);
         forwardButton.addActionListener(new ActionListener()
         {
@@ -102,6 +112,7 @@ public class RightPanel
             }
         });
 
+        toolPanel.add(seedPanelSwap);
         toolPanel.add(forwardButton);
         toolPanel.add(wateringCan);
         toolPanel.add(pickaxe);
@@ -113,9 +124,24 @@ public class RightPanel
     //change this to work with the seeds
     public void initializeSeeds(MyFarmModel model, MyFarmView view)
     {
-        seedTurnip.setIcon(Icons.TURNIP.getImageIcon());
-        seedTurnip.setBackground(new Color(0xAAE29F));
-        seedTurnip.setFocusable(false);
+        SeedButton seedTurnip = new SeedButton(CropType.TURNIP, model, view);
+        SeedButton seedCarrot = new SeedButton(CropType.CARROT, model, view);
+        SeedButton seedPotato = new SeedButton(CropType.POTATO, model, view);
+        SeedButton seedRose = new SeedButton(CropType.ROSE, model, view);
+        SeedButton seedSunflower = new SeedButton(CropType.SUNFLOWER, model, view);
+        SeedButton seedTurnips = new SeedButton(CropType.TURNIPS, model, view);
+        SeedButton seedMango = new SeedButton(CropType.MANGO, model, view);
+        SeedButton seedApple = new SeedButton(CropType.APPLE, model, view);
+
+        toolPanelSwap.setFocusable(false);
+        toolPanelSwap.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                cardLayout.next(rightCardPanel);
+            }
+        });
 
         seedTurnip.addActionListener(new ActionListener()
         {
@@ -132,12 +158,18 @@ public class RightPanel
                 view.leftPanel.initializeGameInfo(model.player);
 
                 view.bottomPanel.playerAction.setText("You planted a turnip.");
-
-                cardLayout.next(rightCardPanel);
             }
         });
 
+        seedPanel.add(toolPanelSwap);
         seedPanel.add(seedTurnip);
+        seedPanel.add(seedCarrot);
+        seedPanel.add(seedPotato);
+        seedPanel.add(seedRose);
+        seedPanel.add(seedSunflower);
+        seedPanel.add(seedTurnips);
+        seedPanel.add(seedApple);
+        seedPanel.add(seedMango);
     }
 
     public void updateCrops(MyFarmModel model, MyFarmView view)
@@ -186,4 +218,28 @@ public class RightPanel
             } else btn1.setText("selected");
     
         }
+
+    public void selectSeed(MyFarmView view, SeedButton btn1, SeedButton btn2,SeedButton btn3, SeedButton btn4,
+                           SeedButton btn5, SeedButton btn6, SeedButton btn7, SeedButton btn8) {
+        //if there's already a selected seed, replace it with the seed being selected
+        boolean isSelectingOther =  btn2.getText().equals("selected") ||
+                btn3.getText().equals("selected") ||
+                btn4.getText().equals("selected") ||
+                btn5.getText().equals("selected")? true : false;
+
+        //if the seed is selected again
+        boolean isAlreadySelected = btn1.getText().equals("selected") ? true:false;
+
+        if (isSelectingOther) {
+            btn1.setText("selected");
+            btn2.setText(btn2.name);
+            btn3.setText(btn3.name);
+            btn4.setText(btn4.name);
+            btn5.setText(btn5.name);
+        } else if (isAlreadySelected) {
+            btn1.setText(btn1.name);
+            view.bottomPanel.playerAction.setText("");
+        } else btn1.setText("selected");
+
+    }
 }

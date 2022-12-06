@@ -146,8 +146,8 @@ public class Crop
         return a + b + c;
     }
 
-    public String getFertilizerAmt() {
-        return null;
+    public int getFertilizerAmt() {
+        return this.fertilizerAmt;
     }
 }
 
