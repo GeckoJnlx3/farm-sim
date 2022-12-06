@@ -28,12 +28,12 @@ public class LeftPanel{
 
     public LeftPanel(Player p1){
         leftCardPanel.setBackground(Palette.GRASS.getColor());
-        leftCardPanel.setPreferredSize(new Dimension(140,100));
+        leftCardPanel.setPreferredSize(new Dimension(135,100));
 
         infoPanel.setBackground(Palette.GRASS.getColor());
-        infoPanel.setPreferredSize(new Dimension(140,100));
+        infoPanel.setPreferredSize(new Dimension(135,100));
         titlePanel.setBackground(Palette.GRASS.getColor());
-        titlePanel.setPreferredSize(new Dimension(140,100));
+        titlePanel.setPreferredSize(new Dimension(135,100));
 
         initializeGameInfo(p1);
         initializeTitles(p1);
