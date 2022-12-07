@@ -9,7 +9,7 @@ public class MyFarmView extends JFrame{
 
     CenterPanel centerPanel = new CenterPanel(myFarmModel, this);
     BottomPanel bottomPanel = new BottomPanel();
-    LeftPanel leftPanel = new LeftPanel(myFarmModel.player);
+    LeftPanel leftPanel = new LeftPanel(myFarmModel.player, myFarmModel, this);
     RightPanel rightPanel = new RightPanel(myFarmModel, this);
 
     public MyFarmView(){

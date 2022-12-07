@@ -9,7 +9,8 @@ public enum Palette {
     UNWATERED_PLOT(0x9F8C83),
     ROCK(0xBABABA),
     WATERED_PLOT(0x654f2b),
-    BOTTOM_PANEL(0x5D5D5D);    
+    BOTTOM_PANEL(0x5D5D5D),
+    SELECTED(0x7BC67D);
 
     private final Color color;
 

@@ -26,7 +26,7 @@ public class LeftPanel{
     JLabel currTitle = new JLabel();
     JLabel currDay = new JLabel();
 
-    public LeftPanel(Player p1){
+    public LeftPanel(Player p1, MyFarmModel model, MyFarmView view){
         leftCardPanel.setBackground(Palette.GRASS.getColor());
         leftCardPanel.setPreferredSize(new Dimension(135,100));
 
@@ -84,6 +84,8 @@ public class LeftPanel{
                 cardLayout.next(leftCardPanel);
             }
         });
+
+
 
         titlePanel.add(infoPanelSwap);
         titlePanel.add(titleReg);

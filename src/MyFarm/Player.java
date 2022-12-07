@@ -88,6 +88,42 @@ class Player {
 //        }
 //    }
 
+    public void viewCropInfo(MyFarmModel model, MyFarmView view, int i, int j)
+    {
+        String name = model.land.crops[i][j].cropType.getCropName();
+        int age = model.land.crops[i][j].getAge();
+        int water = model.land.crops[i][j].getWaterAmt();
+        int fertilizer = model.land.crops[i][j].getFertilizerAmt();
+        int harvest = model.land.crops[i][j].getMaxAge() - age;
+
+        view.bottomPanel.playerAction.setText("A " + name + " is planted here. It is " + age +
+                " day/s old, it has been watered " + water + " time/s, it has been fertilized " + fertilizer +
+                " time/s, and will be ready for harvest in " + harvest + " day/s.");
+    }
+
+    public void plantSeed(MyFarmModel model, MyFarmView view, int i, int j, String selectedCropName)
+    {
+        if (model.land.landState[i][j] == LandState.PLOWED){
+            if (model.player.getCoins() >= new Crop(selectedCropName).getCropCost()){
+                model.land.crops[i][j] = new Crop(selectedCropName);
+                model.land.landState[i][j] = LandState.PLANTED;
+                view.centerPanel.plotBtn[i][j].setIcon(Icons.SEEDLING.getImageIcon());
+
+                model.player.setCoins(model.player.getCoins() - model.land.crops[i][j].getCropCost());
+
+                view.leftPanel.initializeGameInfo(model.player);
+                view.bottomPanel.playerAction.setText("You planted a(n) " + selectedCropName + ".");
+
+                view.leftPanel.initializeGameInfo(this);
+            }
+            else
+                view.bottomPanel.playerAction.setText("You cannot afford to plant this crop seed!");
+        }
+        else
+            view.bottomPanel.playerAction.setText("You cannot plant a seed here!");
+
+    }
+
     public void harvestCrop(MyFarmModel model, MyFarmView view, int i, int j) // only for turnip rn
     {
         double earned = model.land.crops[i][j].computeHarvestEarnings();
@@ -112,6 +148,7 @@ class Player {
         }
         else
             view.bottomPanel.playerAction.setText("You cannot plow the land!");
+
         view.leftPanel.initializeGameInfo(this);
     }
 
@@ -128,8 +165,9 @@ class Player {
             } else if (!isFertilized){
                 view.bottomPanel.playerAction.setText("You have reached the max amount of fertilizer.");
             }
-        } else
-            System.out.println("You cannot fertilize the land!");
+            } else
+                view.bottomPanel.playerAction.setText("You cannot fertilize the land!");
+
         view.leftPanel.initializeGameInfo(this);
     }
 
@@ -174,8 +212,8 @@ class Player {
     }
 
     public void removeRock(MyFarmModel model, MyFarmView view, int i, int j) {
-        boolean enoughCoins = model.player.getCoins()>50 ? true :false;
-        boolean isRock =   model.land.landState[i][j] == LandState.BLOCKED ? true : false;   
+        boolean enoughCoins = model.player.getCoins() > 50;
+        boolean isRock = model.land.landState[i][j] == LandState.BLOCKED;
         
         if (enoughCoins && isRock) {
             model.land.landState[i][j] = LandState.UNPLOWED;

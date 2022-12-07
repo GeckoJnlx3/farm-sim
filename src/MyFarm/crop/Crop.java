@@ -11,6 +11,8 @@ public class Crop
     private int fertilizerAmt;
     private boolean isWithered;
     private boolean isHarvestable;
+
+
     private int farmerEarningTypeBonus = 0; // Create getter class for Farmer title?
 
     public Crop(String cropName) {
@@ -21,28 +23,28 @@ public class Crop
         this.isWithered = false;
 
         switch (cropName) {
-            case "Turnip":
+            case "turnip":
                 this.cropType = CropType.TURNIP;
                 break;
-            case "Carrot":
+            case "carrot":
                 this.cropType = CropType.CARROT;
                 break;
-            case "Potato":
+            case "potato":
                 this.cropType = CropType.POTATO;
                 break;
-            case "Rose":
+            case "rose":
                 this.cropType = CropType.ROSE;
                 break;
-            case "Turnips":
+            case "turnips":
                 this.cropType = CropType.TURNIPS;
                 break;
-            case "Sunflower":
+            case "sunflower":
                 this.cropType = CropType.SUNFLOWER;
                 break;
-            case "Mango":
+            case "mango":
                 this.cropType = CropType.MANGO;
                 break;
-            case "Apple":
+            case "apple":
                 this.cropType = CropType.APPLE;
                 break;
             default:
@@ -74,13 +76,17 @@ public class Crop
 	public int getWaterAmt() {
 		return this.waterAmt;
 	}
+
+    public int getFertilizerAmt() {
+        return this.fertilizerAmt;
+    }
 	
 	public double getCropCost() {
 		return this.cropType.cropCost;
 	}
     
     public boolean increaseWaterAmt() {
-    	boolean isValidAction = this.waterAmt < this.cropType.waterBonus ? true : false;
+    	boolean isValidAction = this.waterAmt < this.cropType.waterBonus;
         
         if (isValidAction) 
     		this.waterAmt++;
@@ -89,7 +95,7 @@ public class Crop
     }
 
     public boolean increaseFertAmt(double objectCoins) {
-    	boolean isValidAction = this.fertilizerAmt < this.cropType.fertilizerBonus && objectCoins >= 4 ? true : false;
+    	boolean isValidAction = this.fertilizerAmt < this.cropType.fertilizerBonus && objectCoins >= 4;
         
         if (isValidAction) 
     		this.fertilizerAmt++;
@@ -104,9 +110,9 @@ public class Crop
 
     public void checkCropStatus()
     {
-        this.isHarvestable = age == cropType.maxAge ? true : false;
-        this.isWithered = age > cropType.maxAge || 
-        (age == cropType.maxAge && waterAmt < cropType.waterMin) ? true : false;
+        this.isHarvestable = age == cropType.maxAge;
+        this.isWithered = age > cropType.maxAge ||
+                (age == cropType.maxAge && waterAmt < cropType.waterMin);
     }
 
     // Generate amount. of crop items obtained from harvesting a single crop
@@ -144,10 +150,6 @@ public class Crop
             return (a + b + c) * 1.1;
 
         return a + b + c;
-    }
-
-    public int getFertilizerAmt() {
-        return this.fertilizerAmt;
     }
 }
 

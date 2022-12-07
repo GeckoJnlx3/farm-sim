@@ -29,6 +29,16 @@ public class RightPanel
     ToolButton hoe = new ToolButton ("hoe");
     ToolButton fertilizer = new ToolButton("fertilizer");
 
+    SeedButton seedTurnip = new SeedButton(CropType.TURNIP);
+    SeedButton seedCarrot = new SeedButton(CropType.CARROT);
+    SeedButton seedPotato = new SeedButton(CropType.POTATO);
+    SeedButton seedRose = new SeedButton(CropType.ROSE);
+    SeedButton seedSunflower = new SeedButton(CropType.SUNFLOWER);
+    SeedButton seedTurnips = new SeedButton(CropType.TURNIPS);
+    SeedButton seedMango = new SeedButton(CropType.MANGO);
+    SeedButton seedApple = new SeedButton(CropType.APPLE);
+
+
     public RightPanel(MyFarmModel model, MyFarmView view)
     {
         rightCardPanel.setBackground(Palette.GRASS.getColor());
@@ -124,15 +134,6 @@ public class RightPanel
     //change this to work with the seeds
     public void initializeSeeds(MyFarmModel model, MyFarmView view)
     {
-        SeedButton seedTurnip = new SeedButton(CropType.TURNIP, model, view);
-        SeedButton seedCarrot = new SeedButton(CropType.CARROT, model, view);
-        SeedButton seedPotato = new SeedButton(CropType.POTATO, model, view);
-        SeedButton seedRose = new SeedButton(CropType.ROSE, model, view);
-        SeedButton seedSunflower = new SeedButton(CropType.SUNFLOWER, model, view);
-        SeedButton seedTurnips = new SeedButton(CropType.TURNIPS, model, view);
-        SeedButton seedMango = new SeedButton(CropType.MANGO, model, view);
-        SeedButton seedApple = new SeedButton(CropType.APPLE, model, view);
-
         toolPanelSwap.setFocusable(false);
         toolPanelSwap.addActionListener(new ActionListener()
         {
@@ -148,16 +149,86 @@ public class RightPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                model.land.crops[2][2] = new Crop("Turnip");
-                model.land.landState[2][2] = LandState.PLANTED;
-                view.centerPanel.plotBtn[2][2].setIcon(Icons.SEEDLING.getImageIcon());
+                view.bottomPanel.playerAction.setText("Select a plot to plant a Turnip on (Cost: 5)");
+                selectSeed(view, seedTurnip, seedCarrot, seedPotato, seedRose, seedSunflower, seedTurnips,
+                        seedApple, seedMango);
+            }
+        });
 
-                model.player.setCoins(model.player.getCoins() - 5);
+        seedCarrot.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                view.bottomPanel.playerAction.setText("Select a plot to plant a Carrot on (Cost: 10)");
+                selectSeed(view, seedCarrot, seedTurnip, seedPotato, seedRose, seedSunflower, seedTurnips,
+                        seedApple, seedMango);
+            }
+        });
 
-                // update the left panel info?
-                view.leftPanel.initializeGameInfo(model.player);
+        seedPotato.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                view.bottomPanel.playerAction.setText("Select a plot to plant a Potato on (Cost: 20)");
+                selectSeed(view, seedPotato, seedTurnip, seedCarrot, seedRose, seedSunflower, seedTurnips,
+                        seedApple, seedMango);
+            }
+        });
 
-                view.bottomPanel.playerAction.setText("You planted a turnip.");
+        seedRose.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                view.bottomPanel.playerAction.setText("Select a plot to plant a Rose on (Cost: 5)");
+                selectSeed(view, seedRose, seedTurnip, seedCarrot, seedPotato, seedSunflower, seedTurnips,
+                        seedApple, seedMango);
+            }
+        });
+
+        seedSunflower.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                view.bottomPanel.playerAction.setText("Select a plot to plant a Sunflower on (Cost: 10)");
+                selectSeed(view, seedSunflower, seedTurnip, seedCarrot, seedPotato, seedRose, seedTurnips,
+                        seedApple, seedMango);
+            }
+        });
+
+        seedTurnips.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                view.bottomPanel.playerAction.setText("Select a plot to plant a Turnips on (Cost: 20)");
+                selectSeed(view, seedTurnips, seedTurnip, seedCarrot, seedPotato, seedRose, seedSunflower,
+                        seedApple, seedMango);
+            }
+        });
+
+        seedApple.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                view.bottomPanel.playerAction.setText("Select a plot to plant a Apple on (Cost: 100)");
+                selectSeed(view, seedApple, seedTurnip, seedCarrot, seedPotato, seedRose, seedSunflower,
+                        seedTurnips, seedMango);
+            }
+        });
+
+        seedMango.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                view.bottomPanel.playerAction.setText("Select a plot to plant a Mango on (Cost: 200)");
+                selectSeed(view, seedMango, seedTurnip, seedCarrot, seedPotato, seedRose, seedSunflower,
+                        seedTurnips, seedApple);
             }
         });
 
@@ -190,6 +261,7 @@ public class RightPanel
                 else if (model.land.crops[i][j].getHarvestStatus() == true)
                 {
                     model.land.landState[i][j] = LandState.HARVESTABLE;
+                    // change to respective icon
                     view.centerPanel.plotBtn[i][j].setIcon(Icons.TURNIP.getImageIcon());
                 }
             }    
@@ -198,13 +270,13 @@ public class RightPanel
 
     public void selectTool(MyFarmView view, ToolButton btn1, ToolButton btn2,ToolButton btn3,ToolButton btn4,ToolButton btn5) {
         //if there's already a selected tool, replace it with the tool being selected
-            boolean isSelectingOther =  btn2.getText().equals("selected") || 
-                                    btn3.getText().equals("selected") ||
-                                    btn4.getText().equals("selected") ||
-                                    btn5.getText().equals("selected")? true : false;
+            boolean isSelectingOther = btn2.getText().equals("selected") ||
+                    btn3.getText().equals("selected") ||
+                    btn4.getText().equals("selected") ||
+                    btn5.getText().equals("selected");
             
             //if the tool is selected again
-            boolean isAlreadySelected = btn1.getText().equals("selected") ? true:false;
+            boolean isAlreadySelected = btn1.getText().equals("selected");
     
             if (isSelectingOther) {
                 btn1.setText("selected");
@@ -222,24 +294,30 @@ public class RightPanel
     public void selectSeed(MyFarmView view, SeedButton btn1, SeedButton btn2,SeedButton btn3, SeedButton btn4,
                            SeedButton btn5, SeedButton btn6, SeedButton btn7, SeedButton btn8) {
         //if there's already a selected seed, replace it with the seed being selected
-        boolean isSelectingOther =  btn2.getText().equals("selected") ||
-                btn3.getText().equals("selected") ||
-                btn4.getText().equals("selected") ||
-                btn5.getText().equals("selected")? true : false;
+        boolean isSelectingOther = btn2.getBackground().equals(Palette.SELECTED.getColor()) ||
+                btn3.getBackground().equals(Palette.SELECTED.getColor()) ||
+                btn4.getBackground().equals(Palette.SELECTED.getColor()) ||
+                btn5.getBackground().equals(Palette.SELECTED.getColor()) ||
+                btn6.getBackground().equals(Palette.SELECTED.getColor()) ||
+                btn7.getBackground().equals(Palette.SELECTED.getColor()) ||
+                btn8.getBackground().equals(Palette.SELECTED.getColor());
 
         //if the seed is selected again
-        boolean isAlreadySelected = btn1.getText().equals("selected") ? true:false;
+        boolean isAlreadySelected = btn1.getBackground().equals(Palette.SELECTED.getColor());
 
         if (isSelectingOther) {
-            btn1.setText("selected");
-            btn2.setText(btn2.name);
-            btn3.setText(btn3.name);
-            btn4.setText(btn4.name);
-            btn5.setText(btn5.name);
+            btn1.setBackground(Palette.SELECTED.getColor());
+            btn2.setBackground(Palette.SEED_SLOT.getColor());
+            btn3.setBackground(Palette.SEED_SLOT.getColor());
+            btn4.setBackground(Palette.SEED_SLOT.getColor());
+            btn5.setBackground(Palette.SEED_SLOT.getColor());
+            btn6.setBackground(Palette.SEED_SLOT.getColor());
+            btn7.setBackground(Palette.SEED_SLOT.getColor());
+            btn8.setBackground(Palette.SEED_SLOT.getColor());
         } else if (isAlreadySelected) {
-            btn1.setText(btn1.name);
+            btn1.setBackground(Palette.SEED_SLOT.getColor());
             view.bottomPanel.playerAction.setText("");
-        } else btn1.setText("selected");
+        } else btn1.setBackground(Palette.SELECTED.getColor());
 
     }
 }

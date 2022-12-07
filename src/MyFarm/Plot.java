@@ -45,8 +45,15 @@ public class Plot extends JButton{
                     model.player.fertilizeCrop(model, view, nRow, nCol);
                     view.rightPanel.fertilizer.setText("fertilizer");
                 }
+                else if (checkSelectedSeed(view) != null){ // if a seed button is selected
+                    String selectedCropName = checkSelectedSeed(view).getCropName();
 
-                // add more else ifs for crops
+                    model.player.plantSeed(model, view, nRow, nCol, selectedCropName);
+                    deselect(view);
+                }
+                else if (model.land.landState[nRow][nCol] == LandState.PLANTED){
+                    model.player.viewCropInfo(model, view, nRow, nCol);
+                }
             }
         });
 
@@ -103,6 +110,54 @@ public class Plot extends JButton{
             default:
                 break;        
         }
+    }
+
+    public CropType checkSelectedSeed(MyFarmView view)
+    {
+        if (view.rightPanel.seedTurnip.getBackground().equals(Palette.SELECTED.getColor()))
+            return CropType.TURNIP;
+        else if (view.rightPanel.seedCarrot.getBackground().equals(Palette.SELECTED.getColor()))
+            return CropType.CARROT;
+        else if (view.rightPanel.seedPotato.getBackground().equals(Palette.SELECTED.getColor()))
+            return CropType.POTATO;
+        else if (view.rightPanel.seedRose.getBackground().equals(Palette.SELECTED.getColor()))
+            return CropType.ROSE;
+        else if (view.rightPanel.seedSunflower.getBackground().equals(Palette.SELECTED.getColor()))
+            return CropType.SUNFLOWER;
+        else if (view.rightPanel.seedTurnips.getBackground().equals(Palette.SELECTED.getColor()))
+            return CropType.TURNIPS;
+        else if (view.rightPanel.seedApple.getBackground().equals(Palette.SELECTED.getColor()))
+            return CropType.APPLE;
+        else if (view.rightPanel.seedMango.getBackground().equals(Palette.SELECTED.getColor()))
+            return CropType.MANGO;
+
+        return null;
+    }
+
+    public void deselect(MyFarmView view){ // THIS FUNC IS SO INEFFICIENT BUT MY HEAD HURTSKJDK optimize this later
+        if (view.rightPanel.seedTurnip.getBackground().equals(Palette.SELECTED.getColor()))
+            view.rightPanel.seedTurnip.setBackground(Palette.SEED_SLOT.getColor());
+
+        else if (view.rightPanel.seedCarrot.getBackground().equals(Palette.SELECTED.getColor()))
+            view.rightPanel.seedCarrot.setBackground(Palette.SEED_SLOT.getColor());
+
+        else if (view.rightPanel.seedPotato.getBackground().equals(Palette.SELECTED.getColor()))
+            view.rightPanel.seedPotato.setBackground(Palette.SEED_SLOT.getColor());
+
+        else if (view.rightPanel.seedRose.getBackground().equals(Palette.SELECTED.getColor()))
+            view.rightPanel.seedRose.setBackground(Palette.SEED_SLOT.getColor());
+
+        else if (view.rightPanel.seedSunflower.getBackground().equals(Palette.SELECTED.getColor()))
+            view.rightPanel.seedSunflower.setBackground(Palette.SEED_SLOT.getColor());
+
+        else if (view.rightPanel.seedTurnips.getBackground().equals(Palette.SELECTED.getColor()))
+            view.rightPanel.seedTurnips.setBackground(Palette.SEED_SLOT.getColor());
+
+        else if (view.rightPanel.seedApple.getBackground().equals(Palette.SELECTED.getColor()))
+            view.rightPanel.seedApple.setBackground(Palette.SEED_SLOT.getColor());
+
+        else if (view.rightPanel.seedMango.getBackground().equals(Palette.SELECTED.getColor()))
+            view.rightPanel.seedMango.setBackground(Palette.SEED_SLOT.getColor());
     }
 
     public int getnRow(){
