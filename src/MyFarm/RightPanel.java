@@ -2,7 +2,6 @@ package MyFarm;
 
 import javax.swing.*;
 
-import MyFarm.crop.Crop;
 import MyFarm.crop.CropType;
 
 import MyFarm.land.LandState;
@@ -123,12 +122,7 @@ public class RightPanel
         });
 
         toolPanel.add(seedPanelSwap);
-        toolPanel.add(forwardButton);
-        toolPanel.add(wateringCan);
-        toolPanel.add(pickaxe);
-        toolPanel.add(shovel);
-        toolPanel.add(hoe);
-        toolPanel.add(fertilizer);
+        addAllToolButtons();
     }
 
     //change this to work with the seeds
@@ -233,14 +227,7 @@ public class RightPanel
         });
 
         seedPanel.add(toolPanelSwap);
-        seedPanel.add(seedTurnip);
-        seedPanel.add(seedCarrot);
-        seedPanel.add(seedPotato);
-        seedPanel.add(seedRose);
-        seedPanel.add(seedSunflower);
-        seedPanel.add(seedTurnips);
-        seedPanel.add(seedApple);
-        seedPanel.add(seedMango);
+        addAllSeedButtons();
     }
 
     public void updateCrops(MyFarmModel model, MyFarmView view)
@@ -262,13 +249,13 @@ public class RightPanel
                 {
                     model.land.landState[i][j] = LandState.HARVESTABLE;
                     // change to respective icon
-                    view.centerPanel.plotBtn[i][j].setIcon(Icons.TURNIP.getImageIcon());
+                    view.centerPanel.plotBtn[i][j].setPlotView(model.land.landState[i][j], model.land.crops[i][j]);;
                 }
             }    
         }
     }
 
-    public void selectTool(MyFarmView view, ToolButton btn1, ToolButton btn2,ToolButton btn3,ToolButton btn4,ToolButton btn5) {
+    private void selectTool(MyFarmView view, ToolButton btn1, ToolButton btn2,ToolButton btn3,ToolButton btn4,ToolButton btn5) {
         //if there's already a selected tool, replace it with the tool being selected
             boolean isSelectingOther = btn2.getText().equals("selected") ||
                     btn3.getText().equals("selected") ||
@@ -291,7 +278,7 @@ public class RightPanel
     
         }
 
-    public void selectSeed(MyFarmView view, SeedButton btn1, SeedButton btn2,SeedButton btn3, SeedButton btn4,
+    private void selectSeed(MyFarmView view, SeedButton btn1, SeedButton btn2,SeedButton btn3, SeedButton btn4,
                            SeedButton btn5, SeedButton btn6, SeedButton btn7, SeedButton btn8) {
         //if there's already a selected seed, replace it with the seed being selected
         boolean isSelectingOther = btn2.getBackground().equals(Palette.SELECTED.getColor()) ||
@@ -319,5 +306,25 @@ public class RightPanel
             view.bottomPanel.playerAction.setText("");
         } else btn1.setBackground(Palette.SELECTED.getColor());
 
+    }
+
+    private void addAllSeedButtons(){
+        seedPanel.add(seedTurnip);
+        seedPanel.add(seedCarrot);
+        seedPanel.add(seedPotato);
+        seedPanel.add(seedRose);
+        seedPanel.add(seedSunflower);
+        seedPanel.add(seedTurnips);
+        seedPanel.add(seedApple);
+        seedPanel.add(seedMango);
+    }
+
+    private void addAllToolButtons(){
+        toolPanel.add(forwardButton);
+        toolPanel.add(wateringCan);
+        toolPanel.add(pickaxe);
+        toolPanel.add(shovel);
+        toolPanel.add(hoe);
+        toolPanel.add(fertilizer);
     }
 }

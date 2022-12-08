@@ -61,18 +61,20 @@ public class Plot extends JButton{
 
     public void setPlotView(LandState landState, Crop crop){
         this.setFocusable(false);
+        this.setBackground(Palette.UNWATERED_PLOT.getColor()); //brown
         switch (landState){
             case BLOCKED: 
-                this.setBackground(Palette.ROCK.getColor());
+                this.setIcon(Icons.BLOCKED.getImageIcon());
                 break;
             case PLOWED:
                 this.setIcon(Icons.PLOWED.getImageIcon());
                 break;
             case PLANTED:
-                if (crop.getWaterAmt() == crop.cropType.waterBonus)
-                    this.setBackground(Palette.WATERED_PLOT.getColor());
-                    
-                setPlantIcon(crop.cropType);
+                this.setIcon(Icons.SEEDLING.getImageIcon());
+                break;
+            case HARVESTABLE:
+                this.setPlantIcon(crop.cropType);
+                break;
             case UNPLOWED:
                 this.setIcon(Icons.UNPLOWED.getImageIcon());
             default:
@@ -84,28 +86,28 @@ public class Plot extends JButton{
     public void setPlantIcon(CropType cropType){
         switch (cropType){
             case TURNIP:
-                this.setIcon(new ImageIcon("src/MyFarm/icon/turnip.png"));
+                this.setIcon(Icons.TURNIP.getImageIcon());
                 break;
             case CARROT:
-                this.setIcon(new ImageIcon("src/MyFarm/icon/carrot.png"));
+                this.setIcon(Icons.CARROT.getImageIcon());
                 break;
             case POTATO:
-                this.setIcon(new ImageIcon("src/MyFarm/icon/potato.png"));
+                this.setIcon(Icons.POTATO.getImageIcon());
                 break;
             case ROSE:
-                this.setIcon(new ImageIcon("src/MyFarm/icon/rose.png"));
+                this.setIcon(Icons.ROSE.getImageIcon());
                 break;            
             case TURNIPS:
-                this.setIcon(new ImageIcon("src/MyFarm/icon/turnips.png"));
+                this.setIcon(Icons.TURNIPS.getImageIcon());
                 break;
             case SUNFLOWER:
-                this.setIcon(new ImageIcon("src/MyFarm/icon/sunflower.png"));
+                this.setIcon(Icons.SUNFLOWER.getImageIcon());
                 break;            
             case MANGO:
-                this.setIcon(new ImageIcon("src/MyFarm/icon/mango.png"));
+                this.setIcon(Icons.MANGO.getImageIcon());
                 break;
             case APPLE:
-                this.setIcon(new ImageIcon("src/MyFarm/icon/apple.png"));
+                this.setIcon(Icons.APPLE.getImageIcon());
                 break;    
             default:
                 break;        

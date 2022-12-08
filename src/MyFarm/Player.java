@@ -130,7 +130,9 @@ class Player {
         this.objectCoins += earned;
         this.xp += 5;
 
-        view.bottomPanel.playerAction.setText("You harvested a turnip and earned " + earned + " coins and 5 XP!");
+        view.bottomPanel.playerAction.setText("You harvested a"+ 
+        model.land.crops[i][j].cropType.getCropName()+ " and earned " + earned 
+        + " coins and 5 XP!");
 
         model.land.landState[i][j] = LandState.UNPLOWED; // revert to unplowed land
         view.centerPanel.plotBtn[i][j].setIcon(Icons.UNPLOWED.getImageIcon()); // icon unplowed

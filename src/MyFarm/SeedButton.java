@@ -2,8 +2,6 @@ package MyFarm;
 
 import javax.swing.JButton;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import MyFarm.crop.CropType;
 
