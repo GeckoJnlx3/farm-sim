@@ -1,8 +1,9 @@
 package MyFarm;
 
-import javax.swing.ImageIcon;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -61,7 +62,8 @@ public class Plot extends JButton{
 
     public void setPlotView(LandState landState, Crop crop){
         this.setFocusable(false);
-        this.setBackground(Palette.UNWATERED_PLOT.getColor()); //brown
+        this.setBackground(Palette.UNWATERED_PLOT.getColor());
+        this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         switch (landState){
             case BLOCKED: 
                 this.setIcon(Icons.BLOCKED.getImageIcon());
@@ -71,6 +73,10 @@ public class Plot extends JButton{
                 break;
             case PLANTED:
                 this.setIcon(Icons.SEEDLING.getImageIcon());
+                if (crop.getWaterAmt() == crop.cropType.getWaterBonus())
+                    this.setBackground(Palette.WATERED_PLOT.getColor());
+                if (crop.getFertilizerAmt() == crop.cropType.getFertilizerBonus())
+                    this.setBorder(BorderFactory.createLineBorder(Palette.FERTILIZED_PLOT.getColor(), 3));
                 break;
             case HARVESTABLE:
                 this.setPlantIcon(crop.cropType);
@@ -160,13 +166,5 @@ public class Plot extends JButton{
 
         else if (view.rightPanel.seedMango.getBackground().equals(Palette.SELECTED.getColor()))
             view.rightPanel.seedMango.setBackground(Palette.SEED_SLOT.getColor());
-    }
-
-    public int getnRow(){
-        return nRow;
-    }
-
-    public int getnCol(){
-        return nCol;
     }
 }

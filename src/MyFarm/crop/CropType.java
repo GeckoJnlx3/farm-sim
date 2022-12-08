@@ -16,7 +16,7 @@ public enum CropType {
     final String cropName;
     final int maxAge; // AKA Harvest Time
     final int waterMin;
-    public final int waterBonus;
+    final int waterBonus;
     final int fertilizerMin;
     final int fertilizerBonus;
     final int produceMin;
@@ -44,5 +44,13 @@ public enum CropType {
 
     public String getCropName(){
         return cropName;
+    }
+
+    public int getWaterBonus(){
+        return this.waterBonus;
+    }
+
+    public int getFertilizerBonus(){
+        return this.fertilizerBonus;
     }
 }

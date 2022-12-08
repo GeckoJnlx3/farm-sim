@@ -6,9 +6,9 @@ import MyFarm.land.LandState;
 class Player {
 
     private double xp = 0;
-    private int level = 0;
+    private int level = 20;
     private Title title = Title.FARMER;
-    private double objectCoins = 100;
+    private double objectCoins = 50000;
     private int time = 1;
 
     void levelUp() {
@@ -56,37 +56,39 @@ class Player {
         this.time += 1;
     }
 
-//    public void buyTitle(Title choice) {
-//        switch (choice) {
-//            case REGISTERED_FARMER:
-//                if (this.level >= 5 && this.objectCoins >= 200 &&
-//                        this.title != Title.REGISTERED_FARMER) {
-//                    System.out.println("You are now a Registered Farmer!");
-//                    this.title = Title.REGISTERED_FARMER;
-//                    this.objectCoins -= 200;
-//                }
-//            case DISTINGUISHED_FARMER:
-//                if (this.level >= 10 && this.objectCoins >= 300 &&
-//                        this.title != Title.DISTINGUISHED_FARMER) {
-//                    System.out.println("You are now a Distinguished Farmer!");
-//                    title = Title.DISTINGUISHED_FARMER;
-//                    this.objectCoins -= 300;
-//                }
-//            case LEGENDARY_FARMER:
-//                if (this.level >= 15 && this.objectCoins >= 400 &&
-//                        this.title != Title.LEGENDARY_FARMER) {
-//                    System.out.println("You are now a Legendary Farmer!");
-//                    title = Title.LEGENDARY_FARMER;
-//                    this.objectCoins -= 400;
-//                }
-//            default:
-//                while (choice == title) {
-//                    System.out.println("You already have this title.");
-//                    int input = sc.nextInt();
-//                    choice = choice.setTitle(input);
-//                }
-//        }
-//    }
+   public void setTitle(Title choice, MyFarmView view) {
+        boolean meetsReqs = this.level >= choice.getLevelReq() && 
+                            this.objectCoins >= choice.getRegistrationFee();
+
+        if (meetsReqs && isBeneficialTitle(choice)){
+            switch (choice) {
+                case REGISTERED_FARMER:
+                    view.bottomPanel.playerAction.setText("You are now a Registered Farmer!");
+                    this.title = choice;
+                    this.objectCoins -= choice.getRegistrationFee();
+                    break;                    
+                case DISTINGUISHED_FARMER:
+                    view.bottomPanel.playerAction.setText("You are now a Distinguished Farmer!");
+                    title = choice;
+                    this.objectCoins -= choice.getRegistrationFee();
+                    break;                    
+                case LEGENDARY_FARMER:
+                    view.bottomPanel.playerAction.setText("You are now a Legendary Farmer!");
+                    title = choice;
+                    this.objectCoins -= choice.getRegistrationFee();
+                    break;                    
+                default:
+                    break;                    
+            }
+        } else if (!meetsReqs){
+            view.bottomPanel.playerAction.setText("You have not met the requirements.");
+        } else if (!isBeneficialTitle(choice)){
+            view.bottomPanel.playerAction.setText("There is no point buying this title.");
+        }
+
+        view.leftPanel.updateLeftPanel(this);
+
+   }
 
     public void viewCropInfo(MyFarmModel model, MyFarmView view, int i, int j)
     {
@@ -111,10 +113,9 @@ class Player {
 
                 model.player.setCoins(model.player.getCoins() - model.land.crops[i][j].getCropCost());
 
-                view.leftPanel.initializeGameInfo(model.player);
                 view.bottomPanel.playerAction.setText("You planted a(n) " + selectedCropName + ".");
 
-                view.leftPanel.initializeGameInfo(this);
+                view.leftPanel.updateLeftPanel(this);
             }
             else
                 view.bottomPanel.playerAction.setText("You cannot afford to plant this crop seed!");
@@ -137,8 +138,9 @@ class Player {
         model.land.landState[i][j] = LandState.UNPLOWED; // revert to unplowed land
         view.centerPanel.plotBtn[i][j].setIcon(Icons.UNPLOWED.getImageIcon()); // icon unplowed
         model.land.crops[i][j] = new Crop(""); // remove crop
-
-        view.leftPanel.initializeGameInfo(this);
+        
+        view.centerPanel.plotBtn[i][j].setPlotView(model.land.landState[i][j], model.land.crops[i][j]);
+        view.leftPanel.updateLeftPanel(this);
     }
 
     public void plowLand (MyFarmModel model, MyFarmView view, int i, int j) {
@@ -151,7 +153,7 @@ class Player {
         else
             view.bottomPanel.playerAction.setText("You cannot plow the land!");
 
-        view.leftPanel.initializeGameInfo(this);
+        view.leftPanel.updateLeftPanel(this);
     }
 
     public void fertilizeCrop (MyFarmModel model, MyFarmView view, int i, int j) {
@@ -169,8 +171,8 @@ class Player {
             }
             } else
                 view.bottomPanel.playerAction.setText("You cannot fertilize the land!");
-
-        view.leftPanel.initializeGameInfo(this);
+        view.centerPanel.plotBtn[i][j].setPlotView(model.land.landState[i][j], model.land.crops[i][j]);
+        view.leftPanel.updateLeftPanel(this);
     }
 
     public void waterPlant(MyFarmModel model, MyFarmView view, int i, int j) {
@@ -187,7 +189,8 @@ class Player {
         else
             view.bottomPanel.playerAction.setText("You cannot"+
             " water the land!");
-        view.leftPanel.initializeGameInfo(this);
+        view.centerPanel.plotBtn[i][j].setPlotView(model.land.landState[i][j], model.land.crops[i][j]);
+        view.leftPanel.updateLeftPanel(this);
     }
 
     public void removePlant(MyFarmModel model, MyFarmView view, int i, int j) {
@@ -210,7 +213,7 @@ class Player {
             this.xp += 2;
             view.bottomPanel.playerAction.setText("The withered plant was removed.");
         } 
-        view.leftPanel.initializeGameInfo(this);
+        view.leftPanel.updateLeftPanel(this);
     }
 
     public void removeRock(MyFarmModel model, MyFarmView view, int i, int j) {
@@ -228,7 +231,20 @@ class Player {
         } else if (!enoughCoins){
             view.bottomPanel.playerAction.setText("You don't have enough coins.");
         }
-        view.leftPanel.initializeGameInfo(this);
-   }
+        view.leftPanel.updateLeftPanel(this);
+    }
 
+    private boolean isBeneficialTitle(Title title){
+        switch (title){
+            case REGISTERED_FARMER:
+                return this.title == Title.FARMER ? true:false;
+            case DISTINGUISHED_FARMER:
+                return this.title == Title.FARMER || 
+                this.title == Title.REGISTERED_FARMER ? true:false;
+            case LEGENDARY_FARMER:
+                return !(this.title == Title.LEGENDARY_FARMER) ? true:false;
+            default:
+                return false;
+        }
+    }
 }
