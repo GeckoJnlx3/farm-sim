@@ -1,5 +1,9 @@
 package MyFarm.crop;
 
+import MyFarm.MyFarmModel;
+
+import java.util.Random;
+
 public class Crop
 {
     // These are variables inherent to each crop category
@@ -11,9 +15,8 @@ public class Crop
     private int fertilizerAmt;
     private boolean isWithered;
     private boolean isHarvestable;
-
-
-    private int farmerEarningTypeBonus = 0; // Create getter class for Farmer title?
+    private int producedAmt;
+    Random random = new Random();
 
     public Crop(String cropName) {
         this.age = 0;
@@ -84,7 +87,19 @@ public class Crop
 	public double getCropCost() {
 		return this.cropType.cropCost;
 	}
-    
+
+    public double getExpYield(){
+        return this.cropType.expYield;
+    }
+
+    public int getProducedAmt(){
+        return this.producedAmt;
+    }
+
+    private void generateProducedAmt(){
+        this.producedAmt = this.cropType.produceMin + random.nextInt(this.cropType.produceMax);
+    }
+
     public boolean increaseWaterAmt() {
     	boolean isValidAction = this.waterAmt < this.cropType.waterBonus;
         
@@ -115,15 +130,10 @@ public class Crop
                 (age == cropType.maxAge && waterAmt < cropType.waterMin);
     }
 
-    // Generate amount. of crop items obtained from harvesting a single crop
-    public int generateYield()
-    {
-        return cropType.produceMin + (int)(Math.random() * ((cropType.produceMax - cropType.produceMin) + 1));
-    }
-
     public double computeHarvestTotal()
     {
-        return generateYield() * (cropType.sellPrice + farmerEarningTypeBonus);
+        this.generateProducedAmt();
+        return this.producedAmt * (cropType.sellPrice);
     }
 
     public double computeWaterBonus()

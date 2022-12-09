@@ -3,27 +3,26 @@ package MyFarm;
 import MyFarm.crop.Crop;
 import MyFarm.land.LandState;
 
+import java.text.DecimalFormat;
+import java.util.Random;
+
 class Player {
 
     private double xp = 0;
-    private int level = 20;
+    private int level = 0;
     private Title title = Title.FARMER;
-    private double objectCoins = 50000;
+    private double objectCoins = 100;
     private int time = 1;
 
-    void levelUp() {
-        this.level++;
-        System.out.println("Congratulations! you have reached level" + level + "!");
+    DecimalFormat df = new DecimalFormat();
+
+    public Player(){
+        df.setMaximumFractionDigits(2);
     }
 
     int getDay()
     {
         return this.time;
-    }
-
-    void setDay(int day)
-    {
-        this.time = day;
     }
 
     double getCoins()
@@ -56,6 +55,13 @@ class Player {
         this.time += 1;
     }
 
+    void levelUp(MyFarmModel model, MyFarmView view) {
+        if (this.xp >= ((this.level + 1) * 100)){
+            this.level++;
+            view.bottomPanel.playerAction.setText("Congratulations! You have reached level" + level + "!");
+        }
+    }
+
    public void setTitle(Title choice, MyFarmView view) {
         boolean meetsReqs = this.level >= choice.getLevelReq() && 
                             this.objectCoins >= choice.getRegistrationFee();
@@ -69,12 +75,12 @@ class Player {
                     break;                    
                 case DISTINGUISHED_FARMER:
                     view.bottomPanel.playerAction.setText("You are now a Distinguished Farmer!");
-                    title = choice;
+                    this.title = choice;
                     this.objectCoins -= choice.getRegistrationFee();
                     break;                    
                 case LEGENDARY_FARMER:
                     view.bottomPanel.playerAction.setText("You are now a Legendary Farmer!");
-                    title = choice;
+                    this.title = choice;
                     this.objectCoins -= choice.getRegistrationFee();
                     break;                    
                 default:
@@ -87,7 +93,6 @@ class Player {
         }
 
         view.leftPanel.updateLeftPanel(this);
-
    }
 
     public void viewCropInfo(MyFarmModel model, MyFarmView view, int i, int j)
@@ -98,15 +103,16 @@ class Player {
         int fertilizer = model.land.crops[i][j].getFertilizerAmt();
         int harvest = model.land.crops[i][j].getMaxAge() - age;
 
-        view.bottomPanel.playerAction.setText("A " + name + " is planted here. It is " + age +
-                " day/s old, it has been watered " + water + " time/s, it has been fertilized " + fertilizer +
-                " time/s, and will be ready for harvest in " + harvest + " day/s.");
+        view.bottomPanel.playerAction.setText("<html>A " + name + " is planted here. <br/>It is " + age +
+                " day/s old.<br/>It has been watered " + water + " time/s.<br/>It has been fertilized " + fertilizer +
+                " time/s.<br/>It will be ready for harvest in " + harvest + " day/s.</html>");
     }
 
     public void plantSeed(MyFarmModel model, MyFarmView view, int i, int j, String selectedCropName)
     {
         if (model.land.landState[i][j] == LandState.PLOWED){
-            if (model.player.getCoins() >= new Crop(selectedCropName).getCropCost()){
+            if (model.player.getCoins() >= new Crop(selectedCropName).getCropCost() -
+                    model.player.getTitle().getseedDiscount()){
                 model.land.crops[i][j] = new Crop(selectedCropName);
                 model.land.landState[i][j] = LandState.PLANTED;
                 view.centerPanel.plotBtn[i][j].setIcon(Icons.SEEDLING.getImageIcon());
@@ -129,11 +135,13 @@ class Player {
     {
         double earned = model.land.crops[i][j].computeHarvestEarnings();
         this.objectCoins += earned;
-        this.xp += 5;
+        this.xp += model.land.crops[i][j].getExpYield();
+        this.levelUp(model, view);
 
-        view.bottomPanel.playerAction.setText("You harvested a"+ 
-        model.land.crops[i][j].cropType.getCropName()+ " and earned " + earned 
-        + " coins and 5 XP!");
+        view.bottomPanel.playerAction.setText("<html>You harvested a " +
+        model.land.crops[i][j].cropType.getCropName() + "<br/> It produced " + df.format(model.land.crops[i][j].getProducedAmt()) +
+                " individual crop items." + "<br/>In total, you earned " + df.format(earned)
+        + " coins and " + df.format(model.land.crops[i][j].getExpYield()) + " XP!</html>");
 
         model.land.landState[i][j] = LandState.UNPLOWED; // revert to unplowed land
         view.centerPanel.plotBtn[i][j].setIcon(Icons.UNPLOWED.getImageIcon()); // icon unplowed
@@ -149,6 +157,7 @@ class Player {
         	view.bottomPanel.playerAction.setText("The land is plowed.");
         	view.centerPanel.plotBtn[i][j].setIcon(Icons.PLOWED.getImageIcon());
         	this.xp += 0.5;
+            this.levelUp(model, view);
         }
         else
             view.bottomPanel.playerAction.setText("You cannot plow the land!");
@@ -164,6 +173,7 @@ class Player {
                 model.land.crops[i][j].getFertilizerAmt() + " times");
                 this.objectCoins -= 4;
                 this.xp +=4;
+                this.levelUp(model, view);
             } else if (this.objectCoins < 4){
                 view.bottomPanel.playerAction.setText("You don't have enough ObjectCoins");
             } else if (!isFertilized){
@@ -181,7 +191,8 @@ class Player {
             if (isWatered) { 
             	view.bottomPanel.playerAction.setText("The plant has been watered " 
                 + model.land.crops[i][j].getWaterAmt() + " times.");
-                this.xp += 0.5;            	
+                this.xp += 0.5;
+                this.levelUp(model, view);
             } else 
             	view.bottomPanel.playerAction.setText("The plant "
                 +"has reached it's max water amount!");
@@ -211,6 +222,7 @@ class Player {
             view.centerPanel.plotBtn[i][j].setIcon(Icons.UNPLOWED.getImageIcon());
             model.land.crops[i][j] = new Crop("");
             this.xp += 2;
+            this.levelUp(model, view);
             view.bottomPanel.playerAction.setText("The withered plant was removed.");
         } 
         view.leftPanel.updateLeftPanel(this);
@@ -225,6 +237,7 @@ class Player {
             view.bottomPanel.playerAction.setText("You have successfully removed a rock");
             this.objectCoins -= 50;
             this.xp += 15;
+            this.levelUp(model, view);
             view.centerPanel.plotBtn[i][j].setPlotView(model.land.landState[i][j], model.land.crops[i][j]);
         } else if (!isRock){
             view.bottomPanel.playerAction.setText("There is no rock to remove.");

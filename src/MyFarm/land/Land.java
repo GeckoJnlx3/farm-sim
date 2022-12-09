@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
+import MyFarm.MyFarmModel;
 import MyFarm.crop.Crop;
 
 public class Land {
@@ -31,7 +32,7 @@ public class Land {
     private void setRocks() {
     	BufferedReader br;
     	try {
-            br = new BufferedReader (new FileReader("./src/MyFarm/rock/scatter.csv"));
+            br = new BufferedReader (new FileReader("farm-sim/src/MyFarm/rock/scatter.csv"));
             String line = "";
             int i = 0;
             while ((line = br.readLine()) != null){
@@ -57,7 +58,7 @@ public class Land {
         int rockAmt = rand.nextInt(21) + 10;
         int i = 0;
         try {
-        	PrintWriter pw = new PrintWriter(new File("./src/MyFarm/rock/scatter.csv"));
+        	PrintWriter pw = new PrintWriter(new File("farm-sim/src/MyFarm/rock/scatter.csv"));
             StringBuilder sb = new StringBuilder();
             ArrayList <Rock>rockGen = new ArrayList<Rock>();
 

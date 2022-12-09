@@ -3,6 +3,7 @@ package MyFarm;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 
 import javax.swing.*;
 
@@ -26,6 +27,8 @@ public class LeftPanel{
     JLabel currTitle = new JLabel();
     JLabel currDay = new JLabel();
 
+    DecimalFormat df = new DecimalFormat();
+
     public LeftPanel(Player p1, MyFarmModel model, MyFarmView view){
         leftCardPanel.setBackground(Palette.GRASS.getColor());
         leftCardPanel.setPreferredSize(new Dimension(135,100));
@@ -35,14 +38,16 @@ public class LeftPanel{
         titlePanel.setBackground(Palette.GRASS.getColor());
         titlePanel.setPreferredSize(new Dimension(135,100));
 
-        initializeGameInfo(p1);
+        initializeGameInfo(p1, view);
         initializeTitles(p1,view);
+
+        df.setMaximumFractionDigits(2);
 
         leftCardPanel.add(infoPanel, "info");
         leftCardPanel.add(titlePanel, "title");
     }
 
-    public void initializeGameInfo(Player p1)
+    public void initializeGameInfo(Player p1, MyFarmView view)
     {
         updateLeftPanel(p1);
 
@@ -62,9 +67,9 @@ public class LeftPanel{
     public void updateLeftPanel(Player p1){
         currDay.setText("Day " + p1.getDay());
         currDay.setIcon(Icons.DAY.getImageIcon());
-        objectCoins.setText(Double.toString(p1.getCoins()));
+        objectCoins.setText(df.format(p1.getCoins()));
         objectCoins.setIcon(Icons.OBJECTCOINS.getImageIcon());
-        currExp.setText(Double.toString(p1.getXP()));
+        currExp.setText(df.format(p1.getXP()));
         currExp.setIcon(Icons.XP.getImageIcon());
         currLvl.setText(Integer.toString(p1.getLevel()));
         currLvl.setIcon(Icons.LVL.getImageIcon());

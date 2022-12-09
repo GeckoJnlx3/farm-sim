@@ -10,4 +10,9 @@ public class MyFarmModel {
         land = new Land();
         player = new Player();
     }
+
+    public void resetModel(){
+        land = new Land();
+        player = new Player();
+    }
 }

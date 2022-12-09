@@ -2,8 +2,7 @@ package MyFarm;
 
 import java.awt.Dimension;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class BottomPanel extends JPanel {
     JLabel playerAction;

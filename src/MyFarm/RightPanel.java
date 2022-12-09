@@ -76,8 +76,12 @@ public class RightPanel
 
                 updateCrops(model, view);
 
-                view.leftPanel.initializeGameInfo(model.player);
-                view.bottomPanel.playerAction.setText("Advanced to the next day!");
+                if (checkForGameOver(model))
+                    view.gameOver();
+                else{
+                    view.leftPanel.initializeGameInfo(model.player, view);
+                    view.bottomPanel.playerAction.setText("Advanced to the next day!");
+                }
             }
         });
 
@@ -326,5 +330,45 @@ public class RightPanel
         toolPanel.add(shovel);
         toolPanel.add(hoe);
         toolPanel.add(fertilizer);
+    }
+
+    private boolean checkIfHasCrops(MyFarmModel model){
+        // returns true if not a single seed/fully grown crop is present
+        boolean flag = false;
+
+        for (int i = 0; i < 5 && !flag; i++)
+        {
+            for (int j = 0; j < 10 && !flag; j++)
+            {
+                if (model.land.landState[i][j].equals(LandState.PLANTED) ||
+                    model.land.landState[i][j].equals(LandState.HARVESTABLE))
+                    flag = true;
+            }
+        }
+
+        return flag;
+    }
+
+    private boolean checkIfAllWithered(MyFarmModel model)
+    {
+        // returns true if all plots contain withered crop
+        boolean flag = true;
+
+        for (int i = 0; i < 5 && flag; i++)
+        {
+            for (int j = 0; j < 10 && flag; j++)
+            {
+                if (!model.land.landState[i][j].equals(LandState.WITHERED))
+                    flag = false;
+            }
+        }
+
+        return flag;
+    }
+
+    public boolean checkForGameOver(MyFarmModel model){
+        return (!checkIfHasCrops(model) && model.player.getCoins() < 5) ||
+                checkIfAllWithered(model);
+        // should return true if a game over condition is met
     }
 }
