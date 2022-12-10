@@ -11,7 +11,6 @@ public enum CropType {
     MANGO("tree", "mango", 10, 7, 7, 4, 4, 5, 15, 100, 8, 25),
     APPLE("tree", "apple", 10, 7, 7, 5, 5, 10, 15, 200, 5, 25);
 
-
     final String cropCategory;
     final String cropName;
     final int maxAge; // AKA Harvest Time

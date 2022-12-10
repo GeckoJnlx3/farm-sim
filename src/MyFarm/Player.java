@@ -7,10 +7,10 @@ import java.text.DecimalFormat;
 
 class Player {
 
-    private double xp = 2000;
-    private int level = 20;
+    private double xp = 0;
+    private int level = 0;
     private Title title = Title.FARMER;
-    private double objectCoins = 1000;
+    private double objectCoins = 100;
     private int time = 1;
 
     DecimalFormat df = new DecimalFormat();

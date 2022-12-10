@@ -78,6 +78,10 @@ public class Plot extends JButton{
                 break;
             case UNPLOWED:
                 this.setIcon(Icons.UNPLOWED.getImageIcon());
+                break;
+            case WITHERED:
+                this.setIcon(Icons.WITHERED.getImageIcon());
+                break;
             default:
                 this.setBackground(Palette.UNWATERED_PLOT.getColor()); //brown
                 break;
@@ -122,13 +126,5 @@ public class Plot extends JButton{
                 return s.crop;
         }
         return null;
-    }
-
-    public int getnRow() {
-        return nRow;
-    }
-
-    public int getnCol() {
-        return nCol;
     }
 }

@@ -1,5 +1,6 @@
 package MyFarm;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -20,6 +21,7 @@ public class MyFarmController {
         view = new MyFarmView(model);
         
         initializeRightPanel();
+        initializeLeftPanel();
     }
 
     public void startView(){
@@ -56,10 +58,10 @@ public class MyFarmController {
                 model.player.advanceTime(); //controller should change
                 updateCrops();
 
-                if (view.rightPanel.checkForGameOver(model))
+                if (checkForGameOver(model))
                     view.gameOver();
                 else{
-                    view.leftPanel.updateLeftPanel(model);
+                    updateLeftPanel(model);
                     view.bottomPanel.playerAction.setText("Advanced to the next day!");
                 }
             }
@@ -329,4 +331,186 @@ public class MyFarmController {
         } 
     }
 
+    private boolean checkIfHasCrops(MyFarmModel model){
+        // returns true if not a single seed/fully grown crop is present
+        boolean flag = false;
+
+        for (int i = 0; i < 5 && !flag; i++)
+        {
+            for (int j = 0; j < 10 && !flag; j++)
+            {
+                if (model.land.landState[i][j].equals(LandState.PLANTED) ||
+                        model.land.landState[i][j].equals(LandState.HARVESTABLE))
+                    flag = true;
+            }
+        }
+
+        return flag;
+    }
+
+    private boolean checkIfAllWithered(MyFarmModel model)
+    {
+        // returns true if all plots contain withered crop
+        boolean flag = true;
+
+        for (int i = 0; i < 5 && flag; i++)
+        {
+            for (int j = 0; j < 10 && flag; j++)
+            {
+                if (!model.land.landState[i][j].equals(LandState.WITHERED))
+                    flag = false;
+            }
+        }
+
+        return flag;
+    }
+
+    public boolean checkForGameOver(MyFarmModel model){
+        return (!checkIfHasCrops(model) && model.player.getCoins() < 5) ||
+                checkIfAllWithered(model);
+        // should return true if a game over condition is met
+    }
+
+    public void initializeLeftPanel(){
+        setInfoIcons();
+        initializeGameInfo(model, view);
+        initializeTitles(model,view);
+
+        view.leftPanel.df.setMaximumFractionDigits(2);
+
+        view.leftPanel.leftCardPanel.add(view.leftPanel.infoPanel, "info");
+        view.leftPanel.leftCardPanel.add(view.leftPanel.titlePanel, "title");
+    }
+
+    public void initializeGameInfo(MyFarmModel model, MyFarmView view)
+    {
+        updateLeftPanel(model);
+
+        view.leftPanel.titlePanelSwap.setFocusable(false);
+        view.leftPanel.titlePanelSwap.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                view.leftPanel.cardLayout.next(view.leftPanel.leftCardPanel);
+            }
+        });
+
+        addInfoPanels();
+    }
+
+
+    public void updateLeftPanel(MyFarmModel model){
+        view.leftPanel.currDay.setText("Day " + model.player.getDay());
+        view.leftPanel.objectCoins.setText(view.leftPanel.df.format(model.player.getCoins()));
+        view.leftPanel.currExp.setText(view.leftPanel.df.format(model.player.getXP()));
+        view.leftPanel.currLvl.setText(Integer.toString(model.player.getLevel()));
+        view.leftPanel.currTitle.setText(model.player.getTitle().getTitleName());
+        updateTitleButton(model.player.getTitle());
+    }
+
+    private void setInfoIcons(){
+        view.leftPanel.currDay.setIcon(Icons.DAY.getImageIcon());
+        view.leftPanel.objectCoins.setIcon(Icons.OBJECTCOINS.getImageIcon());
+        view.leftPanel.currExp.setIcon(Icons.XP.getImageIcon());
+        view.leftPanel.currLvl.setIcon(Icons.LVL.getImageIcon());
+        view.leftPanel.currTitle.setIcon(Icons.PLAYER.getImageIcon());
+    }
+
+    public void initializeTitles(MyFarmModel model, MyFarmView view)
+    {
+        view.leftPanel.infoPanelSwap.setFocusable(false);
+        view.leftPanel.infoPanelSwap.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                view.leftPanel.cardLayout.next(view.leftPanel.leftCardPanel);
+            }
+        });
+
+        view.leftPanel.titleReg.setFocusable(false);
+        view.leftPanel.titleReg.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                model.player.setTitle(Title.REGISTERED_FARMER, view, model);
+            }
+        });
+
+        view.leftPanel.titleDis.setFocusable(false);
+        view.leftPanel.titleDis.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                model.player.setTitle(Title.DISTINGUISHED_FARMER, view, model);
+            }
+        });
+
+        view.leftPanel.titleLeg.setFocusable(false);
+        view.leftPanel.titleLeg.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                model.player.setTitle(Title.LEGENDARY_FARMER, view, model);
+            }
+        });
+
+        addTitlePanels();
+    }
+
+    private void addInfoPanels(){
+        view.leftPanel.infoPanel.add(view.leftPanel.titlePanelSwap);
+        view.leftPanel.infoPanel.add(view.leftPanel.currDay);
+        view.leftPanel.infoPanel.add(view.leftPanel.objectCoins);
+        view.leftPanel.infoPanel.add(view.leftPanel.currExp);
+        view.leftPanel.infoPanel.add(view.leftPanel.currLvl);
+        view.leftPanel.infoPanel.add(view.leftPanel.currTitle);
+    }
+
+    private void addTitlePanels(){
+        view.leftPanel.titlePanel.add(view.leftPanel.infoPanelSwap);
+        view.leftPanel.titlePanel.add(view.leftPanel.titleReg);
+        view.leftPanel.titlePanel.add(view.leftPanel.titleDis);
+        view.leftPanel.titlePanel.add(view.leftPanel.titleLeg);
+    }
+
+    private void updateTitleButton(Title title){
+        switch(title){
+            case LEGENDARY_FARMER:
+                view.leftPanel.titleLeg.setBackground(Color.GRAY);
+            case DISTINGUISHED_FARMER:
+                view.leftPanel.titleDis.setBackground(Color.GRAY);
+            case REGISTERED_FARMER:
+                view.leftPanel.titleReg.setBackground(Color.GRAY);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void initializeCenterPanel(){
+        for (int i = 0; i < 5; i++){
+            for (int j = 0; j < 10; j++){
+                view.centerPanel.plotBtn[i][j].setPlotView(model.player,model.land.landState[i][j], model.land.crops[i][j]);
+                view.centerPanel.add(view.centerPanel.plotBtn[i][j]);
+            }
+        }
+    }
+
+    public void resetCenterPanelButtons(MyFarmModel model){
+        for (int i = 0; i < 5; i++){
+            for (int j = 0; j < 10; j++){
+                view.centerPanel.plotBtn[i][j].setPlotView(model.player,model.land.landState[i][j], model.land.crops[i][j]);
+                view.centerPanel.add(view.centerPanel.plotBtn[i][j]);
+            }
+        }
+    }
+
+    public void resetPanels(MyFarmModel model)
+    { // i dunno if this works!?
+        resetCenterPanelButtons(model);
+        view.bottomPanel.playerAction.setText("");
+        updateLeftPanel(model);
+    }
 }
