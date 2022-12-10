@@ -15,7 +15,7 @@ public class Plot extends JButton{
     int nRow; 
     int nCol;
 
-    public Plot(LandState landState, int nRow, int nCol, MyFarmModel model, MyFarmView view  ){
+    public Plot(int nRow, int nCol){
         this.nRow = nRow;
         this.nCol = nCol;
         this.setFocusable(false);

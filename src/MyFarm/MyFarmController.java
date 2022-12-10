@@ -25,6 +25,7 @@ public class MyFarmController {
         
         initializeRightPanel();
         initializeLeftPanel();
+        initializeCenterPanel();
         addRestartListener();
     }
 
@@ -263,13 +264,13 @@ public class MyFarmController {
                     model.land.crops[i][j].checkCropStatus();
                 }
 
-                if (model.land.crops[i][j].getWitherStatus() == true)
+                if (model.land.crops[i][j].getWitherStatus())
                 {
                     model.land.landState[i][j] = LandState.WITHERED;
                     setPlotView(view.centerPanel.plotBtn[i][j],model.player,model.land.landState[i][j], model.land.crops[i][j]);;
                 }
         
-                else if (model.land.crops[i][j].getHarvestStatus() == true)
+                else if (model.land.crops[i][j].getHarvestStatus())
                 {
                     model.land.landState[i][j] = LandState.HARVESTABLE;
                     setPlotView(view.centerPanel.plotBtn[i][j],model.player,model.land.landState[i][j], model.land.crops[i][j]);;
@@ -435,7 +436,7 @@ public class MyFarmController {
         {
             @Override
             public void actionPerformed(ActionEvent e){
-                model.player.setTitle(Title.REGISTERED_FARMER, view, model);
+                implementTitle(Title.REGISTERED_FARMER, view, model);
             }
         });
 
@@ -444,7 +445,7 @@ public class MyFarmController {
         {
             @Override
             public void actionPerformed(ActionEvent e){
-                model.player.setTitle(Title.DISTINGUISHED_FARMER, view, model);
+                implementTitle(Title.DISTINGUISHED_FARMER, view, model);
             }
         });
         view.leftPanel.titleLeg.setFocusable(false);
@@ -452,7 +453,7 @@ public class MyFarmController {
         {
             @Override
             public void actionPerformed(ActionEvent e){
-                model.player.setTitle(Title.LEGENDARY_FARMER, view, model);
+                implementTitle(Title.LEGENDARY_FARMER, view, model);
             }
         });
         addTitleButtons();
@@ -494,6 +495,9 @@ public class MyFarmController {
     public void initializeCenterPanel(){
         for (int i = 0; i < 5; i++){
             for (int j = 0; j < 10; j++){
+                view.centerPanel.plotBtn[i][j] = new Plot(i, j);
+                initializePlotButton(view.centerPanel.plotBtn[i][j], model.land.landState[i][j]);
+
                 setPlotView(view.centerPanel.plotBtn[i][j],model.player,model.land.landState[i][j], model.land.crops[i][j]);
                 view.centerPanel.add(view.centerPanel.plotBtn[i][j]);
             }
@@ -537,7 +541,7 @@ public class MyFarmController {
     }
 
     //=============== PLOT BUTTON ===========================
-    void initializePlotButton(Plot plot, Player player, LandState landState){
+    void initializePlotButton(Plot plot, LandState landState){
         
         setPlotView(plot, model.player, landState, null);
 
@@ -545,31 +549,31 @@ public class MyFarmController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(model.land.landState[plot.nRow][plot.nCol] == LandState.HARVESTABLE)
-                    model.player.harvestCrop(model, view, plot.nRow, plot.nCol);
+                    harvestCrop(model, view, plot.nRow, plot.nCol);
                 else if (view.rightPanel.toolButtonList.get(BtnIndex.HOE.index).getText().equals("selected")) {
-                    model.player.plowLand(model, view, plot.nRow, plot.nCol);
+                    plowLand(model, view, plot.nRow, plot.nCol);
                 }
                 else if (view.rightPanel.toolButtonList.get(BtnIndex.WATERING_CAN.index).getText().equals("selected")) {
-                    model.player.waterPlant(model, view, plot.nRow, plot.nCol);
+                    waterPlant(model, view, plot.nRow, plot.nCol);
                 }
                 else if (view.rightPanel.toolButtonList.get(BtnIndex.SHOVEL.index).getText().equals("selected")) {
-                    model.player.removePlant(model, view, plot.nRow, plot.nCol);
+                    removePlant(model, view, plot.nRow, plot.nCol);
                 } 
                 else if (view.rightPanel.toolButtonList.get(BtnIndex.PICKAXE.index).getText().equals("selected")){
-                    model.player.removeRock(model, view, plot.nRow, plot.nCol);
+                    removeRock(model, view, plot.nRow, plot.nCol);
                 }
                 else if (view.rightPanel.toolButtonList.get(BtnIndex.FERTILIZER.index).getText().equals("selected")){
-                    model.player.fertilizeCrop(model, view, plot.nRow, plot.nCol);
+                    fertilizeCrop(model, view, plot.nRow, plot.nCol);
                 }
                 else if (checkSelectedSeed(view) != null){ // if a seed button is selected
                     String selectedCropName = checkSelectedSeed(view).getCropName();
 
-                    model.player.plantSeed(model, view, plot.nRow,  plot.nCol, selectedCropName);
+                    plantSeed(model, view, plot.nRow,  plot.nCol, selectedCropName);
                 }
                 else if (model.land.landState[ plot.nRow][ plot.nCol] == LandState.PLANTED){
-                    model.player.viewCropInfo(model, view,  plot.nRow,  plot.nCol);
+                    viewCropInfo(model, view,  plot.nRow,  plot.nCol);
                 }
-                model.player.levelUp(model, view);
+                levelUp(model, view);
             }
         });
     }
@@ -617,4 +621,217 @@ public class MyFarmController {
     }
 
     //================== PLAYER ===========================
+
+    void levelUp(MyFarmModel model, MyFarmView view) {
+        if (model.player.getXP() >= ((model.player.getLevel() + 1) * 100)){
+            model.player.addLevel();
+            view.bottomPanel.playerAction.setText("Congratulations! You have reached level" + model.player.getLevel() + "!");
+        }
+    }
+
+    public void implementTitle(Title choice, MyFarmView view, MyFarmModel model) {
+        boolean meetsReqs = model.player.getLevel() >= choice.getLevelReq() &&
+                model.player.getCoins() >= choice.getRegistrationFee();
+
+        if (meetsReqs && isBeneficialTitle(choice)){
+            switch (choice) {
+                case REGISTERED_FARMER:
+                    view.bottomPanel.playerAction.setText("You are now a Registered Farmer!");
+                    model.player.setTitle(choice);
+                    model.player.setCoins(model.player.getCoins() - choice.getRegistrationFee());
+                    break;
+                case DISTINGUISHED_FARMER:
+                    view.bottomPanel.playerAction.setText("You are now a Distinguished Farmer!");
+                    model.player.setTitle(choice);
+                    model.player.setCoins(model.player.getCoins() - choice.getRegistrationFee());
+                    break;
+                case LEGENDARY_FARMER:
+                    view.bottomPanel.playerAction.setText("You are now a Legendary Farmer!");
+                    model.player.setTitle(choice);
+                    model.player.setCoins(model.player.getCoins() - choice.getRegistrationFee());
+                    break;
+                default:
+                    break;
+            }
+        } else if (!meetsReqs){
+            view.bottomPanel.playerAction.setText("You have not met the requirements.");
+        } else if (!isBeneficialTitle(choice)){
+            view.bottomPanel.playerAction.setText("There is no point buying this title.");
+        }
+
+        updateLeftPanel(model);
+    }
+
+    public void viewCropInfo(MyFarmModel model, MyFarmView view, int i, int j)
+    {
+        String name = model.land.crops[i][j].cropType.getCropName();
+        int age = model.land.crops[i][j].getAge();
+        int water = model.land.crops[i][j].getWaterAmt();
+        int fertilizer = model.land.crops[i][j].getFertilizerAmt();
+        int harvest = model.land.crops[i][j].getMaxAge() - age;
+
+        view.bottomPanel.playerAction.setText("<html>A " + name + " is planted here. <br/>It is " + age +
+                " day/s old.<br/>It has been watered " + water + " time/s.<br/>It has been fertilized " + fertilizer +
+                " time/s.<br/>It will be ready for harvest in " + harvest + " day/s.</html>");
+    }
+
+    public void plantSeed(MyFarmModel model, MyFarmView view, int i, int j, String selectedCropName)
+    {
+        if (model.land.landState[i][j] == LandState.PLOWED){
+            if (model.player.getCoins() >= new Crop(selectedCropName).getCropCost() -
+                    model.player.getTitle().getseedDiscount()){
+                model.land.crops[i][j] = new Crop(selectedCropName);
+                model.land.landState[i][j] = LandState.PLANTED;
+                view.centerPanel.plotBtn[i][j].setIcon(Icons.SEEDLING.getImageIcon());
+
+                purchaseSeedWDiscount(model, i, j);
+
+                view.bottomPanel.playerAction.setText("You planted a(n) " + selectedCropName + ".");
+
+                updateLeftPanel(model);
+            }
+            else
+                view.bottomPanel.playerAction.setText("You cannot afford to plant this crop seed!");
+        }
+        else
+            view.bottomPanel.playerAction.setText("You cannot plant a seed here!");
+
+    }
+
+    private void purchaseSeedWDiscount(MyFarmModel model, int i, int j){
+        double currSeedCost =  model.land.crops[i][j].getCropCost() +
+                model.player.getTitle().getseedDiscount();
+
+        model.player.setCoins(model.player.getCoins() - currSeedCost);
+    }
+
+    public void harvestCrop(MyFarmModel model, MyFarmView view, int i, int j) // only for turnip rn
+    {
+        double earned = model.land.crops[i][j].computeHarvestEarnings(model.player.getTitle());
+        model.player.setCoins(model.player.getCoins() + earned);
+        model.player.setXP(model.player.getXP() + model.land.crops[i][j].getExpYield());
+        this.levelUp(model, view);
+
+        view.bottomPanel.playerAction.setText("<html>You harvested a " +
+                model.land.crops[i][j].cropType.getCropName() + "<br/> It produced " + model.player.df.format(model.land.crops[i][j].getProducedAmt()) +
+                " individual crop items." + "<br/>In total, you earned " + model.player.df.format(earned)
+                + " coins and " + model.player.df.format(model.land.crops[i][j].getExpYield()) + " XP!</html>");
+
+        model.land.landState[i][j] = LandState.UNPLOWED; // revert to unplowed land
+        view.centerPanel.plotBtn[i][j].setIcon(Icons.UNPLOWED.getImageIcon()); // icon unplowed
+        model.land.crops[i][j] = new Crop(""); // remove crop
+
+        setPlotView(view.centerPanel.plotBtn[i][j], model.player, model.land.landState[i][j], model.land.crops[i][j]);
+        updateLeftPanel(model);
+    }
+
+    public void plowLand (MyFarmModel model, MyFarmView view, int i, int j) {
+        if (model.land.landState[i][j] == LandState.UNPLOWED) {
+            model.land.landState[i][j] = LandState.PLOWED;
+            view.bottomPanel.playerAction.setText("The land is plowed.");
+            setPlotView(view.centerPanel.plotBtn[i][j], model.player, model.land.landState[i][j], null);
+            model.player.setXP(model.player.getXP() + 0.5);
+            this.levelUp(model, view);
+        }
+        else
+            view.bottomPanel.playerAction.setText("You cannot plow the land!");
+
+        updateLeftPanel(model);
+    }
+
+    public void fertilizeCrop (MyFarmModel model, MyFarmView view, int i, int j) {
+        if (model.land.landState[i][j] == LandState.PLANTED) {
+            boolean isFertilized = model.land.crops[i][j].increaseFertAmt(model.player.getCoins(), model.player.getTitle());
+            if (isFertilized && model.player.getCoins() >= 10){
+                view.bottomPanel.playerAction.setText("The plant has been fertilized " +
+                        model.land.crops[i][j].getFertilizerAmt() + " times");
+                model.player.setCoins(model.player.getCoins() - 10);
+                model.player.setXP(model.player.getXP() + 4);
+                levelUp(model, view);
+            } else if (model.player.getCoins() < 10){
+                view.bottomPanel.playerAction.setText("You don't have enough ObjectCoins");
+            } else if (!isFertilized){
+                view.bottomPanel.playerAction.setText("You have reached the max amount of fertilizer.");
+            }
+        } else
+            view.bottomPanel.playerAction.setText("You cannot fertilize the land!");
+       setPlotView(view.centerPanel.plotBtn[i][j], model.player,model.land.landState[i][j], model.land.crops[i][j]);
+       updateLeftPanel(model);
+    }
+
+    public void waterPlant(MyFarmModel model, MyFarmView view, int i, int j) {
+        if (model.land.landState[i][j] == LandState.PLANTED) {
+            boolean isWatered = model.land.crops[i][j].increaseWaterAmt(model.player.getTitle());
+            if (isWatered) {
+                view.bottomPanel.playerAction.setText("The plant has been watered "
+                        + model.land.crops[i][j].getWaterAmt() + " times.");
+                model.player.setXP(model.player.getXP() + 0.5);
+                levelUp(model, view);
+            } else
+                view.bottomPanel.playerAction.setText("The plant "
+                        +"has reached it's max water amount!");
+        }
+        else
+            view.bottomPanel.playerAction.setText("You cannot"+
+                    " water the land!");
+        setPlotView(view.centerPanel.plotBtn[i][j], model.player,model.land.landState[i][j], model.land.crops[i][j]);
+        updateLeftPanel(model);
+    }
+
+    public void removePlant(MyFarmModel model, MyFarmView view, int i, int j) {
+        model.player.setCoins(model.player.getCoins() - 7);
+        if (model.land.landState[i][j] == LandState.UNPLOWED ||
+                model.land.landState[i][j] == LandState.PLOWED) {
+            model.land.landState[i][j] = LandState.UNPLOWED;
+            view.bottomPanel.playerAction.setText("You shoveled nothing... you lost 7 coins.");
+        } else if (model.land.landState[i][j] == LandState.BLOCKED) {
+            view.bottomPanel.playerAction.setText("You tried to shovel the rock... you lost 7 coins.");
+        } else if (model.land.landState[i][j] == LandState.PLANTED) {
+            model.land.landState[i][j] = LandState.UNPLOWED;
+            view.centerPanel.plotBtn[i][j].setIcon(Icons.UNPLOWED.getImageIcon());
+            model.land.crops[i][j] = new Crop("");
+            view.bottomPanel.playerAction.setText("You shoveled your growing plant out... you lost 7 coins.");
+        } else if (model.land.landState[i][j] == LandState.WITHERED) {
+            model.land.landState[i][j] = LandState.UNPLOWED;
+            view.centerPanel.plotBtn[i][j].setIcon(Icons.UNPLOWED.getImageIcon());
+            model.land.crops[i][j] = new Crop("");
+            model.player.setXP(model.player.getXP() + 2);
+            levelUp(model, view);
+            view.bottomPanel.playerAction.setText("The withered plant was removed.");
+        }
+        updateLeftPanel(model);
+    }
+
+    public void removeRock(MyFarmModel model, MyFarmView view, int i, int j) {
+        boolean enoughCoins = model.player.getCoins() > 50;
+        boolean isRock = model.land.landState[i][j] == LandState.BLOCKED;
+
+        if (enoughCoins && isRock) {
+            model.land.landState[i][j] = LandState.UNPLOWED;
+            view.bottomPanel.playerAction.setText("You have successfully removed a rock");
+            model.player.setCoins(model.player.getCoins() - 50);
+            model.player.setXP(model.player.getXP() + 15);
+            levelUp(model, view);
+            setPlotView(view.centerPanel.plotBtn[i][j], model.player,model.land.landState[i][j], model.land.crops[i][j]);
+        } else if (!isRock){
+            view.bottomPanel.playerAction.setText("There is no rock to remove.");
+        } else if (!enoughCoins){
+            view.bottomPanel.playerAction.setText("You don't have enough coins.");
+        }
+        updateLeftPanel(model);
+    }
+
+    private boolean isBeneficialTitle(Title title){
+        switch (title){
+            case REGISTERED_FARMER:
+                return model.player.getTitle() == Title.FARMER;
+            case DISTINGUISHED_FARMER:
+                return model.player.getTitle() == Title.FARMER ||
+                        model.player.getTitle() == Title.REGISTERED_FARMER;
+            case LEGENDARY_FARMER:
+                return !(model.player.getTitle() == Title.LEGENDARY_FARMER);
+            default:
+                return false;
+        }
+    }
 }
