@@ -4,6 +4,12 @@ import MyFarm.Title;
 
 import java.util.Random;
 
+/**
+ * Crop class - object that is planted
+ * on a plot of land.
+ * Requires a TextLand tile in the PLOWED
+ * state in order to be utilized.
+ */
 public class Crop
 {
     // These are variables inherent to each crop category
@@ -78,26 +84,51 @@ public class Crop
 		return this.waterAmt;
 	}
 
+    /**
+     * getter for amount of times plant has been watered
+     * @return waterAmt
+     */
     public int getFertilizerAmt() {
         return this.fertilizerAmt;
     }
 	
+    /**
+     * getter for crop cost
+     * @return cropCost
+     */
 	public double getCropCost() {
 		return this.cropType.cropCost;
 	}
 
+    /**
+     * getter for expYield
+     * @return expYield
+     */
     public double getExpYield(){
         return this.cropType.expYield;
     }
 
+    /**
+     * getter for amount of crop produced
+     * @return producedAmt
+     */
     public int getProducedAmt(){
         return this.producedAmt;
     }
 
+    /**
+     * generates the amount of crop that will be produced
+     */
     private void generateProducedAmt(){
-        this.producedAmt = this.cropType.produceMin + random.nextInt(this.cropType.produceMax - this.cropType.produceMin + 1);
+        int randomRange = (random.nextInt(this.cropType.produceMax) - this.cropType.produceMin + 1);
+        this.producedAmt = this.cropType.produceMin + randomRange;
     }
 
+    /**
+     * sets the crop type based on the type of crop
+     * @param cropName string that will be used to know what crop is being 
+     * planted
+     */
     private void setCropType(String cropName){
         switch (cropName) {
             case "turnip":
@@ -130,6 +161,11 @@ public class Crop
         }
     }
 
+    /**
+     * Waters the plant and returns a boolean if the water amount increased
+     * @param title increases the bonus limit of the plant
+     * @return true if the plant is watered and false if not
+     */
     public boolean increaseWaterAmt(Title title) {
         int currWaterBonus = this.cropType.waterBonus + title.getWaterBonusLimitIncrease();
         boolean isValidAction = this.waterAmt < currWaterBonus;
@@ -140,6 +176,13 @@ public class Crop
         return isValidAction;
     }
 
+    /**
+     * Fertilizes the plant and returns a boolean if the fertilize amount 
+     * increased.
+     * @param objectCoins checks if there is enough coins
+     * @param title increases the fertilize limit
+     * @return true if the plant is fertilized, false if not
+     */
     public boolean increaseFertAmt(double objectCoins, Title title) {
     	int currFertBonus = this.cropType.fertilizerBonus + title.getFertBonusLimit();
         boolean isValidAction = this.fertilizerAmt < currFertBonus && objectCoins >= 4;
@@ -150,11 +193,17 @@ public class Crop
         return isValidAction;
     }
 
+    /**
+     * increases the plant's age by one
+     */
     public void updatePlantStage()
     {
         this.age = age + 1;
     }
 
+    /**
+     * updates isHarvestable and isWithered (done after advancing a day)
+     */
     public void checkCropStatus()
     {
         this.isHarvestable = age == cropType.maxAge;
@@ -162,6 +211,12 @@ public class Crop
                 (age == cropType.maxAge && waterAmt < cropType.waterMin);
     }
 
+    /**
+     * computes the price of the crop harvested (without water and fertilize 
+     * bonus)
+     * @param title increases the amount of money earned from a single crop
+     * @return the harvest total
+     */
     public double computeHarvestTotal(Title title)
     {
         this.generateProducedAmt();
@@ -169,6 +224,11 @@ public class Crop
         return this.producedAmt * (currCropSellPrice);
     }
 
+    /**
+     * computes the water bonus of the crop
+     * @param title useed to generate harvest total
+     * @return computed water bonus
+     */
     public double computeWaterBonus(Title title)
     {
         double i = computeHarvestTotal(title);
@@ -176,6 +236,11 @@ public class Crop
         return i * 0.2 * (waterAmt - 1);
     }
 
+    /**
+     * computes the fertilize bonus
+     * @param title used to compute harvest total
+     * @return computed fertilizer bopus
+     */
     public double computeFertilizerBonus(Title title)
     {
         double i = computeHarvestTotal(title);
@@ -183,6 +248,11 @@ public class Crop
         return i * 0.5 * fertilizerAmt;
     }
 
+    /**
+     * computes the total harvest earnings 
+     * @param title used to compute the harvest total
+     * @return  total value of havest, water, and fertilizer bonus
+     */
     public double computeHarvestEarnings(Title title)
     {
         double a = computeHarvestTotal(title);

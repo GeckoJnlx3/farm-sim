@@ -1,20 +1,21 @@
 package MyFarm;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import MyFarm.crop.Crop;
 import MyFarm.crop.CropType;
-import MyFarm.land.LandState;
 
+/**
+ * Plot class - extends from the button
+ */
 public class Plot extends JButton{
     int nRow; 
     int nCol;
 
+    /**
+     * Constructor for Plot
+     * @param nRow row position
+     * @param nCol column position
+     */
     public Plot(int nRow, int nCol){
         this.nRow = nRow;
         this.nCol = nCol;
@@ -22,6 +23,10 @@ public class Plot extends JButton{
     }
 
 
+    /**
+     * sets the Image when harvestable
+     * @param cropType type of crop
+     */
     public void setPlantIcon(CropType cropType){
         switch (cropType){
             case TURNIP:

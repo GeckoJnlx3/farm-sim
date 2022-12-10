@@ -11,11 +11,19 @@ import java.util.Random;
 
 import MyFarm.crop.Crop;
 
+/**
+ * Enum class to store all possible states
+ * that TextLand can be in.
+ */
 public class Land {
     public LandState [][] landState = new LandState[5][10];
     public Crop crops [][] = new Crop[5][10];
     String [] rockCSVData = new String [31];
     
+    /**
+     * Constructor for Land. Initializes it as an empty unplowed plot then
+     * sets rocks on selected tiles.
+     */
     public Land () {
         for (int i = 0; i < 5; i ++) {
             for (int j = 0; j < 10; j++) {
@@ -28,6 +36,9 @@ public class Land {
         setRocks();
     }
 
+    /**
+     * sets the rocks from a .csv file
+     */
     private void setRocks() {
     	BufferedReader br;
     	try {
@@ -52,6 +63,10 @@ public class Land {
         } 
 
     }
+
+    /**
+     * creates .csv file containing the position of each rock
+     */
     private void createRock() {
         Random rand = new Random();
         int rockAmt = rand.nextInt(21) + 10;

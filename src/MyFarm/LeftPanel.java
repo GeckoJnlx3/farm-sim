@@ -1,12 +1,13 @@
 package MyFarm;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 
 import javax.swing.*;
 
+/**
+ * LeftPanel class - contains player information and the shop to get titles
+ */
 public class LeftPanel{
 
     CardLayout cardLayout = new CardLayout();
@@ -29,6 +30,10 @@ public class LeftPanel{
 
     DecimalFormat df = new DecimalFormat();
 
+    /**
+     * Constructor for the LeftPanel
+     * Sets the color and size of panels including the ones in the card panel.
+     */
     public LeftPanel(){
         leftCardPanel.setBackground(Palette.GRASS.getColor());
         leftCardPanel.setPreferredSize(new Dimension(135,100));
@@ -41,6 +46,9 @@ public class LeftPanel{
         setInfoIcons();
     }
 
+    /**
+     * Sets the icons for every JLabel.
+     */
     private void setInfoIcons(){
         currDay.setIcon(Icons.DAY.getImageIcon());
         objectCoins.setIcon(Icons.OBJECTCOINS.getImageIcon());

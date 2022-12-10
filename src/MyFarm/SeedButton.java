@@ -5,10 +5,18 @@ import java.awt.*;
 
 import MyFarm.crop.CropType;
 
+/**
+ * Seedbutton class - extends JButton
+ * plants the seed
+ */
 public class SeedButton extends JButton {
 
     CropType crop;
 
+    /**
+     * Constructor for SeedButton
+     * @param crop type of crop it will plant
+     */
     public SeedButton(CropType crop){
         this.crop = crop;
         
@@ -19,6 +27,10 @@ public class SeedButton extends JButton {
         setPreferredSize(new Dimension(50,50));
     }
 
+    /**
+     * sets the image for the seed button
+     * @param crop
+     */
     private void setSeedIcon(CropType crop){
         switch (crop){
             case TURNIP:
@@ -50,10 +62,16 @@ public class SeedButton extends JButton {
         }
     }
 
+    /**
+     * changes the color when selected
+     */
     void selectButton(){
         setBackground(Palette.SELECTED.getColor());
     }
 
+    /**
+     * changes the color back to deselected
+     */
     void deselectButton(){
         setBackground(Palette.SEED_SLOT.getColor());
     }

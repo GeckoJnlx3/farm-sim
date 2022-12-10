@@ -2,6 +2,9 @@ package MyFarm;
 
 import java.awt.Color;
 
+/**
+ * Palette enum - contains all the hexcodes for the colors of the view
+ */
 public enum Palette {
     WHITE(0xFFFFFF), 
     GRASS(0xC0E5C8),
@@ -15,10 +18,18 @@ public enum Palette {
 
     private final Color color;
 
+    /**
+     * Constructor for Palette. 
+     * @param color for the enum
+     */
     private Palette(int color){
         this.color = new Color(color);
     }
 
+    /**
+     * getter for color
+     * @return color
+     */
     public Color getColor(){
         return this.color;
     }

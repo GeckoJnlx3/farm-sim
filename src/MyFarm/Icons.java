@@ -2,8 +2,11 @@ package MyFarm;
 
 import javax.swing.ImageIcon;
 
+/**
+ * Icons enum - consists of all the image paths
+ */
 public enum Icons {
-    //land images (needs rock)
+    //land images 
     PLOWED("./src/MyFarm/icons/plowed.png"),
     UNPLOWED("./src/MyFarm/icons/unplowed.png"),
     BLOCKED("./src/MyFarm/icons/rock.png"),
@@ -35,10 +38,18 @@ public enum Icons {
 
     private final ImageIcon btnImage;
 
+    /**
+     * Sets the imageicon
+     * @param filename path of the file
+     */
     private Icons(String filename) {
         this.btnImage = new ImageIcon(filename);
     }
 
+    /**
+     * getter for btnImage
+     * @return btnImage
+     */
     public ImageIcon getImageIcon(){
         return this.btnImage;
     }

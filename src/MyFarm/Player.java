@@ -2,17 +2,28 @@ package MyFarm;
 
 import java.text.DecimalFormat;
 
+/**
+ * Player class - contains player data
+ */
 class Player {
 
-    private double xp = 0;
-    private int level = 0;
-    private Title title = Title.FARMER;
-    private double objectCoins = 100;
-    private int time = 1;
+    private double xp;
+    private int level;
+    private Title title;
+    private double objectCoins;
+    private int time;
 
     DecimalFormat df = new DecimalFormat();
 
+    /**
+     * Constructor for Player
+     */
     public Player(){
+        xp = 0;
+        level = 0;
+        title = Title.FARMER;
+        objectCoins = 5;
+        time = 1;
         df.setMaximumFractionDigits(2);
     }
 

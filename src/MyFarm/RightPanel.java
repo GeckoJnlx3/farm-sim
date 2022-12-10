@@ -5,6 +5,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * RightPanel class - contains the tools and seed 
+ */
 public class RightPanel
 {
     //Panels
@@ -23,6 +26,10 @@ public class RightPanel
     ArrayList <ToolButton> toolButtonList = new ArrayList<ToolButton>();
     ArrayList<SeedButton> seedButtonList = new ArrayList<SeedButton>();
 
+    /**
+     * Constructor of RightPanel. 
+     * Sets colors and size.
+     */
     public RightPanel()
     {
         rightCardPanel.setBackground(Palette.GRASS.getColor());

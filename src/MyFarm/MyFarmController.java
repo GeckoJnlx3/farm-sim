@@ -10,18 +10,21 @@ import MyFarm.crop.Crop;
 import MyFarm.crop.CropType;
 import MyFarm.land.LandState;
 
-//if the view changes, the controller changes the model
-//view should respond to changes in model
-
-//REMINDER TO SELF: REMOVE THE MODEL IN THE VIEW AND PUT IT IN 
-//THE CONTROLLER INSTEAD
+/**
+ * MyFarmController class - contains the view and the model. 
+ * has methods to change the view based on the model.
+ */
 public class MyFarmController {
     MyFarmView view; 
     MyFarmModel model;
 
+    /**
+     * Constructor for MyFarmController]
+     * Initializes every panel.
+     */
     public MyFarmController () {
         model = new MyFarmModel();
-        view = new MyFarmView(model);
+        view = new MyFarmView();
         
         initializeRightPanel();
         initializeLeftPanel();
@@ -41,8 +44,8 @@ public class MyFarmController {
      * adds all the buttons and gives them actionlisteners
      */
     private void initializeRightPanel(){
-        initializeTools(model, view);
-        initializeSeeds(model, view);
+        initializeTools();
+        initializeSeeds();
 
         view.rightPanel.rightCardPanel.add(view.rightPanel.toolPanel, "tool");
         view.rightPanel.rightCardPanel.add(view.rightPanel.seedPanel, "seed");
@@ -50,10 +53,8 @@ public class MyFarmController {
 
     /**
      * gives actionlisteners to the tool buttons
-     * @param model required to add in the action listeners 
-     * @param view holds the buttons
      */
-    public void initializeTools(MyFarmModel model, MyFarmView view) {
+    public void initializeTools() {
         view.rightPanel.seedPanelSwap.setFocusable(false);
         view.rightPanel.seedPanelSwap.addActionListener(new ActionListener()
         {
@@ -65,20 +66,20 @@ public class MyFarmController {
             }
         });
 
-        //FORWARD BUTTON (bugged)
+        //FORWARD BUTTON
         view.rightPanel.forwardButton.setFocusable(false);
         view.rightPanel.forwardButton.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                model.player.advanceTime(); //controller should change
+                model.player.advanceTime();
                 updateCrops();
 
-                if (checkForGameOver(model))
+                if (checkForGameOver())
                     view.gameOver();
                 else{
-                    updateLeftPanel(model);
+                    updateLeftPanel();
                     view.bottomPanel.playerAction.setText("Advanced to the next day!");
                 }
             }
@@ -140,7 +141,12 @@ public class MyFarmController {
         addAllToolButtons();
     }
 
-    public void initializeSeeds(MyFarmModel model, MyFarmView view)
+    /**
+     * Gives actionlisteners to the seed
+     * @param model 
+     * @param view
+     */
+    public void initializeSeeds()
     {
         view.rightPanel.toolPanelSwap.setFocusable(false);
         view.rightPanel.toolPanelSwap.addActionListener(new ActionListener()
@@ -255,6 +261,9 @@ public class MyFarmController {
         addAllSeedButtons();
     }
 
+    /**
+     * goes through every crop and checks if theyre withered or harvestable
+     */
     public void updateCrops()
     {
         for (int i = 0; i < 5;i++){
@@ -279,6 +288,12 @@ public class MyFarmController {
         }
     }
 
+    /**
+     * selects tool
+     * this replace tools that are already selected with the one being selected
+     * also deselects the button if it is already selected
+     * @param btn button that is being selected
+     */
     private void selectTool(ToolButton btn) {
         boolean isAlreadySelected = btn.getText().equals("selected");
         boolean isSelectingOther = false;
@@ -298,6 +313,12 @@ public class MyFarmController {
         } else btn.selectButton();
     }
 
+    /**
+     * selects seed
+     * this replace seed that are already selected with the one being selected
+     * also deselects the button if it is already selected
+     * @param btn button that is being selected
+     */
     private void selectSeed(SeedButton btn) {
         //if there's already a selected seed, replace it with the seed being selected
         boolean isSelectingOther = false;
@@ -319,36 +340,52 @@ public class MyFarmController {
 
     }
 
+    /**
+     * deselects all buttons
+     */
     private void deselectAllButtons(){
         deselectToolButtons();
         deselectSeedButtons();
     }
-
+    /**
+     * deselects seed buttons
+     */
     private void deselectSeedButtons(){
         for (SeedButton s: view.rightPanel.seedButtonList){
             s.deselectButton();
         }
     }
-
+    /**
+     * deselects tool buttons
+     */
     private void deselectToolButtons(){
         for (ToolButton t: view.rightPanel.toolButtonList){
             t.deselectButton();
         }
     }
-
+    /**
+     * adds all seed buttons
+     */
     private void addAllSeedButtons(){
         for (SeedButton s: view.rightPanel.seedButtonList){
             view.rightPanel.seedPanel.add(s);
         } 
     }
 
+    /**
+     * adds all tool buttons
+     */
     private void addAllToolButtons(){
         for (ToolButton s: view.rightPanel.toolButtonList){
             view.rightPanel.toolPanel.add(s);
         } 
     }
 
-    private boolean checkIfHasCrops(MyFarmModel model){
+    /**
+     * checks if there are still planted or harvestable crops remaining
+     * @return based on if there are and if there are none
+     */
+    private boolean checkIfHasCrops(){
         // returns true if not a single seed/fully grown crop is present
         boolean flag = false;
         for (int i = 0; i < 5 && !flag; i++)
@@ -362,7 +399,12 @@ public class MyFarmController {
         }
         return flag;
     }
-    private boolean checkIfAllWithered(MyFarmModel model)
+
+    /**
+     * checks if there are withered
+     * @return based on if there are and if there are none
+     */
+    private boolean checkIfAllWithered()
     {
         // returns true if all plots contain withered crop
         boolean flag = true;
@@ -377,13 +419,23 @@ public class MyFarmController {
         return flag;
     }
 
-    public boolean checkForGameOver(MyFarmModel model){
-        return (!checkIfHasCrops(model) && model.player.getCoins() < 5) ||
-                checkIfAllWithered(model);
+    /**
+     * checks if the game is over with the following conditions
+     * 1. if the player does not have harvestable or growing plants
+     * 2. if the player does not have enough money to buy the cheapest plant
+     * 3. if the player has no plant or has only withered plants
+     * @return
+     */
+    public boolean checkForGameOver(){
+        return (!checkIfHasCrops() && model.player.getCoins() < 5) ||
+                checkIfAllWithered();
     }
 
     //======================= LEFT PANEL=================================
 
+    /**
+     * adds actionlisteners to the title buttons of the left panel
+     */
     public void initializeLeftPanel(){
         
         initializeGameInfo();
@@ -393,11 +445,11 @@ public class MyFarmController {
         view.leftPanel.leftCardPanel.add(view.leftPanel.titlePanel, "title");
     }
     /**
-     * adds actionListeners to buttons
+     * adds actionListeners to swap button
      */
     public void initializeGameInfo()
     {
-        updateLeftPanel(model);
+        updateLeftPanel();
         view.leftPanel.titlePanelSwap.setFocusable(false);
         view.leftPanel.titlePanelSwap.addActionListener(new ActionListener()
         {
@@ -407,10 +459,13 @@ public class MyFarmController {
                 view.leftPanel.cardLayout.next(view.leftPanel.leftCardPanel);
             }
         });
-        addInfoButtons();
+        addInfoLabels();
     }
 
-    public void updateLeftPanel(MyFarmModel model){
+    /**
+     * updates the left panel with the info on player
+     */
+    public void updateLeftPanel(){
         view.leftPanel.currDay.setText("Day " + model.player.getDay());
         view.leftPanel.objectCoins.setText(view.leftPanel.df.format(model.player.getCoins()));
         view.leftPanel.currExp.setText(view.leftPanel.df.format(model.player.getXP()));
@@ -419,6 +474,9 @@ public class MyFarmController {
         updateTitleButton(model.player.getTitle());
     }
 
+    /**
+     * adds action listeners to the buttons on the title page
+     */
     public void initializeTitles()
     {
         view.leftPanel.infoPanelSwap.setFocusable(false);
@@ -436,7 +494,7 @@ public class MyFarmController {
         {
             @Override
             public void actionPerformed(ActionEvent e){
-                implementTitle(Title.REGISTERED_FARMER, view, model);
+                implementTitle(Title.REGISTERED_FARMER);
             }
         });
 
@@ -445,7 +503,7 @@ public class MyFarmController {
         {
             @Override
             public void actionPerformed(ActionEvent e){
-                implementTitle(Title.DISTINGUISHED_FARMER, view, model);
+                implementTitle(Title.DISTINGUISHED_FARMER);
             }
         });
         view.leftPanel.titleLeg.setFocusable(false);
@@ -453,12 +511,17 @@ public class MyFarmController {
         {
             @Override
             public void actionPerformed(ActionEvent e){
-                implementTitle(Title.LEGENDARY_FARMER, view, model);
+                implementTitle(Title.LEGENDARY_FARMER);
             }
         });
         addTitleButtons();
     }
-    private void addInfoButtons(){
+
+
+    /**
+     * adds the info labels to the left panel
+     */
+    private void addInfoLabels(){
         view.leftPanel.infoPanel.add(view.leftPanel.titlePanelSwap);
         view.leftPanel.infoPanel.add(view.leftPanel.currDay);
         view.leftPanel.infoPanel.add(view.leftPanel.objectCoins);
@@ -466,6 +529,9 @@ public class MyFarmController {
         view.leftPanel.infoPanel.add(view.leftPanel.currLvl);
         view.leftPanel.infoPanel.add(view.leftPanel.currTitle);
     }
+    /**
+     * add all title buttons
+     */
     private void addTitleButtons(){
         view.leftPanel.titlePanel.add(view.leftPanel.infoPanelSwap);
         view.leftPanel.titlePanel.add(view.leftPanel.titleReg);
@@ -473,6 +539,10 @@ public class MyFarmController {
         view.leftPanel.titlePanel.add(view.leftPanel.titleLeg);
     }
 
+    /**
+     * updates the view with the titles that the player can still purchase
+     * @param title
+     */
     private void updateTitleButton(Title title){
         switch(title){
             case LEGENDARY_FARMER:
@@ -498,7 +568,8 @@ public class MyFarmController {
                 view.centerPanel.plotBtn[i][j] = new Plot(i, j);
                 initializePlotButton(view.centerPanel.plotBtn[i][j], model.land.landState[i][j]);
 
-                setPlotView(view.centerPanel.plotBtn[i][j],model.player,model.land.landState[i][j], model.land.crops[i][j]);
+                setPlotView(view.centerPanel.plotBtn[i][j],model.player,model.land.landState[i][j], 
+                            model.land.crops[i][j]);
                 view.centerPanel.add(view.centerPanel.plotBtn[i][j]);
             }
         }
@@ -509,29 +580,36 @@ public class MyFarmController {
     public void resetCenterPanelButtons(){
         for (int i = 0; i < 5; i++){
             for (int j = 0; j < 10; j++){
-                setPlotView(view.centerPanel.plotBtn[i][j],model.player,model.land.landState[i][j], model.land.crops[i][j]);
+                setPlotView(view.centerPanel.plotBtn[i][j],model.player,model.land.landState[i][j], 
+                            model.land.crops[i][j]);
             }
         }
     }
     
-    public void resetPanels(MyFarmModel model)
+    /**
+     * resets the panels when the game starts over
+     */
+    public void resetPanels()
     { 
         resetCenterPanelButtons();
         view.bottomPanel.clearBottompanel();
-        updateLeftPanel(model);
+        updateLeftPanel();
     }
 
 
     //========== GAME OVER PANEL=========================
     
+    /**
+     * adds an action listener to the restart button
+     */
     private void addRestartListener(){
         view.gameOverPanel.restart.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                model.resetModel();
-                resetPanels(model);
+                model = new MyFarmModel();
+                resetPanels();
 
                 view.cardLayout.next(view.mainPanel);
             }
@@ -541,6 +619,11 @@ public class MyFarmController {
     }
 
     //=============== PLOT BUTTON ===========================
+    /**
+     * adds actionlistener to the plot 
+     * @param plot      the button being given the action listener
+     * @param landState the landstate of that button
+     */
     void initializePlotButton(Plot plot, LandState landState){
         
         setPlotView(plot, model.player, landState, null);
@@ -549,35 +632,42 @@ public class MyFarmController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(model.land.landState[plot.nRow][plot.nCol] == LandState.HARVESTABLE)
-                    harvestCrop(model, view, plot.nRow, plot.nCol);
+                    harvestCrop(plot.nRow, plot.nCol);
                 else if (view.rightPanel.toolButtonList.get(BtnIndex.HOE.index).getText().equals("selected")) {
-                    plowLand(model, view, plot.nRow, plot.nCol);
+                    plowLand(plot.nRow, plot.nCol);
                 }
                 else if (view.rightPanel.toolButtonList.get(BtnIndex.WATERING_CAN.index).getText().equals("selected")) {
-                    waterPlant(model, view, plot.nRow, plot.nCol);
+                    waterPlant(plot.nRow, plot.nCol);
                 }
                 else if (view.rightPanel.toolButtonList.get(BtnIndex.SHOVEL.index).getText().equals("selected")) {
-                    removePlant(model, view, plot.nRow, plot.nCol);
+                    removePlant(plot.nRow, plot.nCol);
                 } 
                 else if (view.rightPanel.toolButtonList.get(BtnIndex.PICKAXE.index).getText().equals("selected")){
-                    removeRock(model, view, plot.nRow, plot.nCol);
+                    removeRock(plot.nRow, plot.nCol);
                 }
                 else if (view.rightPanel.toolButtonList.get(BtnIndex.FERTILIZER.index).getText().equals("selected")){
-                    fertilizeCrop(model, view, plot.nRow, plot.nCol);
+                    fertilizeCrop(plot.nRow, plot.nCol);
                 }
                 else if (checkSelectedSeed(view) != null){ // if a seed button is selected
                     String selectedCropName = checkSelectedSeed(view).getCropName();
 
-                    plantSeed(model, view, plot.nRow,  plot.nCol, selectedCropName);
+                    plantSeed(plot.nRow,  plot.nCol, selectedCropName);
                 }
                 else if (model.land.landState[ plot.nRow][ plot.nCol] == LandState.PLANTED){
-                    viewCropInfo(model, view,  plot.nRow,  plot.nCol);
+                    viewCropInfo(plot.nRow,  plot.nCol);
                 }
-                levelUp(model, view);
+                levelUp();
             }
         });
     }
     
+    /**
+     * sets the view of the plot based on the crop and the landstate
+     * @param plot      button being updated
+     * @param p1        player information
+     * @param landState landstate of the button
+     * @param crop      crop of the button (if there is one)
+     */
     public void setPlotView(Plot plot, Player p1, LandState landState, Crop crop){
         
         plot.setBackground(Palette.UNWATERED_PLOT.getColor());
@@ -611,6 +701,9 @@ public class MyFarmController {
         }
     }
 
+    /** 
+     * checks if theres a seed button that is being selected
+    */
     private CropType checkSelectedSeed(MyFarmView view)
     {
         for (SeedButton s : view.rightPanel.seedButtonList){
@@ -622,14 +715,21 @@ public class MyFarmController {
 
     //================== PLAYER ===========================
 
-    void levelUp(MyFarmModel model, MyFarmView view) {
+    /**
+     * levels up the player and notifies them
+     */
+    void levelUp() {
         if (model.player.getXP() >= ((model.player.getLevel() + 1) * 100)){
             model.player.addLevel();
             view.bottomPanel.playerAction.setText("Congratulations! You have reached level" + model.player.getLevel() + "!");
         }
     }
 
-    public void implementTitle(Title choice, MyFarmView view, MyFarmModel model) {
+    /**
+     * gives the player the title and notifies the player of their successful purchase
+     * @param choice    title bought
+     */
+    public void implementTitle(Title choice) {
         boolean meetsReqs = model.player.getLevel() >= choice.getLevelReq() &&
                 model.player.getCoins() >= choice.getRegistrationFee();
 
@@ -659,10 +759,15 @@ public class MyFarmController {
             view.bottomPanel.playerAction.setText("There is no point buying this title.");
         }
 
-        updateLeftPanel(model);
+        updateLeftPanel();
     }
 
-    public void viewCropInfo(MyFarmModel model, MyFarmView view, int i, int j)
+    /**
+     * shows information on the crop
+     * @param i x position of the crop
+     * @param j y position of the crop
+     */
+    public void viewCropInfo(int i, int j)
     {
         String name = model.land.crops[i][j].cropType.getCropName();
         int age = model.land.crops[i][j].getAge();
@@ -675,7 +780,13 @@ public class MyFarmController {
                 " time/s.<br/>It will be ready for harvest in " + harvest + " day/s.</html>");
     }
 
-    public void plantSeed(MyFarmModel model, MyFarmView view, int i, int j, String selectedCropName)
+    /**
+     * plants the right seed
+     * @param i                 x position of the crop
+     * @param j                 y position of the crop
+     * @param selectedCropName  name of crop 
+     */
+    public void plantSeed(int i, int j, String selectedCropName)
     {
         if (model.land.landState[i][j] == LandState.PLOWED){
             if (model.player.getCoins() >= new Crop(selectedCropName).getCropCost() -
@@ -684,11 +795,11 @@ public class MyFarmController {
                 model.land.landState[i][j] = LandState.PLANTED;
                 view.centerPanel.plotBtn[i][j].setIcon(Icons.SEEDLING.getImageIcon());
 
-                purchaseSeedWDiscount(model, i, j);
+                purchaseSeedWDiscount(i, j);
 
                 view.bottomPanel.playerAction.setText("You planted a(n) " + selectedCropName + ".");
 
-                updateLeftPanel(model);
+                updateLeftPanel();
             }
             else
                 view.bottomPanel.playerAction.setText("You cannot afford to plant this crop seed!");
@@ -698,19 +809,24 @@ public class MyFarmController {
 
     }
 
-    private void purchaseSeedWDiscount(MyFarmModel model, int i, int j){
+    /**
+     * buys the seed with a discount 
+     * @param i                 x position of the crop
+     * @param j                 y position of the crop
+     */
+    private void purchaseSeedWDiscount(int i, int j){
         double currSeedCost =  model.land.crops[i][j].getCropCost() +
                 model.player.getTitle().getseedDiscount();
 
         model.player.setCoins(model.player.getCoins() - currSeedCost);
     }
 
-    public void harvestCrop(MyFarmModel model, MyFarmView view, int i, int j) // only for turnip rn
+    public void harvestCrop(int i, int j) // only for turnip rn
     {
         double earned = model.land.crops[i][j].computeHarvestEarnings(model.player.getTitle());
         model.player.setCoins(model.player.getCoins() + earned);
         model.player.setXP(model.player.getXP() + model.land.crops[i][j].getExpYield());
-        this.levelUp(model, view);
+        this.levelUp();
 
         view.bottomPanel.playerAction.setText("<html>You harvested a " +
                 model.land.crops[i][j].cropType.getCropName() + "<br/> It produced " + model.player.df.format(model.land.crops[i][j].getProducedAmt()) +
@@ -722,24 +838,34 @@ public class MyFarmController {
         model.land.crops[i][j] = new Crop(""); // remove crop
 
         setPlotView(view.centerPanel.plotBtn[i][j], model.player, model.land.landState[i][j], model.land.crops[i][j]);
-        updateLeftPanel(model);
+        updateLeftPanel();
     }
 
-    public void plowLand (MyFarmModel model, MyFarmView view, int i, int j) {
+    /**
+     * plows the land 
+     * @param i                 x position of the crop
+     * @param j                 y position of the crop
+     */
+    public void plowLand (int i, int j) {
         if (model.land.landState[i][j] == LandState.UNPLOWED) {
             model.land.landState[i][j] = LandState.PLOWED;
             view.bottomPanel.playerAction.setText("The land is plowed.");
             setPlotView(view.centerPanel.plotBtn[i][j], model.player, model.land.landState[i][j], null);
             model.player.setXP(model.player.getXP() + 0.5);
-            this.levelUp(model, view);
+            this.levelUp();
         }
         else
             view.bottomPanel.playerAction.setText("You cannot plow the land!");
 
-        updateLeftPanel(model);
+        updateLeftPanel();
     }
 
-    public void fertilizeCrop (MyFarmModel model, MyFarmView view, int i, int j) {
+    /**
+     * fertilizes the land
+     * @param i                 x position of the crop
+     * @param j                 y position of the crop
+     */
+    public void fertilizeCrop (int i, int j) {
         if (model.land.landState[i][j] == LandState.PLANTED) {
             boolean isFertilized = model.land.crops[i][j].increaseFertAmt(model.player.getCoins(), model.player.getTitle());
             if (isFertilized && model.player.getCoins() >= 10){
@@ -747,7 +873,7 @@ public class MyFarmController {
                         model.land.crops[i][j].getFertilizerAmt() + " times");
                 model.player.setCoins(model.player.getCoins() - 10);
                 model.player.setXP(model.player.getXP() + 4);
-                levelUp(model, view);
+                levelUp();
             } else if (model.player.getCoins() < 10){
                 view.bottomPanel.playerAction.setText("You don't have enough ObjectCoins");
             } else if (!isFertilized){
@@ -756,17 +882,22 @@ public class MyFarmController {
         } else
             view.bottomPanel.playerAction.setText("You cannot fertilize the land!");
        setPlotView(view.centerPanel.plotBtn[i][j], model.player,model.land.landState[i][j], model.land.crops[i][j]);
-       updateLeftPanel(model);
+       updateLeftPanel();
     }
 
-    public void waterPlant(MyFarmModel model, MyFarmView view, int i, int j) {
+        /**
+     * waters the land
+     * @param i                 x position of the crop
+     * @param j                 y position of the crop
+     */
+    public void waterPlant(int i, int j) {
         if (model.land.landState[i][j] == LandState.PLANTED) {
             boolean isWatered = model.land.crops[i][j].increaseWaterAmt(model.player.getTitle());
             if (isWatered) {
                 view.bottomPanel.playerAction.setText("The plant has been watered "
                         + model.land.crops[i][j].getWaterAmt() + " times.");
                 model.player.setXP(model.player.getXP() + 0.5);
-                levelUp(model, view);
+                levelUp();
             } else
                 view.bottomPanel.playerAction.setText("The plant "
                         +"has reached it's max water amount!");
@@ -775,10 +906,14 @@ public class MyFarmController {
             view.bottomPanel.playerAction.setText("You cannot"+
                     " water the land!");
         setPlotView(view.centerPanel.plotBtn[i][j], model.player,model.land.landState[i][j], model.land.crops[i][j]);
-        updateLeftPanel(model);
+        updateLeftPanel();
     }
-
-    public void removePlant(MyFarmModel model, MyFarmView view, int i, int j) {
+    /**
+     * uses the shovel (regardless if plant or not)
+     * @param i                 x position of the crop
+     * @param j                 y position of the crop
+     */
+    public void removePlant(int i, int j) {
         model.player.setCoins(model.player.getCoins() - 7);
         if (model.land.landState[i][j] == LandState.UNPLOWED ||
                 model.land.landState[i][j] == LandState.PLOWED) {
@@ -796,13 +931,18 @@ public class MyFarmController {
             view.centerPanel.plotBtn[i][j].setIcon(Icons.UNPLOWED.getImageIcon());
             model.land.crops[i][j] = new Crop("");
             model.player.setXP(model.player.getXP() + 2);
-            levelUp(model, view);
+            levelUp();
             view.bottomPanel.playerAction.setText("The withered plant was removed.");
         }
-        updateLeftPanel(model);
+        updateLeftPanel();
     }
 
-    public void removeRock(MyFarmModel model, MyFarmView view, int i, int j) {
+    /**
+     * removes rock
+     * @param i x pos
+     * @param j y pos
+     */
+    public void removeRock(int i, int j) {
         boolean enoughCoins = model.player.getCoins() > 50;
         boolean isRock = model.land.landState[i][j] == LandState.BLOCKED;
 
@@ -811,16 +951,21 @@ public class MyFarmController {
             view.bottomPanel.playerAction.setText("You have successfully removed a rock");
             model.player.setCoins(model.player.getCoins() - 50);
             model.player.setXP(model.player.getXP() + 15);
-            levelUp(model, view);
+            levelUp();
             setPlotView(view.centerPanel.plotBtn[i][j], model.player,model.land.landState[i][j], model.land.crops[i][j]);
         } else if (!isRock){
             view.bottomPanel.playerAction.setText("There is no rock to remove.");
         } else if (!enoughCoins){
             view.bottomPanel.playerAction.setText("You don't have enough coins.");
         }
-        updateLeftPanel(model);
+        updateLeftPanel();
     }
 
+    /**
+     * returns boolean if the title the player wants to buy will be beneficial
+     * @param title title that the player is choosing
+     * @return true if the title is beneficial, false if not
+     */
     private boolean isBeneficialTitle(Title title){
         switch (title){
             case REGISTERED_FARMER:

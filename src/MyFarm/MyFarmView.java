@@ -4,7 +4,10 @@ import java.awt.*;
 
 import javax.swing.*;
 
-//interaction with viewers
+/**
+ * MyFarmView class - extends JFrame 
+ * Contains all of the panels. 
+ */
 public class MyFarmView extends JFrame{
 
     CardLayout cardLayout = new CardLayout();
@@ -16,8 +19,10 @@ public class MyFarmView extends JFrame{
     LeftPanel leftPanel;
     RightPanel rightPanel;
 
-
-    public MyFarmView(MyFarmModel model){
+    /**
+     * Constructor for MyFarmView
+     */ 
+    public MyFarmView(){
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(800,460);
         this.setResizable(false);
@@ -25,8 +30,8 @@ public class MyFarmView extends JFrame{
         this.setIconImage(Icons.SEEDLING.getImageIcon().getImage());
         this.setLayout(new BorderLayout(8,2));
 
-        gameOverPanel = new GameOverPanel(model, this);
-        centerPanel = new CenterPanel(model, this);
+        gameOverPanel = new GameOverPanel();
+        centerPanel = new CenterPanel();
         leftPanel = new LeftPanel();
         rightPanel = new RightPanel();
 
@@ -41,6 +46,9 @@ public class MyFarmView extends JFrame{
         this.add(mainPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Changes the CardLayout to the game over panel
+     */
     public void gameOver()
     {
         cardLayout.next(mainPanel);

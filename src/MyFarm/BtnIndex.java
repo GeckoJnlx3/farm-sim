@@ -1,5 +1,9 @@
 package MyFarm;
 
+/**
+ * BtnIndex enum - the enum is accompanied with numbers which represent which 
+ * index the button is in the array list.
+ */
 enum BtnIndex{
     //INDEXES FOR TOOLBUTTON
     WATERING_CAN (0), 
@@ -20,6 +24,11 @@ enum BtnIndex{
 
     final int index;
 
+    /**
+     * Constructor for BtnIndex. 
+     * Associates the proper index to the correct button.
+     * @param index
+     */
     private BtnIndex(int index){
         this.index = index;
     }

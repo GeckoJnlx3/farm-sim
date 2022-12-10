@@ -1,6 +1,7 @@
 package MyFarm.crop;
 
 public enum CropType {
+    //All the Types of crops
     EMPTY("", "", 0,0,0,0,0,0,0,0,0,0),
 	TURNIP("root", "turnip", 2, 1, 2, 0, 1, 1, 2, 5, 6, 5),
     CARROT("root", "carrot", 3, 1, 2, 0, 1, 1, 2, 10, 9, 7.5),
@@ -11,6 +12,7 @@ public enum CropType {
     MANGO("tree", "mango", 10, 7, 7, 4, 4, 5, 15, 100, 8, 25),
     APPLE("tree", "apple", 10, 7, 7, 5, 5, 10, 15, 200, 5, 25);
 
+    //Crop Data
     final String cropCategory;
     final String cropName;
     final int maxAge; // AKA Harvest Time
@@ -24,6 +26,21 @@ public enum CropType {
     final double sellPrice;
     final double expYield;
 
+    /**
+     * Adds crop data to the crop type
+     * @param cropCategory      crop category
+     * @param cropName          name of the crop
+     * @param maxAge            the harvest age of the crop
+     * @param waterMin          minimum amount of water required
+     * @param waterBonus        maximum amount of water that can be given
+     * @param fertilizerMin     minimum amount of fertilizer required
+     * @param fertilizerBonus   maximum amount of fertilizer that can be given
+     * @param produceMin        minimum amount of produced crop 
+     * @param produceMax        maximum amount of produced crop
+     * @param cropCost          purchase price of the crop
+     * @param sellPrice         sell price of the crop
+     * @param expYield          amount of xp received from harvesting crop
+     */
     CropType(String cropCategory, String cropName, int maxAge, int waterMin, int waterBonus, 
     		int fertilizerMin, int fertilizerBonus, int produceMin, int produceMax, 
     		double cropCost, double sellPrice, double expYield) {
@@ -41,14 +58,26 @@ public enum CropType {
         this.expYield = expYield;
     }
 
+    /**
+     * getter for cropName
+     * @return cropName
+     */
     public String getCropName(){
         return cropName;
     }
 
+    /**
+     * getter for waterBonus
+     * @return waterBonus
+     */
     public int getWaterBonus(){
         return this.waterBonus;
     }
 
+    /**
+     * getter for fertilizerBonus
+     * @return fertilizerBonus
+     */
     public int getFertilizerBonus(){
         return this.fertilizerBonus;
     }
