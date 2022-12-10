@@ -803,7 +803,7 @@ public class MyFarmController {
     }
 
     public void removeRock(MyFarmModel model, MyFarmView view, int i, int j) {
-        boolean enoughCoins = model.player.getCoins() > 50;
+        boolean enoughCoins = model.player.getCoins() >= 50;
         boolean isRock = model.land.landState[i][j] == LandState.BLOCKED;
 
         if (enoughCoins && isRock) {
