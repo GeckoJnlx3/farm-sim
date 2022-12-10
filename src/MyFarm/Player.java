@@ -22,7 +22,7 @@ class Player {
         xp = 0;
         level = 0;
         title = Title.FARMER;
-        objectCoins = 5;
+        objectCoins = 100;
         time = 1;
         df.setMaximumFractionDigits(2);
     }

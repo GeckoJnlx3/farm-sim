@@ -38,6 +38,9 @@ public class Crop
         this.isWithered = false;
 
         setCropType(cropName);
+
+        if (cropType != CropType.EMPTY)
+            this.producedAmt = cropType.produceMin +(random.nextInt(this.cropType.produceMax) - this.cropType.produceMin + 1);
     }
 
     /**
@@ -119,9 +122,9 @@ public class Crop
     /**
      * generates the amount of crop that will be produced
      */
-    private void generateProducedAmt(){
+    private int generateProducedAmt(){
         int randomRange = (random.nextInt(this.cropType.produceMax) - this.cropType.produceMin + 1);
-        this.producedAmt = this.cropType.produceMin + randomRange;
+        return this.cropType.produceMin + randomRange;
     }
 
     /**
@@ -219,7 +222,7 @@ public class Crop
      */
     public double computeHarvestTotal(Title title)
     {
-        this.generateProducedAmt();
+
         double currCropSellPrice = cropType.sellPrice + title.getBonusEarnings();
         return this.producedAmt * (currCropSellPrice);
     }
