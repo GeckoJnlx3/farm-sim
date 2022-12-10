@@ -69,7 +69,7 @@ public class Crop
     }
 
     private void generateProducedAmt(){
-        this.producedAmt = this.cropType.produceMin + random.nextInt(this.cropType.produceMax);
+        this.producedAmt = this.cropType.produceMin + random.nextInt(this.cropType.produceMax - this.cropType.produceMin + 1);
     }
 
     private void setCropType(String cropName){
