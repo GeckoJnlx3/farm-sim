@@ -1,7 +1,5 @@
 package MyFarm;
 
-import MyFarm.land.Land;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,6 +9,7 @@ public class GameOverPanel extends JPanel
 {
     JLabel gameOver = new JLabel("BRUH!!!");
     JButton restart = new JButton("Start a New Game");
+    
     public GameOverPanel(MyFarmModel model, MyFarmView view){
         this.setPreferredSize(new Dimension(800,460));
         this.setBackground(Palette.SELECTED.getColor());
@@ -24,7 +23,7 @@ public class GameOverPanel extends JPanel
             public void actionPerformed(ActionEvent e)
             {
                 model.resetModel();
-                view.resetPanels();
+                view.resetPanels(model);
 
                 view.cardLayout.next(view.mainPanel);
             }

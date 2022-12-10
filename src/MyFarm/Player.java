@@ -7,10 +7,10 @@ import java.text.DecimalFormat;
 
 class Player {
 
-    private double xp = 0;
+    private double xp = 2000;
     private int level = 20;
     private Title title = Title.FARMER;
-    private double objectCoins = 50000;
+    private double objectCoins = 1000;
     private int time = 1;
 
     DecimalFormat df = new DecimalFormat();
@@ -51,7 +51,7 @@ class Player {
 
     void advanceTime()
     {
-        this.time += 1;
+        this.time++;
     }
 
     void levelUp(MyFarmModel model, MyFarmView view) {
@@ -61,7 +61,7 @@ class Player {
         }
     }
 
-   public void setTitle(Title choice, MyFarmView view) {
+   public void setTitle(Title choice, MyFarmView view, MyFarmModel model) {
         boolean meetsReqs = this.level >= choice.getLevelReq() && 
                             this.objectCoins >= choice.getRegistrationFee();
 
@@ -91,7 +91,7 @@ class Player {
             view.bottomPanel.playerAction.setText("There is no point buying this title.");
         }
 
-        view.leftPanel.updateLeftPanel(this);
+        view.leftPanel.updateLeftPanel(model);
    }
 
     public void viewCropInfo(MyFarmModel model, MyFarmView view, int i, int j)
@@ -120,7 +120,7 @@ class Player {
 
                 view.bottomPanel.playerAction.setText("You planted a(n) " + selectedCropName + ".");
 
-                view.leftPanel.updateLeftPanel(this);
+                view.leftPanel.updateLeftPanel(model);
             }
             else
                 view.bottomPanel.playerAction.setText("You cannot afford to plant this crop seed!");
@@ -153,22 +153,22 @@ class Player {
         view.centerPanel.plotBtn[i][j].setIcon(Icons.UNPLOWED.getImageIcon()); // icon unplowed
         model.land.crops[i][j] = new Crop(""); // remove crop
         
-        view.centerPanel.plotBtn[i][j].setPlotView(model.land.landState[i][j], model.land.crops[i][j]);
-        view.leftPanel.updateLeftPanel(this);
+        view.centerPanel.plotBtn[i][j].setPlotView(model.player, model.land.landState[i][j], model.land.crops[i][j]);
+        view.leftPanel.updateLeftPanel(model);
     }
 
     public void plowLand (MyFarmModel model, MyFarmView view, int i, int j) {
         if (model.land.landState[i][j] == LandState.UNPLOWED) {
         	model.land.landState[i][j] = LandState.PLOWED;
         	view.bottomPanel.playerAction.setText("The land is plowed.");
-        	view.centerPanel.plotBtn[i][j].setPlotView(model.land.landState[i][j], null);;
+        	view.centerPanel.plotBtn[i][j].setPlotView(model.player,model.land.landState[i][j], null);;
         	this.xp += 0.5;
             this.levelUp(model, view);
         }
         else
             view.bottomPanel.playerAction.setText("You cannot plow the land!");
 
-        view.leftPanel.updateLeftPanel(this);
+        view.leftPanel.updateLeftPanel(model);
     }
 
     public void fertilizeCrop (MyFarmModel model, MyFarmView view, int i, int j) {
@@ -187,8 +187,8 @@ class Player {
             }
             } else
                 view.bottomPanel.playerAction.setText("You cannot fertilize the land!");
-        view.centerPanel.plotBtn[i][j].setPlotView(model.land.landState[i][j], model.land.crops[i][j]);
-        view.leftPanel.updateLeftPanel(this);
+        view.centerPanel.plotBtn[i][j].setPlotView(model.player,model.land.landState[i][j], model.land.crops[i][j]);
+        view.leftPanel.updateLeftPanel(model);
     }
 
     public void waterPlant(MyFarmModel model, MyFarmView view, int i, int j) {
@@ -206,8 +206,8 @@ class Player {
         else
             view.bottomPanel.playerAction.setText("You cannot"+
             " water the land!");
-        view.centerPanel.plotBtn[i][j].setPlotView(model.land.landState[i][j], model.land.crops[i][j]);
-        view.leftPanel.updateLeftPanel(this);
+        view.centerPanel.plotBtn[i][j].setPlotView(model.player,model.land.landState[i][j], model.land.crops[i][j]);
+        view.leftPanel.updateLeftPanel(model);
     }
 
     public void removePlant(MyFarmModel model, MyFarmView view, int i, int j) {
@@ -231,7 +231,7 @@ class Player {
             this.levelUp(model, view);
             view.bottomPanel.playerAction.setText("The withered plant was removed.");
         } 
-        view.leftPanel.updateLeftPanel(this);
+        view.leftPanel.updateLeftPanel(model);
     }
 
     public void removeRock(MyFarmModel model, MyFarmView view, int i, int j) {
@@ -244,13 +244,13 @@ class Player {
             this.objectCoins -= 50;
             this.xp += 15;
             this.levelUp(model, view);
-            view.centerPanel.plotBtn[i][j].setPlotView(model.land.landState[i][j], model.land.crops[i][j]);
+            view.centerPanel.plotBtn[i][j].setPlotView(model.player,model.land.landState[i][j], model.land.crops[i][j]);
         } else if (!isRock){
             view.bottomPanel.playerAction.setText("There is no rock to remove.");
         } else if (!enoughCoins){
             view.bottomPanel.playerAction.setText("You don't have enough coins.");
         }
-        view.leftPanel.updateLeftPanel(this);
+        view.leftPanel.updateLeftPanel(model);
     }
 
     private boolean isBeneficialTitle(Title title){

@@ -9,7 +9,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
-import MyFarm.MyFarmModel;
 import MyFarm.crop.Crop;
 
 public class Land {
@@ -40,7 +39,7 @@ public class Land {
                 i++;
             }
             String [][] rockList = new String [31][2];
-            for (i = 1; rockCSVData[i] != null; i++) {
+            for (i = 0; rockCSVData[i] != null; i++) {
                 rockList[i] = rockCSVData[i].split(",");
                 landState[Integer.parseInt(rockList[i][0])][Integer.parseInt(rockList[i][1])] = LandState.BLOCKED;
             }

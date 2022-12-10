@@ -7,12 +7,12 @@ import MyFarm.crop.CropType;
 
 public class SeedButton extends JButton {
 
-    String name;
+    CropType crop;
 
     public SeedButton(CropType crop){
-
-        this.name = crop.getCropName();
-
+        this.crop = crop;
+        
+        setFocusable(false);
         setSeedIcon(crop);
         setBackground(Palette.SEED_SLOT.getColor());
         setFocusable(false);

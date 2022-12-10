@@ -8,15 +8,13 @@ public class BottomPanel extends JPanel {
     JLabel playerAction;
 
     public BottomPanel(){
-        
-        setBackground(Palette.BOTTOM_PANEL.getColor()); //gray
+        setBackground(Palette.BOTTOM_PANEL.getColor());
         setPreferredSize(new Dimension(50,100));
         
         playerAction = new JLabel("");
-        playerAction.setForeground(Palette.WHITE.getColor()); //white
+        playerAction.setForeground(Palette.WHITE.getColor()); 
 
         add(playerAction);
-
     }
 
     void clearBottompanel(){

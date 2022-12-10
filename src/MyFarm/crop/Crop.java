@@ -1,6 +1,5 @@
 package MyFarm.crop;
 
-import MyFarm.MyFarmModel;
 import MyFarm.Title;
 
 import java.util.Random;
@@ -116,7 +115,7 @@ public class Crop
     }
 
     public boolean increaseFertAmt(double objectCoins, Title title) {
-    	int currFertBonus = this.cropType.waterBonus + title.getFertBonusLimit();
+    	int currFertBonus = this.cropType.fertilizerBonus + title.getFertBonusLimit();
         boolean isValidAction = this.fertilizerAmt < currFertBonus && objectCoins >= 4;
         
         if (isValidAction) 

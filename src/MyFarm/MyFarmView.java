@@ -6,25 +6,29 @@ import javax.swing.*;
 
 //interaction with viewers
 public class MyFarmView extends JFrame{
-    MyFarmModel myFarmModel = new MyFarmModel();
 
     CardLayout cardLayout = new CardLayout();
     JPanel mainPanel = new JPanel(cardLayout);
-    GameOverPanel gameOverPanel = new GameOverPanel(myFarmModel, this);
+    GameOverPanel gameOverPanel;
     GamePanel gamePanel = new GamePanel();
-    CenterPanel centerPanel = new CenterPanel(myFarmModel, this);
+    CenterPanel centerPanel;
     BottomPanel bottomPanel = new BottomPanel();
-    LeftPanel leftPanel = new LeftPanel(myFarmModel.player, myFarmModel, this);
-    RightPanel rightPanel = new RightPanel(myFarmModel, this);
+    LeftPanel leftPanel;
+    RightPanel rightPanel;
 
 
-    public MyFarmView(){
+    public MyFarmView(MyFarmModel model){
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(800,460);
         this.setResizable(false);
         this.setTitle("Farming Simulator");
         this.setIconImage(Icons.SEEDLING.getImageIcon().getImage());
         this.setLayout(new BorderLayout(8,2));
+
+        gameOverPanel = new GameOverPanel(model, this);
+        centerPanel = new CenterPanel(model, this);
+        leftPanel = new LeftPanel(model, this);
+        rightPanel = new RightPanel(model, this);
 
         gamePanel.add(rightPanel.rightCardPanel, BorderLayout.EAST);
         gamePanel.add(leftPanel.leftCardPanel, BorderLayout.WEST);
@@ -37,11 +41,11 @@ public class MyFarmView extends JFrame{
         this.add(mainPanel, BorderLayout.CENTER);
     }
 
-    public void resetPanels()
+    public void resetPanels(MyFarmModel model)
     { // i dunno if this works!?
-        this.centerPanel.resetCenterPanelButtons(myFarmModel);
+        this.centerPanel.resetCenterPanelButtons(model);
         this.bottomPanel.playerAction.setText("");
-        this.leftPanel.updateLeftPanel(myFarmModel.player);
+        this.leftPanel.updateLeftPanel(model);
     }
 
     public void gameOver()
