@@ -942,8 +942,8 @@ public class MyFarmController {
      * @param i x pos
      * @param j y pos
      */
-    public void removeRock(int i, int j) {
-        boolean enoughCoins = model.player.getCoins() > 50;
+    public void removeRock(int i, int j) { 
+        boolean enoughCoins = model.player.getCoins() >= 50;
         boolean isRock = model.land.landState[i][j] == LandState.BLOCKED;
 
         if (enoughCoins && isRock) {
