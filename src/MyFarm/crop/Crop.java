@@ -16,8 +16,14 @@ public class Crop
     private boolean isWithered;
     private boolean isHarvestable;
     private int producedAmt;
+
+    //random generator
     Random random = new Random();
 
+    /**
+     * intializes crop to have the default set values
+     * @param cropName inputted string to determine the crop type
+     */
     public Crop(String cropName) {
         this.age = 0;
         this.waterAmt = 0;
@@ -28,26 +34,46 @@ public class Crop
         setCropType(cropName);
     }
 
+    /**
+     * getter for current age
+     * @return current age
+     */
     public int getAge()
     {
         return this.age;
     }
 
+    /**
+     * getter for harvest age
+     * @return maxAge
+     */
     public int getMaxAge()
     {
         return this.cropType.maxAge;
     }
 
+    /**
+     * getter for wither status
+     * @return isWithered
+     */
     public boolean getWitherStatus()
     {
         return this.isWithered;
     }
 
+    /**
+     * getter for harvest status
+     * @return isHarvestable
+     */
     public boolean getHarvestStatus()
     {
         return this.isHarvestable;
     }
     
+    /**
+     * getter for amount of times plant has been watered
+     * @return waterAmt
+     */
 	public int getWaterAmt() {
 		return this.waterAmt;
 	}
