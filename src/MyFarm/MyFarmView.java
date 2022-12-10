@@ -39,10 +39,9 @@ public class MyFarmView extends JFrame{
 
     public void resetPanels()
     { // i dunno if this works!?
-        this.centerPanel = new CenterPanel(myFarmModel, this);
-        this.bottomPanel = new BottomPanel();
-        this.leftPanel = new LeftPanel(myFarmModel.player, myFarmModel, this);
-        this.rightPanel = new RightPanel(myFarmModel, this);
+        this.centerPanel.resetCenterPanelButtons(myFarmModel);
+        this.bottomPanel.playerAction.setText("");
+        this.leftPanel.updateLeftPanel(myFarmModel.player);
     }
 
     public void gameOver()

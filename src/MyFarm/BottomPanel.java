@@ -18,4 +18,8 @@ public class BottomPanel extends JPanel {
         add(playerAction);
 
     }
+
+    void clearBottompanel(){
+        playerAction.setText("");
+    }
 }

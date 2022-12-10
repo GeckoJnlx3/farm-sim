@@ -11,7 +11,7 @@ public class LeftPanel{
 
     CardLayout cardLayout = new CardLayout();
     JPanel leftCardPanel = new JPanel(cardLayout);
-    JPanel infoPanel = new JPanel();
+    JPanel infoPanel = new JPanel(new GridLayout(6,1));
     JPanel titlePanel = new JPanel();
 
     JButton titlePanelSwap = new JButton("Buy a Title");

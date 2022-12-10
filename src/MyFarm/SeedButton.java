@@ -49,4 +49,13 @@ public class SeedButton extends JButton {
                 break;
         }
     }
+
+    void selectButton(){
+        setBackground(Palette.SELECTED.getColor());
+    }
+
+    void deselectButton(){
+        setBackground(Palette.SEED_SLOT.getColor());
+    }
+
 }

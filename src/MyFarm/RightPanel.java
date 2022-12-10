@@ -12,22 +12,26 @@ import java.awt.event.ActionListener;
 
 public class RightPanel
 {
+    //Panels
     CardLayout cardLayout = new CardLayout();
     JPanel rightCardPanel = new JPanel(cardLayout);
-    JPanel toolPanel = new JPanel();
+    JPanel toolPanel = new JPanel(new GridLayout(7,1,3,3));
     JPanel seedPanel = new JPanel();
 
+    //Buttons for swapping card layouts
     JButton seedPanelSwap = new JButton("seed shop");
     JButton toolPanelSwap = new JButton("    Back    ");
 
     JButton forwardButton = new JButton("advance day");
     
+    //Tools    
     ToolButton wateringCan = new ToolButton("watering can");
     ToolButton pickaxe = new ToolButton("pickaxe");
     ToolButton shovel = new ToolButton ("shovel");
     ToolButton hoe = new ToolButton ("hoe");
     ToolButton fertilizer = new ToolButton("fertilizer");
 
+    //Seeds
     SeedButton seedTurnip = new SeedButton(CropType.TURNIP);
     SeedButton seedCarrot = new SeedButton(CropType.CARROT);
     SeedButton seedPotato = new SeedButton(CropType.POTATO);
@@ -62,6 +66,7 @@ public class RightPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                deselectAllButtons();
                 cardLayout.next(rightCardPanel);
             }
         });
@@ -138,6 +143,7 @@ public class RightPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                deselectSeedButtons();
                 cardLayout.next(rightCardPanel);
             }
         });
@@ -208,25 +214,25 @@ public class RightPanel
             }
         });
 
-        seedApple.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                view.bottomPanel.playerAction.setText("Select a plot to plant a Apple on (Cost: 100)");
-                selectSeed(view, seedApple, seedTurnip, seedCarrot, seedPotato, seedRose, seedSunflower,
-                        seedTurnips, seedMango);
-            }
-        });
-
         seedMango.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                view.bottomPanel.playerAction.setText("Select a plot to plant a Mango on (Cost: 200)");
+                view.bottomPanel.playerAction.setText("Select a plot to plant a Mango on (Cost: 100)");
                 selectSeed(view, seedMango, seedTurnip, seedCarrot, seedPotato, seedRose, seedSunflower,
                         seedTurnips, seedApple);
+            }
+        });
+
+        seedApple.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                view.bottomPanel.playerAction.setText("Select a plot to plant a Apple on (Cost: 200)");
+                selectSeed(view, seedApple, seedTurnip, seedCarrot, seedPotato, seedRose, seedSunflower,
+                        seedTurnips, seedMango);
             }
         });
 
@@ -270,15 +276,12 @@ public class RightPanel
             boolean isAlreadySelected = btn1.getText().equals("selected");
     
             if (isSelectingOther) {
-                btn1.setText("selected");
-                btn2.setText(btn2.name);
-                btn3.setText(btn3.name);
-                btn4.setText(btn4.name);
-                btn5.setText(btn5.name);
+                deselectToolButtons();
+                btn1.selectButton();
             } else if (isAlreadySelected) {
-                btn1.setText(btn1.name);
-                view.bottomPanel.playerAction.setText("");
-            } else btn1.setText("selected");
+                btn1.deselectButton();
+                view.bottomPanel.clearBottompanel();
+            } else btn1.selectButton();
     
         }
 
@@ -297,19 +300,37 @@ public class RightPanel
         boolean isAlreadySelected = btn1.getBackground().equals(Palette.SELECTED.getColor());
 
         if (isSelectingOther) {
-            btn1.setBackground(Palette.SELECTED.getColor());
-            btn2.setBackground(Palette.SEED_SLOT.getColor());
-            btn3.setBackground(Palette.SEED_SLOT.getColor());
-            btn4.setBackground(Palette.SEED_SLOT.getColor());
-            btn5.setBackground(Palette.SEED_SLOT.getColor());
-            btn6.setBackground(Palette.SEED_SLOT.getColor());
-            btn7.setBackground(Palette.SEED_SLOT.getColor());
-            btn8.setBackground(Palette.SEED_SLOT.getColor());
+            deselectSeedButtons();
+            btn1.selectButton();
         } else if (isAlreadySelected) {
-            btn1.setBackground(Palette.SEED_SLOT.getColor());
-            view.bottomPanel.playerAction.setText("");
-        } else btn1.setBackground(Palette.SELECTED.getColor());
+            btn1.deselectButton();
+            view.bottomPanel.clearBottompanel();
+        } else btn1.selectButton();
 
+    }
+
+    private void deselectAllButtons(){
+        deselectToolButtons();
+        deselectSeedButtons();
+    }
+
+    private void deselectSeedButtons(){
+        seedTurnip.deselectButton();
+        seedApple.deselectButton();
+        seedCarrot.deselectButton();
+        seedMango.deselectButton();
+        seedPotato.deselectButton();
+        seedRose.deselectButton();
+        seedSunflower.deselectButton();
+        seedTurnips.deselectButton();
+    }
+
+    private void deselectToolButtons(){
+        wateringCan.deselectButton();
+        hoe.deselectButton();
+        pickaxe.deselectButton();
+        fertilizer.deselectButton();
+        shovel.deselectButton();
     }
 
     private void addAllSeedButtons(){
@@ -319,8 +340,8 @@ public class RightPanel
         seedPanel.add(seedRose);
         seedPanel.add(seedSunflower);
         seedPanel.add(seedTurnips);
-        seedPanel.add(seedApple);
         seedPanel.add(seedMango);
+        seedPanel.add(seedApple);
     }
 
     private void addAllToolButtons(){

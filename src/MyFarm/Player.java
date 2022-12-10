@@ -4,14 +4,13 @@ import MyFarm.crop.Crop;
 import MyFarm.land.LandState;
 
 import java.text.DecimalFormat;
-import java.util.Random;
 
 class Player {
 
     private double xp = 0;
-    private int level = 0;
+    private int level = 20;
     private Title title = Title.FARMER;
-    private double objectCoins = 100;
+    private double objectCoins = 50000;
     private int time = 1;
 
     DecimalFormat df = new DecimalFormat();
@@ -117,7 +116,7 @@ class Player {
                 model.land.landState[i][j] = LandState.PLANTED;
                 view.centerPanel.plotBtn[i][j].setIcon(Icons.SEEDLING.getImageIcon());
 
-                model.player.setCoins(model.player.getCoins() - model.land.crops[i][j].getCropCost());
+                purchaseSeedWDiscount(model, i, j);
 
                 view.bottomPanel.playerAction.setText("You planted a(n) " + selectedCropName + ".");
 
@@ -131,9 +130,16 @@ class Player {
 
     }
 
+    private void purchaseSeedWDiscount(MyFarmModel model, int i, int j){
+        double currSeedCost =  model.land.crops[i][j].getCropCost() + 
+        model.player.getTitle().getseedDiscount();
+        
+        model.player.setCoins(model.player.getCoins() - currSeedCost);
+    }
+
     public void harvestCrop(MyFarmModel model, MyFarmView view, int i, int j) // only for turnip rn
     {
-        double earned = model.land.crops[i][j].computeHarvestEarnings();
+        double earned = model.land.crops[i][j].computeHarvestEarnings(this.title);
         this.objectCoins += earned;
         this.xp += model.land.crops[i][j].getExpYield();
         this.levelUp(model, view);
@@ -155,7 +161,7 @@ class Player {
         if (model.land.landState[i][j] == LandState.UNPLOWED) {
         	model.land.landState[i][j] = LandState.PLOWED;
         	view.bottomPanel.playerAction.setText("The land is plowed.");
-        	view.centerPanel.plotBtn[i][j].setIcon(Icons.PLOWED.getImageIcon());
+        	view.centerPanel.plotBtn[i][j].setPlotView(model.land.landState[i][j], null);;
         	this.xp += 0.5;
             this.levelUp(model, view);
         }
@@ -167,7 +173,7 @@ class Player {
 
     public void fertilizeCrop (MyFarmModel model, MyFarmView view, int i, int j) {
         if (model.land.landState[i][j] == LandState.PLANTED) {
-            boolean isFertilized = model.land.crops[i][j].increaseFertAmt(model.player.objectCoins);
+            boolean isFertilized = model.land.crops[i][j].increaseFertAmt(this.objectCoins, this.title);
             if (isFertilized && this.objectCoins >= 4){
                 view.bottomPanel.playerAction.setText("The plant has been fertilized " + 
                 model.land.crops[i][j].getFertilizerAmt() + " times");
@@ -187,7 +193,7 @@ class Player {
 
     public void waterPlant(MyFarmModel model, MyFarmView view, int i, int j) {
         if (model.land.landState[i][j] == LandState.PLANTED) {
-        	boolean isWatered = model.land.crops[i][j].increaseWaterAmt();
+        	boolean isWatered = model.land.crops[i][j].increaseWaterAmt(this.title);
             if (isWatered) { 
             	view.bottomPanel.playerAction.setText("The plant has been watered " 
                 + model.land.crops[i][j].getWaterAmt() + " times.");

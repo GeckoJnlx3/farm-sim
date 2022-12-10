@@ -11,5 +11,12 @@ public class ToolButton extends JButton {
         setFocusable(false);
     }
 
+    void selectButton(){
+        setText("selected");
+    }
 
+    void deselectButton(){
+        setText(this.name);
+    }
+    
 }

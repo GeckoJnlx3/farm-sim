@@ -28,29 +28,23 @@ public class Plot extends JButton{
                     model.player.harvestCrop(model, view, nRow, nCol);
                 else if (view.rightPanel.hoe.getText().equals("selected")) {
                     model.player.plowLand(model, view, nRow, nCol);
-                    view.rightPanel.hoe.setText("hoe");
                 }
                 else if (view.rightPanel.wateringCan.getText().equals("selected")) {
                     model.player.waterPlant(model, view, nRow, nCol);
-                    view.rightPanel.wateringCan.setText("watering can");
                 }
                 else if (view.rightPanel.shovel.getText().equals("selected")) {
                     model.player.removePlant(model, view, nRow, nCol);
-                    view.rightPanel.shovel.setText("shovel");
                 } 
                 else if (view.rightPanel.pickaxe.getText().equals("selected")){
                     model.player.removeRock(model, view, nRow, nCol);
-                    view.rightPanel.pickaxe.setText("pickaxe");
                 }
                 else if (view.rightPanel.fertilizer.getText().equals("selected")){
                     model.player.fertilizeCrop(model, view, nRow, nCol);
-                    view.rightPanel.fertilizer.setText("fertilizer");
                 }
                 else if (checkSelectedSeed(view) != null){ // if a seed button is selected
                     String selectedCropName = checkSelectedSeed(view).getCropName();
 
                     model.player.plantSeed(model, view, nRow, nCol, selectedCropName);
-                    deselect(view);
                 }
                 else if (model.land.landState[nRow][nCol] == LandState.PLANTED){
                     model.player.viewCropInfo(model, view, nRow, nCol);
@@ -166,5 +160,13 @@ public class Plot extends JButton{
 
         else if (view.rightPanel.seedMango.getBackground().equals(Palette.SELECTED.getColor()))
             view.rightPanel.seedMango.setBackground(Palette.SEED_SLOT.getColor());
+    }
+
+    public int getnRow() {
+        return nRow;
+    }
+
+    public int getnCol() {
+        return nCol;
     }
 }

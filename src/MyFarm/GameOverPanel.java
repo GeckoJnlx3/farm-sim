@@ -23,10 +23,8 @@ public class GameOverPanel extends JPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                // add code to restart game
                 model.resetModel();
                 view.resetPanels();
-                // sry jnl i couldn't figure this out! T_T
 
                 view.cardLayout.next(view.mainPanel);
             }
