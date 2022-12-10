@@ -4,6 +4,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
+
+import MyFarm.crop.Crop;
 import MyFarm.crop.CropType;
 import MyFarm.land.LandState;
 
@@ -22,12 +25,20 @@ public class MyFarmController {
         
         initializeRightPanel();
         initializeLeftPanel();
+        addRestartListener();
     }
 
+    /**
+     * starts up the view 
+     */
     public void startView(){
         this.view.setVisible(true);
     }
 
+    // ======================= RIGHT PANEL==================================
+    /**
+     * adds all the buttons and gives them actionlisteners
+     */
     private void initializeRightPanel(){
         initializeTools(model, view);
         initializeSeeds(model, view);
@@ -36,6 +47,11 @@ public class MyFarmController {
         view.rightPanel.rightCardPanel.add(view.rightPanel.seedPanel, "seed");
     }
 
+    /**
+     * gives actionlisteners to the tool buttons
+     * @param model required to add in the action listeners 
+     * @param view holds the buttons
+     */
     public void initializeTools(MyFarmModel model, MyFarmView view) {
         view.rightPanel.seedPanelSwap.setFocusable(false);
         view.rightPanel.seedPanelSwap.addActionListener(new ActionListener()
@@ -250,13 +266,13 @@ public class MyFarmController {
                 if (model.land.crops[i][j].getWitherStatus() == true)
                 {
                     model.land.landState[i][j] = LandState.WITHERED;
-                    view.centerPanel.plotBtn[i][j].setPlotView(model.player,model.land.landState[i][j], model.land.crops[i][j]);;
+                    setPlotView(view.centerPanel.plotBtn[i][j],model.player,model.land.landState[i][j], model.land.crops[i][j]);;
                 }
         
                 else if (model.land.crops[i][j].getHarvestStatus() == true)
                 {
                     model.land.landState[i][j] = LandState.HARVESTABLE;
-                    view.centerPanel.plotBtn[i][j].setPlotView(model.player,model.land.landState[i][j], model.land.crops[i][j]);;
+                    setPlotView(view.centerPanel.plotBtn[i][j],model.player,model.land.landState[i][j], model.land.crops[i][j]);;
                 }
             }    
         }
@@ -334,7 +350,6 @@ public class MyFarmController {
     private boolean checkIfHasCrops(MyFarmModel model){
         // returns true if not a single seed/fully grown crop is present
         boolean flag = false;
-
         for (int i = 0; i < 5 && !flag; i++)
         {
             for (int j = 0; j < 10 && !flag; j++)
@@ -344,15 +359,12 @@ public class MyFarmController {
                     flag = true;
             }
         }
-
         return flag;
     }
-
     private boolean checkIfAllWithered(MyFarmModel model)
     {
         // returns true if all plots contain withered crop
         boolean flag = true;
-
         for (int i = 0; i < 5 && flag; i++)
         {
             for (int j = 0; j < 10 && flag; j++)
@@ -361,31 +373,30 @@ public class MyFarmController {
                     flag = false;
             }
         }
-
         return flag;
     }
 
     public boolean checkForGameOver(MyFarmModel model){
         return (!checkIfHasCrops(model) && model.player.getCoins() < 5) ||
                 checkIfAllWithered(model);
-        // should return true if a game over condition is met
     }
 
+    //======================= LEFT PANEL=================================
+
     public void initializeLeftPanel(){
-        setInfoIcons();
-        initializeGameInfo(model, view);
-        initializeTitles(model,view);
-
+        
+        initializeGameInfo();
+        initializeTitles();
         view.leftPanel.df.setMaximumFractionDigits(2);
-
         view.leftPanel.leftCardPanel.add(view.leftPanel.infoPanel, "info");
         view.leftPanel.leftCardPanel.add(view.leftPanel.titlePanel, "title");
     }
-
-    public void initializeGameInfo(MyFarmModel model, MyFarmView view)
+    /**
+     * adds actionListeners to buttons
+     */
+    public void initializeGameInfo()
     {
         updateLeftPanel(model);
-
         view.leftPanel.titlePanelSwap.setFocusable(false);
         view.leftPanel.titlePanelSwap.addActionListener(new ActionListener()
         {
@@ -395,10 +406,8 @@ public class MyFarmController {
                 view.leftPanel.cardLayout.next(view.leftPanel.leftCardPanel);
             }
         });
-
-        addInfoPanels();
+        addInfoButtons();
     }
-
 
     public void updateLeftPanel(MyFarmModel model){
         view.leftPanel.currDay.setText("Day " + model.player.getDay());
@@ -409,15 +418,7 @@ public class MyFarmController {
         updateTitleButton(model.player.getTitle());
     }
 
-    private void setInfoIcons(){
-        view.leftPanel.currDay.setIcon(Icons.DAY.getImageIcon());
-        view.leftPanel.objectCoins.setIcon(Icons.OBJECTCOINS.getImageIcon());
-        view.leftPanel.currExp.setIcon(Icons.XP.getImageIcon());
-        view.leftPanel.currLvl.setIcon(Icons.LVL.getImageIcon());
-        view.leftPanel.currTitle.setIcon(Icons.PLAYER.getImageIcon());
-    }
-
-    public void initializeTitles(MyFarmModel model, MyFarmView view)
+    public void initializeTitles()
     {
         view.leftPanel.infoPanelSwap.setFocusable(false);
         view.leftPanel.infoPanelSwap.addActionListener(new ActionListener()
@@ -446,7 +447,6 @@ public class MyFarmController {
                 model.player.setTitle(Title.DISTINGUISHED_FARMER, view, model);
             }
         });
-
         view.leftPanel.titleLeg.setFocusable(false);
         view.leftPanel.titleLeg.addActionListener(new ActionListener()
         {
@@ -455,11 +455,9 @@ public class MyFarmController {
                 model.player.setTitle(Title.LEGENDARY_FARMER, view, model);
             }
         });
-
-        addTitlePanels();
+        addTitleButtons();
     }
-
-    private void addInfoPanels(){
+    private void addInfoButtons(){
         view.leftPanel.infoPanel.add(view.leftPanel.titlePanelSwap);
         view.leftPanel.infoPanel.add(view.leftPanel.currDay);
         view.leftPanel.infoPanel.add(view.leftPanel.objectCoins);
@@ -467,8 +465,7 @@ public class MyFarmController {
         view.leftPanel.infoPanel.add(view.leftPanel.currLvl);
         view.leftPanel.infoPanel.add(view.leftPanel.currTitle);
     }
-
-    private void addTitlePanels(){
+    private void addTitleButtons(){
         view.leftPanel.titlePanel.add(view.leftPanel.infoPanelSwap);
         view.leftPanel.titlePanel.add(view.leftPanel.titleReg);
         view.leftPanel.titlePanel.add(view.leftPanel.titleDis);
@@ -489,28 +486,135 @@ public class MyFarmController {
         }
     }
 
+    //============================= CENTER PANEL ============================
+    /**
+     * sets the view for every plot button based on information from model
+     * and adds every button into the center panel
+     */
     public void initializeCenterPanel(){
         for (int i = 0; i < 5; i++){
             for (int j = 0; j < 10; j++){
-                view.centerPanel.plotBtn[i][j].setPlotView(model.player,model.land.landState[i][j], model.land.crops[i][j]);
+                setPlotView(view.centerPanel.plotBtn[i][j],model.player,model.land.landState[i][j], model.land.crops[i][j]);
                 view.centerPanel.add(view.centerPanel.plotBtn[i][j]);
             }
         }
     }
-
-    public void resetCenterPanelButtons(MyFarmModel model){
+    /**
+     * sets the view of each plot (to not double the addition of buttons)
+     */
+    public void resetCenterPanelButtons(){
         for (int i = 0; i < 5; i++){
             for (int j = 0; j < 10; j++){
-                view.centerPanel.plotBtn[i][j].setPlotView(model.player,model.land.landState[i][j], model.land.crops[i][j]);
-                view.centerPanel.add(view.centerPanel.plotBtn[i][j]);
+                setPlotView(view.centerPanel.plotBtn[i][j],model.player,model.land.landState[i][j], model.land.crops[i][j]);
             }
         }
     }
-
+    
     public void resetPanels(MyFarmModel model)
-    { // i dunno if this works!?
-        resetCenterPanelButtons(model);
-        view.bottomPanel.playerAction.setText("");
+    { 
+        resetCenterPanelButtons();
+        view.bottomPanel.clearBottompanel();
         updateLeftPanel(model);
     }
+
+
+    //========== GAME OVER PANEL=========================
+    
+    private void addRestartListener(){
+        view.gameOverPanel.restart.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                model.resetModel();
+                resetPanels(model);
+
+                view.cardLayout.next(view.mainPanel);
+            }
+        });
+        
+        view.gameOverPanel.add(view.gameOverPanel.restart, BorderLayout.SOUTH);
+    }
+
+    //=============== PLOT BUTTON ===========================
+    void initializePlotButton(Plot plot, Player player, LandState landState){
+        
+        setPlotView(plot, model.player, landState, null);
+
+        plot.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(model.land.landState[plot.nRow][plot.nCol] == LandState.HARVESTABLE)
+                    model.player.harvestCrop(model, view, plot.nRow, plot.nCol);
+                else if (view.rightPanel.toolButtonList.get(BtnIndex.HOE.index).getText().equals("selected")) {
+                    model.player.plowLand(model, view, plot.nRow, plot.nCol);
+                }
+                else if (view.rightPanel.toolButtonList.get(BtnIndex.WATERING_CAN.index).getText().equals("selected")) {
+                    model.player.waterPlant(model, view, plot.nRow, plot.nCol);
+                }
+                else if (view.rightPanel.toolButtonList.get(BtnIndex.SHOVEL.index).getText().equals("selected")) {
+                    model.player.removePlant(model, view, plot.nRow, plot.nCol);
+                } 
+                else if (view.rightPanel.toolButtonList.get(BtnIndex.PICKAXE.index).getText().equals("selected")){
+                    model.player.removeRock(model, view, plot.nRow, plot.nCol);
+                }
+                else if (view.rightPanel.toolButtonList.get(BtnIndex.FERTILIZER.index).getText().equals("selected")){
+                    model.player.fertilizeCrop(model, view, plot.nRow, plot.nCol);
+                }
+                else if (checkSelectedSeed(view) != null){ // if a seed button is selected
+                    String selectedCropName = checkSelectedSeed(view).getCropName();
+
+                    model.player.plantSeed(model, view, plot.nRow,  plot.nCol, selectedCropName);
+                }
+                else if (model.land.landState[ plot.nRow][ plot.nCol] == LandState.PLANTED){
+                    model.player.viewCropInfo(model, view,  plot.nRow,  plot.nCol);
+                }
+                model.player.levelUp(model, view);
+            }
+        });
+    }
+    
+    public void setPlotView(Plot plot, Player p1, LandState landState, Crop crop){
+        
+        plot.setBackground(Palette.UNWATERED_PLOT.getColor());
+        plot.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        switch (landState){
+            case BLOCKED: 
+                plot.setIcon(Icons.BLOCKED.getImageIcon());
+                break;
+            case PLOWED:
+                plot.setIcon(Icons.PLOWED.getImageIcon());
+                break;
+            case PLANTED:
+                plot.setIcon(Icons.SEEDLING.getImageIcon());
+                if (crop.getWaterAmt() == crop.cropType.getWaterBonus() + p1.getTitle().getWaterBonusLimitIncrease())
+                    plot.setBackground(Palette.WATERED_PLOT.getColor());
+                if (crop.getFertilizerAmt() == crop.cropType.getFertilizerBonus() + p1.getTitle().getFertBonusLimit())
+                    plot.setBorder(BorderFactory.createLineBorder(Palette.FERTILIZED_PLOT.getColor(), 3));
+                break;
+            case HARVESTABLE:
+                plot.setPlantIcon(crop.cropType);
+                break;
+            case UNPLOWED:
+                plot.setIcon(Icons.UNPLOWED.getImageIcon());
+                break;
+            case WITHERED:
+                plot.setIcon(Icons.WITHERED.getImageIcon());
+                break;
+            default:
+                plot.setBackground(Palette.UNWATERED_PLOT.getColor()); //brown
+                break;
+        }
+    }
+
+    private CropType checkSelectedSeed(MyFarmView view)
+    {
+        for (SeedButton s : view.rightPanel.seedButtonList){
+            if (s.getBackground().equals(Palette.SELECTED.getColor()))
+                return s.crop;
+        }
+        return null;
+    }
+
+    //================== PLAYER ===========================
 }

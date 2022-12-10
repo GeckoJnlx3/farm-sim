@@ -2,8 +2,6 @@ package MyFarm;
 
 import javax.swing.*;
 
-import MyFarm.land.LandState;
-
 import java.awt.*;
 import java.util.ArrayList;
 

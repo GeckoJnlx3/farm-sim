@@ -37,5 +37,15 @@ public class LeftPanel{
         infoPanel.setPreferredSize(new Dimension(135,100));
         titlePanel.setBackground(Palette.GRASS.getColor());
         titlePanel.setPreferredSize(new Dimension(135,100));
+
+        setInfoIcons();
+    }
+
+    private void setInfoIcons(){
+        currDay.setIcon(Icons.DAY.getImageIcon());
+        objectCoins.setIcon(Icons.OBJECTCOINS.getImageIcon());
+        currExp.setIcon(Icons.XP.getImageIcon());
+        currLvl.setIcon(Icons.LVL.getImageIcon());
+        currTitle.setIcon(Icons.PLAYER.getImageIcon());
     }
 }

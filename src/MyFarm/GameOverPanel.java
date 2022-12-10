@@ -2,8 +2,6 @@ package MyFarm;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class GameOverPanel extends JPanel
 {
@@ -17,19 +15,6 @@ public class GameOverPanel extends JPanel
 
         gameOver.setIcon(Icons.GAME_OVER.getImageIcon());
 
-        restart.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                model.resetModel();
-                view.resetPanels(model);
-
-                view.cardLayout.next(view.mainPanel);
-            }
-        });
-
         this.add(gameOver, BorderLayout.CENTER);
-        this.add(restart, BorderLayout.SOUTH);
     }
 }
