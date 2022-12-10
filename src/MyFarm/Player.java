@@ -1,8 +1,5 @@
 package MyFarm;
 
-import MyFarm.crop.Crop;
-import MyFarm.land.LandState;
-
 import java.text.DecimalFormat;
 
 class Player {
@@ -41,7 +38,7 @@ class Player {
 
     void setXP(double XP)
     {
-        this.xp += XP;
+        this.xp = XP;
     }
 
     int getLevel()
